@@ -1,0 +1,9 @@
+﻿.top .logo {
+	background:url(../img/ie6patch/logo.gif);
+	height:60px;
+	left:0;
+	position:absolute;
+	top:0;
+	text-indent: -99999px;
+	width:100px;
+}

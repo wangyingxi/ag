@@ -1,0 +1,626 @@
+<?php
+    $user = $this->me->getUser();
+    $profile_image = $user->profile_image;
+    $wait_tobe_validate = $user->wait_tobe_validate;
+    if(isset($wait_tobe_validate) && $wait_tobe_validate == 1){
+        $wait_tobe_validate = true;
+    } else {
+        $wait_tobe_validate = false;
+    }
+
+    $imageUrl = $this->imageUrl;
+    // 页面所否锁定
+    $lock = false;
+    if($wait_tobe_validate) {
+        $lock = true;
+    } else if ($user->validated_bln) {
+        $lock = true;
+    }
+    
+    // 是否显示提示框
+    $reason_count = count($user->identity_refused_reason);
+    $showTip = true;
+    $tipType = '';
+    if($user->validated_bln) {
+        $tipType = 'activated';
+    } else {
+        if($wait_tobe_validate) {
+            $tipType = 'processing';
+        } else {
+            if($reason_count > 0) {
+                $tipType = 'refused';
+            } else {
+                $showTip = false;
+            }
+        }
+    }
+    
+?>
+<div class="container_24 main">
+<div class="grid_18 board relative">
+    
+    <?php
+    if($showTip) {
+    ?>
+    <div class="shadowbox45degree radiusall_4px toptip">
+        <?php
+        switch($tipType) {
+            case "activated" :
+                ?>
+                <p class="green bold">你已经通过实名认证，所有个人信息均以你提交认证时填写的内容为准，不可更改</p>
+        <?php
+                break;
+            case "processing" :
+                ?>
+                <p class="red bold">你的实名认证申请正在审核中，并且该页面不可修改。</p><p style="margin-top:4px">我们会尽快完成审核工作并且第一时间通知你，感谢你的耐心等待</p>
+        <?php
+                break;
+            case "refused" :
+                ?>
+                <span class="red bold">很抱歉，</span><span>你最近提交的实名认证已被拒绝通过，以下是拒绝的原因，请修正后重新提交，谢谢理解</span>
+                <div class="clear_5px"></div>
+                <p><?php echo $user->identity_refused_reason[$reason_count - 1]->content?></p>
+        <?php
+                break;
+            default:
+                break;
+        }
+        
+        ?>
+    </div>
+    <?php
+    }
+    ?>
+
+    <h1 class="pagetitle">
+    实名认证信息 - <?php echo($user->getUserTypeInChinese())?>
+    </h1>
+
+    <table class="submittable">
+            <tr>
+                    <td class="col1">头像 <span class="red font12px">*</span></td>
+                    <td>
+                            <div id="userphoto" style="background-image:url(<?php echo $imageUrl; ?>)" class="shadowbox"><?php if(!$lock){ ?><input id="edituserphoto" class="edituserphoto btn btn_white gbtnnoicon" type="button" value="编辑图片"/><?php } ?></div>
+                            <input type="hidden" for="userphoto" id="userphotouploaded" class="uploadInput" value="<?php if(isset($profile_image)){ echo '1'; }?>"/>
+                    </td>
+            </tr>
+            <tr>
+                    <td>姓名 <span class="red font12px">*</span></td>
+                    <td><input type="text" id="username" <?php if($lock){ ?>disabled="disabled"<?php } ?> class="ntext validtext" value="<?php echo $user->username;?>"/></td>
+            </tr>
+            <tr>
+                    <td>身份证号码 <span class="red font12px">*</span></td>
+                    <td><input type="text" id="identity_id" <?php if($lock){ ?>disabled="disabled"<?php } ?> class="ntext validtext" value="<?php echo $user->identity_id;?>"/></td>
+            </tr>
+            <tr>
+                    <td class="col1">身份证正面扫描图片 <span class="red font12px">*</span></td>
+                    <td>
+                        <?php if(!$lock){ ?>
+                        <input type="button" id="fif" class="btn_white userdocbtn" value="选择文件..." />
+                        <?php } ?>
+                        <div id="fifuploaded" class="uploadedwrapper">
+                        <?php
+                            if($user->identity_front_doc){
+                                $fifUrl = $this->url(array('doctype'=>$this->type_identity_front, 'user_id'=>$user->id, 'doc_id'=>$user->identity_front_doc->id), 'user-doc');
+                           
+                        ?>
+                            <p><a href="<?php echo $fifUrl ?>" class="attachfile"><?php echo $user->identity_front_doc->filename ?></a></p>
+                        <?php
+                            }
+                        ?>
+                            
+                            <input type="hidden" for="fif" class="uploadInput" value="<?php if(isset($fifUrl)){ echo '1'; }?>"/>
+                        </div>
+                        
+                    </td>
+            </tr>
+            <tr>
+                    <td class="col1">身份证反面扫描图片 <span class="red font12px">*</span></td>
+                    <td>
+                        <?php if(!$lock){ ?>
+                        <input type="button" id="fib" class="btn_white userdocbtn" value="选择文件..." />
+                        <?php } ?>
+                        <div id="fibuploaded" class="uploadedwrapper">
+                        <?php
+                            if($user->identity_back_doc){
+                                $fibUrl = $this->url(array('doctype'=>$this->type_identify_back, 'user_id'=>$user->id, 'doc_id'=>$user->identity_back_doc->id), 'user-doc');
+                        ?>
+                            <p><a href="<?php echo $fibUrl ?>" class="attachfile"><?php echo $user->identity_back_doc->filename ?></a></p>
+                        <?php
+                            }
+                        ?>
+                            
+                            <input type="hidden" for="fib" class="uploadInput" value="<?php if(isset($fibUrl)){ echo '1'; }?>"/>
+                        </div>
+                    </td>
+            </tr>
+            <tr>
+                    <td>联系电话 <span class="red font12px">*</span></td>
+                    <td><input type="text" id="phone" <?php if($lock){ ?>disabled="disabled"<?php } ?> class="ntext validtext" value="<?php echo $user->phone;?>"/></td>
+            </tr>
+            <tr>
+                    <td>联系地址 <span class="red font12px">*</span></td>
+                    <td><input type="text" id="address" <?php if($lock){ ?>disabled="disabled"<?php } ?> class="ntext validtext" value="<?php echo $user->address;?>"/></td>
+            </tr>
+
+    </table>
+    
+    <?php
+    if($this->me->getUser()->user_type == 'investor')
+    {
+    ?>
+    
+    
+    <div class="boldline nomargin"></div>
+    <div class="clear_20px"></div>
+    <h1 class="pagetitle">
+    投资人投资能力和风险担当自我申明
+    </h1>
+    <p class="songti gray">作为投资人，你必须至少符合下列选项中的其中一项</p>
+    <div class="clear_20px"></div>
+    <div class="investorquestions">
+        <ul>
+            <li>
+                <input type="checkbox" id="q1"/>
+            </li>
+            <li>
+                <label for="q1">
+                    你的个人年收入超过20万人民币
+                </label>
+            </li>
+        </ul>
+        <div class="clear"></div>
+        <ul>
+            <li>
+                <input type="checkbox" id="q2"/>
+            </li>
+            <li>
+                <label for="q2">
+                    你夫妻双方年超过30万人民币
+                </label>
+            </li>
+        </ul>
+        <div class="clear"></div>
+        <ul>
+            <li>
+                <input type="checkbox" id="q3"/>
+            </li>
+            <li>
+                <label for="q3">
+                    除第一居所以外你本人名下总资产超过100万人民币
+                </label>
+            </li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+    
+    <div class="clear_20px"></div>
+    
+    <?php
+    }
+    ?>
+    <?php if(!$lock){ ?>
+    <div class="boldline nomargin"></div>
+    <div class="clear_50px"></div>
+    <div>
+            <input type="checkbox" id="acceptterm"/> <label for="acceptterm" class="gray songti">我同意天使圈的服务条款</label> <a href="#">服务条款</a>
+    </div>
+    <div class="clear_20px"></div>
+    <input type="button" value="保存修改" popuptargetid="loaderdivwrapper" id="savebtn" class="btn btn_black"/> 
+    <input type="button" value="提交实名认证" popuptargetid="loaderdivwrapper" id="submitbtn" class="btn"/> 
+    <a href="#" class="leftmargin20px">暂不认证，返回浏览网站</a>
+    <?php
+    }
+    ?>
+</div>
+</div>
+<?php
+if(!$lock) {
+?>
+
+<div id="loaderdivwrapper" class="hidden">
+    <div class="loaderdiv"></div>
+</div>
+<div id="failpopupwrapper" class="hidden">
+    <div class="failpopup" style="background:url('http://cdn1.iconfinder.com/data/icons/function_icon_set/cancel_48.png') 20px 20px no-repeat;padding:20px;padding-left:80px;">
+        <p class="bold">头像上传失败！请检查后重试:</p>
+        <ul class="leftmargin20px">
+            <li>图片的大小不能超过了5M</li>
+            <li>图片的格式必须为JPG或PNG</li>
+        </ul>
+    </div>
+</div>
+<div id="failpopupwrapper_userdoc" class="hidden">
+    <div class="failpopup" style="background:url('http://cdn1.iconfinder.com/data/icons/function_icon_set/cancel_48.png') 20px 20px no-repeat;padding:20px;padding-left:80px;">
+        <p class="bold">文件上传失败！请检查后重试:</p>
+        <ul class="leftmargin20px">
+            <li>文件的大小不能超过了10M</li>
+            <li>网络传输故障</li>
+        </ul>
+    </div>
+</div>
+
+<div id="successpopup" class="hidden">
+    <div class="paddingbox20px">
+        <div class="successpopupcontent">更新成功！</div>
+    </div>
+</div> 
+
+<div id="failpopup" class="hidden">
+    <div class="paddingbox20px">
+        <div class="failpopupcontent">操作失败，请重试！</div>
+    </div>
+</div> 
+
+<div id="successpopupsubmit" class="hidden">
+    <div class="paddingbox20px">
+        <div class="successpopupcontent">实名认证提交成功！</div>
+        <?php
+        
+            if($user->isStartup()){
+                if(!$this->company_id) {
+                    ?>
+                    <div class="clear_10px"></div>
+                    <div class="aligncenter">
+                        <input type="button" value="填写公司信息" id="createcompanybtn" class="btn btn_white"/>
+                    </div>
+        <?php
+                } else {
+                    $company_id = $this->company_id;
+                    ?>
+                    <div class="clear_10px"></div>
+                    <div class="aligncenter">
+                        <a href="<?php echo $this->url(array('id'=>$company_id), 'company-info') ?>" class="btn btn_white gbtn gbtnnoicon">查看我的公司信息</a>
+                    </div>
+        <?php
+                }
+                ?>
+        
+            <?php
+            } else {
+                ?>
+        <div class="clear_10px"></div>
+        <div class="aligncenter">
+            <input type="button" value="浏览创业公司" id="createcompanybtn_investor" class="btn btn_white"/>
+        </div>
+                   <?php
+            }
+        ?>
+        
+    </div>
+</div> 
+
+<div class="hidden" id="thumbnail-crop-modal">
+    <div class="thumbnail-crop-wrapper paddingbox20px">
+        <div class="lt thumbnail-crop-image">
+            <img id="img-thumbnail" />
+        </div>
+        <div class="rt">
+            <div class="block">
+                <div class="thumbnail thumbnail-180 overflow-hidden">
+                    <img id="thumbnail-180"/>
+                </div>
+                <div>
+                    <div>中尺寸头像</div>
+                    <span class="label">180 * 180 像素</span>
+                </div>
+            </div>
+            
+            <div class="block">
+                <div class="thumbnail thumbnail-50 overflow-hidden">
+                    <img id="thumbnail-50"/>
+                </div>
+                <div>
+                    <div>小尺寸头像</div>
+                    <span class="label">50 * 50 像素</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="thumbnail-crop-footer">
+        <input type="button" class="btn" id="btn-finish-crop" value="完成裁剪"/>
+    </div>
+</div>
+<?php
+}
+?>
+
+<iframe id="thumbnail-upload-iframe" src="<?php echo $this->url(array(), 'personal-thumbnail'); ?>" class="hidden"></iframe>
+<iframe id="user-doc-upload-iframe" src="<?php echo $this->url(array(), 'upload-user-doc'); ?>" class="hidden"></iframe>
+
+<link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("jquery.Jcrop.min.css"); ?>" />
+<script type="text/javascript" src="<?php echo $this->jsPath('jquery.Jcrop.min.js'); ?>"></script>
+<script type="text/javascript">
+    (function($){
+        
+        $('body').addClass('loginpage');
+    })(jQuery);
+</script>
+        
+<?php
+if(!$lock) {
+?>
+
+<script type="text/javascript">
+    (function($){
+        
+        $('body').addClass('loginpage');
+        
+        $('#edituserphoto').click(function(){
+            var thumbnailUploadIframe = $('#thumbnail-upload-iframe');
+            // 获取上传控件
+            thumbnailUploadIframe.off('load');
+            thumbnailUploadIframe.on('load', function(){
+                $.popupClose(0);
+                var status = thumbnailUploadIframe.contents().find('body input[name="status"]:first').val();
+                if(status != '1'){
+                    var options = {modal:false};
+                    $.popup(options, 'failpopupwrapper');
+                }
+                else{
+                    var path = thumbnailUploadIframe.contents().find('body input[name="path"]:first').val();
+                    winCrop.loadImg(path);
+                }
+            });
+            
+            var fileInput = thumbnailUploadIframe.contents().find('body input[type="file"]');
+            var handleFunc = function (){
+                var form = thumbnailUploadIframe.contents().find('form');
+                form.submit();
+            };
+            
+            var options = {modal:true, event:'change', agpopupframe:false, func:handleFunc};
+            // 绑定读取进度条图标
+            fileInput.attr('popuptargetid','loaderdivwrapper');
+            fileInput.popup(options);
+            fileInput.click();
+        });
+        
+        var winCrop = {
+            jcrop_api: null,
+            coords:{x:100, y:100, w:180, h:180},
+            loadImg: function(imgPath){
+                
+                var options = {title:'修改裁剪头像', speed:0};
+                $.popup(options, 'thumbnail-crop-modal');
+                $('#img-thumbnail').attr('src', imgPath);
+                $('#thumbnail-180').attr('src', imgPath);
+                $('#thumbnail-50').attr('src', imgPath);
+                
+            },
+            showPreview: function(){
+                var self = this;
+                return function(coords){
+                    self.coords = coords;
+                    var rx = 180 / coords.w;
+                    var ry = 180 / coords.h;
+
+                    $('#thumbnail-180').css({
+                            width: Math.round(rx * 540) + 'px',
+                            height: Math.round(ry * 400) + 'px',
+                            marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+                            marginTop: '-' + Math.round(ry * coords.y) + 'px'
+                    });
+
+                    rx = 50 / coords.w;
+                    ry = 50 / coords.h;
+                    $('#thumbnail-50').css({
+                            width: Math.round(rx * 540) + 'px',
+                            height: Math.round(ry * 400) + 'px',
+                            marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+                            marginTop: '-' + Math.round(ry * coords.y) + 'px'
+                    });
+                }
+            },
+            setSelect: function(){
+                this.jcrop_api.setSelect(this.coords);
+            },
+            finishCrop: function(){
+                var self = this;
+                return function(){
+                    $('#btn-finish-crop').processBtn('正在裁剪...');
+                    
+                    $.post('<?php echo $this->url(array(), 'crop-thumbnail')?>', self.coords, function(response){
+                        $('#userphoto').css('background-image', 'url(' + response.large + ")");
+                        $('#userphotouploaded').val(1);
+                        self.jcrop_api.destroy();
+                        $.popupClose();
+                    });
+                };
+            },
+            init: function(){
+                var self = this;
+                $('#img-thumbnail').on('load', function(e){
+                    $(e.currentTarget).Jcrop({
+                        onChange: self.showPreview(),
+                        onSelect: self.showPreview(),
+                        onRelease: self.setSelect,
+                        allowSelect: false,
+                        minSize: [180, 180],
+                        setSelect: [self.coords.x, self.coords.y, self.coords.w, self.coords.h],
+                        aspectRatio: 1
+                    }, function(){
+                        self.jcrop_api = this;
+                    });
+                });
+                
+                $('#btn-finish-crop').click(self.finishCrop());
+            }
+        };
+        winCrop.init();
+        
+        $('.userdocbtn').click(function(e){
+            $.validResultClear();
+            var userDocUploadIframe = $('#user-doc-upload-iframe');
+            var doctype = $(e.target).attr('id');
+            
+            userDocUploadIframe.off('load');
+            userDocUploadIframe.on('load', function(){
+                $.popupClose();
+                $('#' + doctype).validResultHide();
+                var status = userDocUploadIframe.contents().find('body input[name="status"]:first').val();
+                
+                if(status != '1'){
+                    var options = {modal:false};
+                    $.popup(options, 'failpopupwrapper_userdoc');
+                    $('#' + doctype).validResultShow('error', "文件上传失败", 70, 10);
+                }
+                else{
+                    $('#' + doctype).validResultShow('right', '文件上传成功', 70, 10);
+                    var path = userDocUploadIframe.contents().find('body input[name="path"]:first').val();
+                    var filename = userDocUploadIframe.contents().find('body input[name="filename"]:first').val();
+                    var wrapper = $(e.target).parent().find('.uploadedwrapper');
+                    var model = wrapper.attr('model');
+                    if(model === 'multi') {
+                        // multi file uploading
+                        // wrapper.append();
+                    } else {
+                        // single file uploading
+                        wrapper.find('.attachfile').parent().remove();
+                    }
+                    var alink = "<p><a href='" + path + "' class='attachfile'>" + filename + "</a></p>";
+                    wrapper.append(alink);
+                    wrapper.find('.uploadInput').val(1);
+                    
+                }
+            });
+            
+            var fileInput = userDocUploadIframe.contents().find('body input[type="file"]');
+            userDocUploadIframe.contents().find('body input[name="doctype"]').val(doctype);
+            var handleFunc = function (){
+                var form = userDocUploadIframe.contents().find('form');
+                form.submit();
+            };
+            
+            var options = {modal:true, event:'change', agpopupframe:false, func:handleFunc};
+            
+            // 绑定读取进度条图标
+            fileInput.attr('popuptargetid','loaderdivwrapper');
+            fileInput.popup(options);
+            fileInput.click();
+        });
+        
+        function getData(validation){
+            var username = $('#username').val();
+            var identity_id = $('#identity_id').val();
+            var phone = $('#phone').val();
+            var address = $('#address').val();
+            
+            var data = { 'username':username, 'identity_id':identity_id, 'phone':phone, 'address':address, validation: validation };
+            return data;
+        }
+        
+        $('#savebtn').click(function(e){
+            $.validResultClear();
+            var data = getData(0);
+            var object = $(e.target)
+            object.processBtn('正在提交...');
+            $.post('/personalinfo', data, function(result){
+                object.processBtnRestore();
+                var options = {bg:false};
+                if(result === 1) {
+                    $.popup(options,'successpopup');
+                } else {
+                    $.popup(options,'failpopup');
+                }
+            });
+        });
+        
+        $('#submitbtn').click(function(e){
+            var object = $(e.target);
+            var firstErrorId;
+            $.validResultClear();
+            var valid = true;
+            object.processBtn('正在提交...');
+            
+            $('.uploadInput').each(function(){
+                if (!validUpload($(this))) {
+                    valid = false;
+                    if(!firstErrorId) {
+                        firstErrorId = $(this).attr('for');
+                    }
+                }
+            });
+            
+            $('.validtext').each(function(){
+                if (!validInputText($(this))) {
+                    valid = false;
+                    if(!firstErrorId) {
+                        firstErrorId = $(this).attr('id');
+                    }
+                }
+            });
+            
+            var cbk = $('#acceptterm');
+            cbk.click(function(){ cbk.validResultHide(); });
+            if(!cbk.prop('checked')){
+                cbk.validResultShow('error','提交实名认证前信息请认真阅读，并勾选同意天使圈服务条款', 230, -1);
+                valid = false;
+                if(!firstErrorId) {
+                    firstErrorId = 'acceptterm';
+                }
+            }
+            
+            if (valid) {
+                var data = getData(1);
+                $.post('/personalinfo', data, function(result){
+                    var options = {bg:true, modal:true};
+                    if(result === 1) {
+                        $.popup(options,'successpopupsubmit');
+                    } else {
+                        options.modal = false;
+                        $.popup(options,'failpopup');
+                    }
+                });
+            } else {
+                location.href="#" + firstErrorId;
+                object.processBtnRestore();
+                return;
+            }
+        });
+        
+        $("#createcompanybtn").click(function(){
+            $.post('<?php echo $this->url(array(), 'company-create') ?>', null, function(response){
+                if(response.length > 0) {
+                    location.href = response;
+                } else {
+                    alert('创建公司失败，请重试');
+                }
+            });
+        });
+        
+        $('#createcompanybtn_investor').click(function(){
+            location.href = "/";
+        });
+        
+        function validUpload(hidden) {
+            var result = true;
+            hidden.validResultHide();
+            var hiddenVal = hidden.val();
+            if(hiddenVal.length !== 1) {
+                var forid = hidden.attr('for');
+                if(forid === 'userphoto') {
+                    $('#' + forid).validResultShow('error','请上传你的照片',20);
+                } else {
+                    $('#' + forid).validResultShow('error','请上传该文件',70, 10);
+                }
+                result = false;
+            }
+            return result;
+        }
+        
+        function validInputText(input) {
+            var result = true;
+            input.validResultHide();
+            var inputVal = input.val();
+            if(inputVal.length === 0) {
+                input.validResultShow('error','请输入正确信息',25);
+                result = false;
+            }
+            return result;
+        }
+        
+    })(jQuery);
+</script>
+
+<?php } ?>

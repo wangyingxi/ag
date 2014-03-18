@@ -1,0 +1,19 @@
+<div style="font-family:'Microsoft Yahei';font-size:13px;margin:auto;width:600px;">
+    <p style="background:#F8F8F8;padding:20px;text-align:center;margin:0">
+        <a href="<?php echo $this->domain_url ?>">
+                <img width="120" src="<?php echo $this->domain_url.$this->imagePath('logo.png'); ?>" title="天使圈" style="border:0"/>
+        </a>
+    </p>
+    <div style="background:#FFF;padding:20px;margin:0">
+        <?php echo $this->layout()->content; ?>
+        <p style="padding-top: 10px">
+            天使圈团队
+            <br/>
+            <?php echo date('m/d/Y')?>
+        </p>
+    </div>
+
+    <p style="background:#F8F8F8;font-size:12px;padding:20px;text-align:center;margin:0">
+        <a href="<?php echo $this->domain_url.$this->url(array(), 'about'); ?>" style="text-decoration:none;color:#BBB !important;">关于天使圈</a> <span style="color:#EEE">&nbsp;|&nbsp;</span> <a href="<?php echo $this->domain_url; ?>" style="text-decoration:none;color:#BBB !important;">浏览天使圈</a> 
+    </p>
+</div>

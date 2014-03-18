@@ -1,0 +1,70 @@
+<?php
+    $user = $this->me->getUser();
+?>
+<div class="container_24 main">
+<div class="clear_50px"></div>
+<?php echo $this->partial('user/partials/_usersetting_nav.phtml', array('selected'=>'mycompany', 'usertype'=>$user->user_type )); ?>
+<div class="grid_21 radiusall_4px mainbody">
+    <div class="leftmargin50px">
+        <?php echo $this->partial('user/partials/_show_validate_tip.phtml', array('user'=>$user)); ?>
+    <div class="relative">
+        <h1 class="pagetitle">
+        我的公司
+        </h1>
+        <div class="cont">
+            <?php
+            if($this->company && count($this->company) > 0) {
+                foreach($this->company as $company) {
+            ?>
+            <p>
+                <a href="<?php echo $this->url(array('id'=>$company->id), 'company-detail') ?>" target="_blank">
+                <?php
+                $companyName = $company->name;
+                if(!$companyName) {
+                    $companyName = "未命名公司";
+                }
+                echo $companyName
+                ?>
+                </a>
+                <span> - </span>
+                <a href="<?php echo $this->url(array('id'=>$company->id), 'company-info')?>" target="_blank">
+                    查看公司基本信息
+                </a>
+            </p>
+            <?php
+                }
+            } else {
+            ?>
+            <div class="warningblk">
+                <p>你还没有创建公司</p>
+                <div class="clear_5px"></div>
+                <input type="button" id="createCompany" value="创建公司" class="btn btn_white gbtn gbtnnoicon"/>
+            </div>
+            <?php
+            }
+            ?>
+        </div>
+        <div class="clear_20px"></div>
+
+        <div class="boldline nomargin"></div>
+    </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    (function($){
+        
+        $('body').addClass('my');
+        $('#createCompany').click(function(){
+            $.post("<?php echo $this->url(array(), 'company-create') ?>", null, function(response){
+                if(response.length > 0) {
+                    location.href = response;
+                } else {
+                    alert('创建公司失败，请重试');
+                }
+            });
+            
+        });
+    })(jQuery);
+</script>
+        

@@ -1,0 +1,90 @@
+<div class="container_24 main">
+<div class="grid_12 adv"></div>
+<div class="grid_12 board relative">
+    <h1 class="shorttitle">
+    用户登录
+    </h1>
+    <span class="unregister gray">没有天使圈帐号？现在 <a href="/register">注册</a> </span>
+    <div class="inputs">
+        <div class="input email">
+            <span class="title">输入邮箱</span>
+            <input type="text" id="email" class="txt" />
+        </div>
+        <div class="clear_10px"></div>
+        <div class="input pwd">
+            <span class="title">输入密码</span>
+            <input type="password" enterclickobjid="loginbtn" id="pwd" class="txt enterclick"/>
+        </div>
+        <div class="clear_20px"></div>
+        <div>
+            <input type="checkbox" id="rememberme"/> <label for="rememberme" class="gray songti">记住我（下次自动登录）</label>
+            <a href="/forgotpwd">忘记密码？</a>
+        </div>
+        <div class="clear_20px"></div>
+        <input type="button" id="loginbtn" class="btn" value="登录"/>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    (function($){
+        
+        $('body').addClass('loginpage');
+        
+        var clickBtn = $('#loginbtn');
+        var emailObj = $('#email');
+        var remembermeObj = $('#rememberme');
+        var pwdObj = $('#pwd');
+        
+        clickBtn.click(function(){
+            
+            clickBtn.validResultHide();
+            emailObj.validResultHide();
+            if(!validateInput(emailObj)){
+                return;
+            }
+            
+            var remember = 'no';
+            if(remembermeObj.prop('checked')) {
+                remember = 'yes';
+            }
+            
+            var data = {email:emailObj.val(), pwd:pwdObj.val(), remember:remember};
+            
+            $.post('/login', data, function(result){
+                
+                if(result === 1) {
+                    // 登录成功
+                    $.queryString.initial();
+                    var redirectUrl = $.queryString.getValue('goto');
+                    if (typeof(redirectUrl) !== 'string' || redirectUrl.length === 0) {
+                        redirectUrl = "<?php echo $this->url(array(), 'personal-info') ?>";
+                    }
+                    location.href = redirectUrl;
+                } else {
+                    // 登录失败
+                    clickBtn.validResultShow('error','登录失败，请确认是否输入正确的邮箱地址和密码',-30, 50);
+                }
+            });
+            
+            
+            
+            
+        });
+        
+        function validateInput(emailObj) {
+            var result = true;
+
+            // CHECKING EMAIL
+            var reg = REG_EMAIL;
+            var email = emailObj.val();
+            if (reg.test(email)) {
+
+            } else {
+                    emailObj.validResultShow('error','请输入正确的邮箱',100);
+                    result = false;
+            }
+
+            return result;
+	}
+    })(jQuery);
+</script>

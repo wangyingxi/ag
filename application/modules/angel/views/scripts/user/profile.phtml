@@ -1,0 +1,212 @@
+<?php
+    $user = $this->me->getUser();
+    $wait_tobe_validate = $user->wait_tobe_validate;
+    if(isset($wait_tobe_validate) && $wait_tobe_validate == 1){
+        $wait_tobe_validate = true;
+    } else {
+        $wait_tobe_validate = false;
+    }
+?>
+<style>
+    #previewhome {
+        position:absolute;right:0;top:0;
+    }
+</style>
+<div class="container_24 main">
+<div class="clear_50px"></div>
+<?php echo $this->partial('user/partials/_usersetting_nav.phtml', array('selected'=>'profile', 'usertype'=>$user->user_type )); ?>
+<div class="grid_21 radiusall_4px mainbody">
+    <div class="leftmargin50px">
+        <?php echo $this->partial('user/partials/_show_validate_tip.phtml', array('user'=>$user)); ?>
+    <div class="relative">
+        <h1 class="pagetitle">
+            用户资料 - 基本信息 <a id="previewhome" class="btn btn_white gbtn gbtnnoicon" href="<?php echo $this->url(array('id'=>$this->me->getUser()->id), 'user-home') ?>">我的首页</a>
+        </h1>
+
+        <div class="clear_20px"></div>
+
+        <table class="submittable">
+            <tr>
+                <td class="col1">真实姓名</td>
+                <td class="gray"><?php echo($user->username)?></td>
+            </tr>
+            <tr>
+                <td>身份</td>
+                <td class="gray"><?php echo($user->getUserTypeInChinese())?></td>
+            </tr>
+            <tr>
+                <td>邮箱</td>
+                <td class="gray"><?php echo($user->email)?></td>
+            </tr>
+
+            <tr>
+                <td>自我介绍</td>
+                <td><textarea class="ntext narea"></textarea></td>
+            </tr>
+            <tr>
+                <td>现居城市</td>
+                <td><input type="text" class="ntext"/></td>
+            </tr>
+        </table>
+        <div class="boldline nomargin"></div>
+        <div class="clear_20px"></div>
+        <h1 class="pagetitle">
+        用户资料 - 兴趣
+        </h1>
+
+        <div class="clear_20px"></div>
+
+        <div class="settag">
+            <div class="fulltag" title="点击修改"><span class="tagtxt">足球</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">足球</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">旅行</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">健身</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">打游戏</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">遛狗</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">爬山，远足</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">技术，编程</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">设计</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+        </div>
+        <div class="clear_20px"></div>
+        <div class="addtag">
+            <strong>添加新的标签</strong>
+            <div class="clear_5px"></div>
+            <input type="text" class="ntext leftfloat" /> <input type="button" class="btn btn_white leftfloat" value="添加"/>
+        </div>
+        <div class="clear_20px"></div>
+        <div class="boldline nomargin"></div>
+        <div class="clear_20px"></div>
+
+
+
+        <h1 class="pagetitle">
+        用户资料 - 技能
+        </h1>
+
+        <div class="clear_20px"></div>
+
+        <div class="settag">
+            <div class="fulltag" title="点击修改"><span class="tagtxt">ASP.NET</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">SQL SERVER</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">ORACLE</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">Javascript</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">Photoshop</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">Jquery</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">Object C</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">PHP</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">BI</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+        </div>
+        <div class="clear_20px"></div>
+        <div class="addtag">
+            <strong>添加新的标签</strong>
+            <div class="clear_5px"></div>
+            <input type="text" class="ntext leftfloat" /> <input type="button" class="btn btn_white leftfloat" value="添加"/>
+        </div>
+        <div class="clear_20px"></div>
+        <div class="boldline nomargin"></div>
+        <div class="clear_20px"></div>
+
+
+
+        <h1 class="pagetitle">
+        用户资料 - 工作经历
+        </h1>
+
+        <div class="clear_20px"></div>
+
+        <div class="settag">
+            <div class="fulltag" title="点击修改"><span class="tagtxt">IBM</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">MICROSOFT</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">ORACLE</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">Tencent</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+            <div class="fulltag" title="点击修改"><span class="tagtxt">HUAWEI</span> <a href="javascript:void(0)" class="close" title="删除该标签"></a></div>
+        </div>
+        <div class="clear_20px"></div>
+        <div class="addtag">
+            <strong>添加新的标签</strong>
+            <div class="clear_5px"></div>
+            <input type="text" class="ntext leftfloat" /> <input type="button" class="btn btn_white leftfloat" value="添加"/>
+        </div>
+        <div class="clear_20px"></div>
+        <div class="boldline nomargin"></div>
+        <div class="clear_20px"></div>
+
+
+        <input type="button" value="保存更新" class="btn"/>
+        <div class="clear_50px"></div>
+    </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    (function($){
+        
+        $('body').addClass('my');
+        
+        $('.fulltag').click(function(e){
+            var object = $(e.target);
+            fullTagClick(object);
+        });
+        
+        $('.close').click(function(e){
+            fulltagClose(e);
+        });
+        
+        var fulltageditClassName = 'fulltagedit';
+        function fulltagClose(e) {
+            var object = $(e.target);
+            
+            
+            e.stopPropagation();
+        }
+        function fullTagClick(object) {
+            
+            object = findParentByClass(object, 'fulltag');
+            var wrapper = findParentByClass(object, 'settag');
+            var oldedit = wrapper.find('.fulltagedit');
+            fullTagEditOpen(object);
+        }
+        
+        function fullTagEditOpen(fulltag){
+            
+            if(fulltag.hasClass(fulltageditClassName)) { return; }
+            fulltag.addClass(fulltageditClassName);
+            var tagtxtSpan = fulltag.find('.tagtxt');
+            var tagtxt = tagtxtSpan.html();
+            
+            tagtxtSpan.remove();
+            fulltag.append("<input class='edit' type='text' value='" + tagtxt + "'/>");
+            var edit = fulltag.find('.edit');
+            edit.focus();
+            edit.change(function(e){
+                fullTagEditChange($(e.target));
+            });
+            edit.blur(function(e){
+                fullTagEditChange($(e.target));
+            });
+            edit.keypress(function(e){
+                if(e.keyCode === 13){
+                    fullTagEditChange($(e.target));
+                }
+            });
+        }
+        function fullTagEditChange(object){
+            var fulltag = object.parent();
+            fulltag.removeClass(fulltageditClassName);
+            var input = fulltag.find('.edit');
+            var inputTxt = input.val();
+            
+            if(inputTxt.length === 0){
+                fulltag.remove();
+                return;
+            }
+            
+            input.remove();
+            fulltag.append("<span class='tagtxt'>" + inputTxt + "</span>");
+            
+            // 更新到hidden保存
+        }
+        
+    })(jQuery);
+</script>
+        

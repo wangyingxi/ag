@@ -1,0 +1,191 @@
+<div class="container_24 main">
+<div class="grid_12 adv chapter1"></div>
+<div class="grid_12 board relative chapter1">
+    <h1 class="shorttitle">
+    注册
+    </h1>
+    <span class="unregister gray">已经有帐号了？现在 <a href="/login">登录</a> </span>
+
+    <div class="rolechoice" id="rolechoice">
+        <p class="leftfloat title">你的身份</p>
+
+        <div class="dots"></div>
+
+        <div class="roles" id="roles">
+                <input type="radio" name="role" id="investor" class="leftmargin20px" /> <label>投资者</label>
+                <input type="radio" name="role" id="startup" /> <label>创业者</label>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <style>
+        .gregwarning {
+            background:url(http://cdn1.iconfinder.com/data/icons/famfamfam_mini_icons/icon_alert.gif) no-repeat;
+            margin:0 0 10px 0;
+            padding-left:20px; 
+        }
+    </style>
+    <p class="gregwarning hidden">
+        “注册邮箱”和“真实姓名”不可修改
+    </p>
+    <div class="inputs">
+        <div class="input email">
+            <span class="title">注册邮箱</span>
+            <input type="text" id="email" class="txt" />
+        </div>
+        <div class="clear_10px"></div>
+        <div class="input name">
+            <span class="title">真实姓名</span>
+            <input type="text" id="name" class="txt" />
+        </div>
+        <div class="clear_10px"></div>
+        <div class="input pwd">
+            <span class="title">注册密码</span>
+            <input type="password" enterclickobjid="registerbtn" id="pwd" class="txt enterclick"/>
+        </div>
+        <div class="clear_20px"></div>
+        <div>
+            <input type="checkbox" id="tsqterm"/> <label for="tsqterm" class="gray songti">我同意天使圈的服务条款</label> <a href="#">服务条款</a>
+        </div>
+        <div class="clear_20px"></div>
+        <input type="button" id="registerbtn" class="btn" value="注册"/>
+        <!--<input type="button" id="testbtn" class="btn" value="测试按钮（可以删除）"/>-->
+    </div>
+</div>
+
+<div class="grid_24 hidden chapter2">
+        <div class="emailsent">
+            <strong class="font14px" id="registername"></strong>
+                <div class="clear_10px"></div>
+                <p class="songti">谢谢你加入到天使圈。但在你使用天使圈的服务前，还需要你激活你的天使圈帐号。我们已经发送了一封帐号激活邮件到你的注册邮箱，请根据邮件中的提示完成激活。再次谢谢。</p>
+                <p class="alignright songti">- 天使圈团队</p>
+                <div class="clear_10px"></div>
+                <a href="#" target="_blank" id="checkmailbox" class="btn resend">前往邮箱</a>
+        </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    (function($){
+        
+        $('body').addClass('loginpage');
+        
+        var guarantor_register = '<?php echo $this->guarantor_register ?>';
+        if(guarantor_register === '1') {
+            $('.shorttitle').html('担保人注册');
+            $('#startup').prop('checked', true);
+            
+            $('#name').prop('disabled', true);
+            $('#name').val('<?php echo $this->guarantor_name ?>');
+            $('#email').prop('disabled', true);
+            $('#email').val('<?php echo $this->guarantor_email ?>');
+            
+            $('.gregwarning').show();
+        }
+	var clickBtn = $('#registerbtn');
+	var emailObj = $('#email');
+	var rolesObj = $('#roles');
+	var nameObj = $('#name');
+	var pwdObj = $('#pwd');
+	var rolechoiceObj = $('#rolechoice');
+	var tsqtermObj = $('#tsqterm');
+
+        rolechoiceObj.inputTip('请你选择合适的身份', 'mouseenter', 'mouseleave', 50);
+        nameObj.inputTip('此处请填写你身份证上的真实姓名');
+        emailObj.inputTip('请使用你常用的邮件以便顺利通过邮箱认证');
+        pwdObj.inputTip('请设置长度大于6位的密码');
+	emailObj.change(function(){
+            checkingMailExist();
+        });
+        clickBtn.click(function(){
+            var radioObj = $('input[name="role"]').filter(':checked');
+            rolesObj.validResultHide();
+            emailObj.validResultHide();
+            nameObj.validResultHide();
+            pwdObj.validResultHide();
+            tsqtermObj.validResultHide();
+            clickBtn.validResultHide();
+
+            var validateResult = validateInput(rolesObj, radioObj, emailObj, pwdObj, tsqtermObj);
+            if (!validateResult) {
+                    return;
+            }
+            var usertype = radioObj.attr('id');
+
+            clickBtn.processBtn('注册中...');
+            var data = {email:emailObj.val(), username:nameObj.val(), pwd:pwdObj.val(), usertype:usertype};
+            $.post('/register', data, function(result){
+                    if(result === 1) {
+                            // 注册成功，显示注册邮件发送页面
+                            $('.chapter1').hide();
+                            $('#checkmailbox').attr('href', "http://www." + emailObj.val().split('@')[1]);
+                            $('#registername').html(nameObj.val());
+                            $('.chapter2').show();
+                    } else {
+                            // 注册失败，停留在当页，并提示错误
+                            clickBtn.processBtnRestore();
+                            clickBtn.validResultShow('error','注册失败：' + result, -30, 50);
+                    }
+            });
+		
+        });
+        function checkingMailExist() {
+            var email = $('#email').val();
+            emailObj.validResultHide();
+            // 是否存在该邮箱
+            $.post('/isemailexist', {email:email}, function(r){
+                if(r === 0) {
+                    emailObj.validResultShow('right','该邮箱可以注册',100);
+                    clickBtn.processBtnRestore();
+                } else {
+                    emailObj.validResultShow('error','该邮箱已经存在',100);
+                    clickBtn.processBtn('注册');
+                }
+            });
+        }
+	function validateInput(rolesObj, radioObj, emailObj, pwdObj, tsqtermObj) {
+            var result = true;
+            // CHECKING ROLES
+            if(radioObj.length === 0) {
+                    rolesObj.validResultShow('error','请选择一个身份',30);
+                    result = false;
+            }
+
+            // CHECKING EMAIL
+            var reg = REG_EMAIL;
+            var email = emailObj.val();
+            if (reg.test(email)) {
+
+            } else {
+                    emailObj.validResultShow('error','请输入正确的邮箱',100);
+                    result = false;
+            }
+
+            // CHECKING NAME
+            reg = REG_NAME;
+            if (reg.test(nameObj.val())) {
+
+            } else {
+                    nameObj.validResultShow('error','请输入你的真实姓名',100);
+                    result = false;
+            }
+            // CHECKING PWD
+            reg = REG_PWD;
+            if (reg.test(pwdObj.val())) {
+
+            } else {
+                    pwdObj.validResultShow('error','密码的长度必须大于6位',100);
+                    result = false;
+            }
+
+            // CHECKING TERM
+            var acceptTerm = tsqtermObj.prop('checked');
+            if (acceptTerm) {
+
+            } else {
+                    tsqtermObj.validResultShow('error','注册前请认真阅读，并勾选同意天使圈服务条款',220, 0);
+                    result = false;
+            }
+            return result;
+	}
+    })(jQuery);
+</script>

@@ -1,0 +1,366 @@
+<?php
+$username = $this->user->username;
+$company = $this->company;
+
+?>
+<style>
+    #userphoto {width:175px;height:175px;}
+</style>
+<div class="titleblock fullwrapper">
+        <div class="container_24">
+                <div class="grid_5 x06"></div>
+                <div class="grid_12">
+                        <p>
+                                <?php echo $username ?>
+                                <?php
+                                if($this->user->isStartup()) {
+                                    ?>
+                            <span class="badge">创业者</span>
+                            <?php
+                                }
+                                ?>
+                                <?php
+                                if($this->user->isInvestor()) {
+                                    ?>
+                            <span class="badge">投资者</span>
+                            <?php
+                                }
+                                ?>
+                        </p>
+
+                </div>
+                <div class="grid_7"></div>
+        </div>
+</div>
+<div class="subtitleblock fullwrapper">
+        <div class="container_24">
+                <div class="grid_5 photo">
+                        <a href="#" class="shadowbox photolink">
+                                <img id="userphoto" src="<?php echo $this->imageUrl ?>"/>
+                                <span class="badge">金牌投资人</span>
+                                <span class="badge" style="top:25px;">实名认证</span>
+                        </a>
+                </div>
+                <div class="grid_12">
+                        <p class="x05">
+                                中国，上海
+                        </p>
+                        <a href="www.ana-baltodano.com" target="_blank" class="lightgray">www.ana-baltodano.com</a>
+                        <ul class="snslist">
+                                <li>
+                                        <a href="#" class="weibo"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="douban"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="tqq"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="linkedin"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="pinterest"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="qzone"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="google"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="instagram"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="dribbble"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="facebook"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="flickr"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="tumblr"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="twitter"></a>
+                                </li>
+                                <li>
+                                        <a href="#" class="mail"></a>
+                                </li>
+                        </ul>
+                </div>
+                <div class="grid_7 x04">
+
+                        <input type="button" class="btn rightfloat leftmargin5px" id="sendmsg" popuptargetid="template" value="发送私信"/>
+                        <input type="button" class="btn btn_green rightfloat leftmargin5px" id="followit" value="关注TA"/>
+                </div>
+        </div>
+</div>
+
+
+<div class="container_24 main">
+        <div class="grid_5 peoplelt">
+                <div class="rightmargin10px">
+                        <div class="clear_40px"></div>
+                        <?php
+                        if(!empty($this->user->startup_introduction)) {
+                        ?>
+                        <div class="selfintroduction block">
+                                <p class="bold font15px bottommargin5px">自我介绍</p>
+                                <div class="boldline"></div>
+                                <p class="info">
+                                        <?php  echo $this->user->startup_introduction ?>
+                                </p>
+                                <a href="javascript:void(0)" class="shadowbtn rightfloat" onclick="$(this).parent().find('.info').toggleClass('autoheight');">
+                                        更多
+                                </a>
+                                <div class="clear"></div>
+                        </div>
+                        <?php
+                        }
+                        ?>
+                        <div class="hobbit block">
+                                <p class="bold font15px bottommargin5px">兴趣</p>
+                                <div class="boldline"></div>
+                                <div class="topmargin5px">
+                                        <a href="#" class="fulltag">
+                                                LBS Service
+                                        </a>
+                                        <a href="#" class="fulltag">
+                                                internet
+                                        </a>
+                                        <a href="#" class="fulltag">
+                                                移动生活
+                                        </a>
+
+                                </div>
+                        </div>
+
+                        <div class="skill block">
+                                <p class="bold font15px bottommargin5px">技能</p>
+                                <div class="boldline"></div>
+                                <div class="topmargin5px">
+                                        <a href="#" class="fulltag">
+                                                asp.net
+                                        </a>
+                                        <a href="#" class="fulltag">
+                                                sql server
+                                        </a>
+                                        <a href="#" class="fulltag">
+                                                dota
+                                        </a>
+                                        <a href="#" class="fulltag">
+                                                健身
+                                        </a>
+
+                                </div>
+                        </div>
+
+                        <div class="experience block">
+                                <p class="bold font15px bottommargin5px">工作经历</p>
+                                <div class="boldline"></div>
+                                <div class="topmargin5px">
+                                        <a href="#" class="fulltag">
+                                                LBS Service
+                                        </a>
+                                        <a href="#" class="fulltag">
+                                                internet
+                                        </a>
+                                        <a href="#" class="fulltag">
+                                                移动生活
+                                        </a>
+
+                                </div>
+                        </div>
+
+                </div>
+        </div>
+
+        <div class="grid_12 itemcontainer">
+                <div class="black bold font14px relative">
+                    <?php
+                    if(!empty($company) && count($company) > 0) {
+                        ?>
+                        <p class="x07 leftfloat">
+                                <?php echo $username ?> <?php if($this->user->isStartup()) { echo '创建'; } if($this->user->isInvestor()) { echo '投资'; }?>的公司
+                        </p>
+                        <?php
+                    }
+                        ?>
+                        <ul class="pages rightfloat" style="display:block;">
+                        <?php
+                        $i = 0;
+                        foreach($company as $item) {
+                            $className = "";
+                            if($i == 0) {
+                                $className = "selected";
+                            }
+                        ?>
+                                <li><a href="#" class="<?php echo $className ?>"><?php echo $i + 1?></a></li>
+                        </ul>
+                        <?php
+                        }
+                        ?>
+                </div>
+            <?php
+            if(!empty($company) && count($company) > 0) { 
+            ?>
+                <div class="clear_20px"></div>
+                <?php
+            }
+                ?>
+                <div class="grid_12 itemblock alpha omega">
+                    <?php
+                    if(!empty($company) && count($company) > 0) {
+                        foreach($company as $item) {
+                            $images = $item->images;
+                            $firstOrigUrl = $this->companyImage($images[0]->angelname, 'orig');
+                    ?>
+                        <div class="itemwrapper odd">
+                                <div class="head">
+                                        <p>
+                                                <?php echo $item->name ?>
+                                        </p>
+                                        <i>
+                                                "ludyboy"，85后天平座，台湾人，半导体工程师，胶片摄影师
+                                        </i>
+                                </div>
+                                <a href="<?php echo $this->url(array('id'=>$item->id), 'company-detail')?>" class="itemlink">
+                                    <img src="<?php echo $firstOrigUrl ?>" height="100%"/>
+                                </a>
+                                <div class="bar">
+                                       <?php echo $this->partial('company/partials/_company_prog.phtml', array('company'=>$item)); ?>
+                                        <div class="remainingtime">
+                                                <span class="line"></span>
+                                                <div class="t1">
+                                                        剩余时间
+                                                </div>
+                                                <div class="t2">
+                                                        <strong><?php echo $item->getLeftDays(false)?></strong><span>天</span>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                    
+                    <?php
+                        }?>
+                    <div class="clear_30px"></div>
+                    <?php
+                    }
+                    ?>
+                        
+                                <?php echo $this->partial('company/partials/_company_messages.phtml', array()); ?>
+                        <div class="clear"></div>
+                        <a href="#" class="btn btn_white rightmargin5px loadmore">
+                                加载更多
+                        </a>
+                </div>
+        </div>
+        <div class="grid_7">
+                <div class="leftmargin5px">
+                        <div class="sideblock">
+                                <div class="head">
+                                        <?php echo $username ?> 关注的公司
+                                </div>
+                                <div class="body">
+                                        <div class="corps">
+                                                <div class="corp">
+                                                        <a href="#" class="img">
+                                                                <img src="img/photos/person7.jpg" />
+                                                        </a>
+                                                        <div class="txt">
+                                                                <a href="#">深圳中兴通讯有限公司</a>
+                                                                <span class="songti grayA">
+                                                                        中兴通讯是全球领先的综合性通信制造业上市
+                                                                </span>
+                                                        </div>
+                                                        <div class="clear"></div>
+                                                </div>
+                                                <div class="corp">
+                                                        <a href="#" class="img">
+                                                                <img src="img/photos/person7.jpg" />
+                                                        </a>
+                                                        <div class="txt">
+                                                                <a href="#">深圳中兴通讯有限公司</a>
+                                                                <span class="songti grayA">
+                                                                        中兴通讯是全球领先的综合性通信制造业上市
+                                                                </span>
+                                                        </div>
+                                                        <div class="clear"></div>
+                                                </div>
+                                                <div class="clear"></div>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <div class="sideblock">
+                                <div class="head">
+                                        <?php echo $username ?> 关注的人
+                                </div>
+                                <div class="body">
+                                        <div class="imgs">
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person1.jpg" />
+                                                </a>
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person2.jpg" />
+                                                </a>
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person3.jpg" />
+                                                </a>
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person4.jpg" />
+                                                </a>
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person5.jpg" />
+                                                </a>
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person5.jpg" />
+                                                </a>
+                                                <div class="clear"></div>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <div class="sideblock">
+                                <div class="head">
+                                        他们关注 <?php echo $username ?>
+                                </div>
+                                <div class="body">
+                                        <div class="imgs">
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person1.jpg" />
+                                                </a>
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person2.jpg" />
+                                                </a>
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person3.jpg" />
+                                                </a>
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person4.jpg" />
+                                                </a>
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person5.jpg" />
+                                                </a>
+                                                <a href="#" class="img">
+                                                        <img src="img/photos/person5.jpg" />
+                                                </a>
+                                                <div class="clear"></div>
+                                        </div>
+                                </div>
+                        </div>
+
+                </div>
+        </div>
+
+</div>
+
+<script type="text/javascript">
+    (function($){
+        $('body').addClass('people');
+        $('.sideblock').addClass('rightmargin5px');
+    })(jQuery);
+</script>
