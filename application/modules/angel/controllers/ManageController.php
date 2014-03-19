@@ -13,6 +13,19 @@ class Angel_ManageController extends Angel_Controller_Action
         
     }
     
+    public function productListAction() {
+        
+    }
+    public function productCreateAction() {
+        
+    }
+    public function productEditAction() {
+        
+    }
+    public function productDeleteAction() {
+        
+    }
+    
 //    public function personalInfoListAction() {
 //        $userModel = $this->getModel('user');
 //        $paginator = $userModel->getAllUsersInWaitTobeValidatedList();
