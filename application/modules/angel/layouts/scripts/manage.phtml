@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>管理系统</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+
+        <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+        <link href="<?php echo $this->cssPath("global.css"); ?>" rel="stylesheet" type="text/css" />
+        <link href="<?php echo $this->cssPath("global.manage.css"); ?>" rel="stylesheet" type="text/css" />
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
+            <script src="http://cdn.bootcss.com/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <!-- Static navbar -->
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/manage">管理系统</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">商品管理 <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">商品列表</a></li>
+                                <li><a href="#">添加商品</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">图片管理 <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">图片列表</a></li>
+                                <li><a href="#">添加图片</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">分类管理 <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">分类列表</a></li>
+                                <li><a href="#">添加分类</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">安全退出 <i class="glyphicon glyphicon-off"></i></a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+
+
+        <div class="container">
+            <?php echo $this->layout()->content; ?>
+        </div> <!-- /container -->
+
+
+        <script type="text/javascript" src="<?php echo $this->jsPath('jquery.1.10.2.min.js'); ?>"></script>
+        <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                
+            });
+
+        </script>
+    </body>
+</html>
