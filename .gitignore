@@ -1,2 +1,8 @@
 data/cache/*
 data/log/*
+data/tmp/*
+public/user/doc/*
+public/user/image/*
+public/company/logo/*
+public/company/image/*
+public/company/doc/*
