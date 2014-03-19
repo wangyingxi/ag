@@ -2,6 +2,8 @@
 
 class Angel_ManageController extends Angel_Controller_Action
 {
+    protected $login_not_required = array('index', 'product-list');
+    
     public function init()
     {
         parent::init();
