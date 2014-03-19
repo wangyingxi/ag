@@ -14,3 +14,6 @@
 [19-Mar-2014 05:26:54 UTC] PHP Warning:  move_uploaded_file(): Unable to move '/tmp/phpoJeKBa' to '/var/www/ag/application/../data/tmp/53292a9ee4323' in /var/www/ag/library/Zend/File/Transfer/Adapter/Http.php on line 189
 [19-Mar-2014 05:27:01 UTC] PHP Warning:  move_uploaded_file(/var/www/ag/application/../data/tmp/53292aa54e1ce): failed to open stream: No such file or directory in /var/www/ag/library/Zend/File/Transfer/Adapter/Http.php on line 189
 [19-Mar-2014 05:27:01 UTC] PHP Warning:  move_uploaded_file(): Unable to move '/tmp/phpQfa5PR' to '/var/www/ag/application/../data/tmp/53292aa54e1ce' in /var/www/ag/library/Zend/File/Transfer/Adapter/Http.php on line 189
+[19-Mar-2014 06:25:11 UTC] PHP Warning:  Division by zero in /var/www/ag/application/modules/angel/models/Documents/Company.php on line 656
+[19-Mar-2014 06:25:11 UTC] PHP Warning:  Division by zero in /var/www/ag/application/modules/angel/models/Documents/Company.php on line 656
+[19-Mar-2014 06:25:11 UTC] PHP Warning:  Division by zero in /var/www/ag/application/modules/angel/controllers/CompanyController.php on line 462

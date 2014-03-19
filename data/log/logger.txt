@@ -18,3 +18,13 @@ Stack trace:
 #5 /var/www/ag/public/index.php(44): Zend_Application->run()
 #6 {main}
 2014-03-19T13:26:35+08:00 INFO (6): array
+2014-03-19T14:25:11+08:00 INFO (6): exception 'Zend_Controller_Action_Exception' with message 'Action "logo" does not exist and was not trapped in __call()' in /var/www/ag/library/Zend/Controller/Action.php:485
+Stack trace:
+#0 /var/www/ag/library/Zend/Controller/Action.php(518): Zend_Controller_Action->__call('logoAction', Array)
+#1 /var/www/ag/library/Zend/Controller/Dispatcher/Standard.php(308): Zend_Controller_Action->dispatch('logoAction')
+#2 /var/www/ag/library/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))
+#3 /var/www/ag/library/Zend/Application/Bootstrap/Bootstrap.php(97): Zend_Controller_Front->dispatch()
+#4 /var/www/ag/library/Zend/Application.php(366): Zend_Application_Bootstrap_Bootstrap->run()
+#5 /var/www/ag/public/index.php(44): Zend_Application->run()
+#6 {main}
+2014-03-19T14:25:11+08:00 INFO (6): array
