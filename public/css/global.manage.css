@@ -1,0 +1,11 @@
+/*
+* Reset the bootstrap css
+*/
+
+
+.intlbd {
+    background: #F0F0F0;
+    border-top: 3px solid #339bfc;
+    padding: 20px;
+    text-align:center;
+}
