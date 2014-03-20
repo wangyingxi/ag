@@ -1,10 +1,11 @@
 <?php
+
 namespace Documents;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /** @ODM\Document */
-class Product extends AbstractDocument{
+class Product extends AbstractDocument {
 
     /** @ODM\String */
     protected $title;                               // 标题
@@ -25,7 +26,7 @@ class Product extends AbstractDocument{
     protected $status = 'online';                   // 商品状态: 'online', 'soldout'
 
     /** @ODM\String */
-    protected $description = 'nothing';
+    protected $description;
 
     /** @ODM\ReferenceMany(targetDocument="\Documents\Photo") */
     protected $photo = array();
@@ -41,26 +42,34 @@ class Product extends AbstractDocument{
 
     /** @ODM\ReferenceOne(targetDocument="\Documents\User") */
     protected $owner;
-    
+
     /** @ODM\Int */
     protected $view = 0;
-    
+
     /** @ODM\Int */
     protected $sold = 0;
 
     /**
      * 添加图片
      */
-    public function addPhoto($name, $type, $description, $owner){
+    public function addPhoto($name, $type, $description, $owner) {
         $photo = new \Documents\Photo();
         $photo->name = $name;
         $photo->description = $description;
         $photo->type = $type;
         $photo->owner = $owner;
-        
+
         $this->photo[] = $photo;
-        
+
         return $photo;
+    }
+
+    public function addSellingPrice($currency, $amount) {
+        $priceDoc = new \Documents\PriceDoc();
+        $priceDoc->currency = $currency;
+        $priceDoc->amount = $amount;
+        
+        $this->selling_price[] = $priceDoc;
     }
 
 }
