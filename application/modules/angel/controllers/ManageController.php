@@ -1,33 +1,36 @@
 <?php
 
-class Angel_ManageController extends Angel_Controller_Action
-{
+class Angel_ManageController extends Angel_Controller_Action {
+
     protected $login_not_required = array('index', 'product-list');
-    
-    public function init()
-    {
+
+    public function init() {
         parent::init();
-        
+
         $this->_helper->layout->setLayout('manage');
     }
-    
+
     public function indexAction() {
         
     }
-    
+
     public function productListAction() {
         
     }
+
     public function productCreateAction() {
+        $this->view->title = "创建商品";
         
     }
+
     public function productEditAction() {
         
     }
+
     public function productDeleteAction() {
         
     }
-    
+
 //    public function personalInfoListAction() {
 //        $userModel = $this->getModel('user');
 //        $paginator = $userModel->getAllUsersInWaitTobeValidatedList();
@@ -38,7 +41,6 @@ class Angel_ManageController extends Angel_Controller_Action
 //        $this->view->type_identity_front = \Angel_Model_User::FILETYPE_IDENTITY_FRONT;
 //        $this->view->type_identify_back = \Angel_Model_User::FILETYPE_IDENTITY_BACK;
 //    } 
-    
 //    public function companyInfoListAction() {
 //        $companyModel = $this->getModel('company');
 //        $paginator = $companyModel->getAllCompanyInWaitTobeValidatedList();
