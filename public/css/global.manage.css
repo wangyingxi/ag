@@ -1,11 +1,17 @@
 /*
 * Reset the bootstrap css
 */
-
+.input-group {
+    margin-bottom:2px;
+}
 
 .intlbd {
     background: #F0F0F0;
     border-top: 3px solid #339bfc;
     padding: 20px;
     text-align:center;
+}
+.page-title {
+    font-size:24px;
+    margin-bottom:30px;
 }

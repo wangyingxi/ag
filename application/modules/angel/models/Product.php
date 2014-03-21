@@ -17,10 +17,11 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
      * @param float $base_price
      * @param array $selling_price
      * @param \Documents\User $owner
+     * @param \Document\Brand $brand
      * @return mix - when user registration success, return the user id, otherwise, boolean false
      * @throws Angel_Exception_Product 
      */
-    public function addProduct($title, $short_title, $sub_title, $sku, $description, $photo, $location, $base_price, $selling_price, $owner) {
+    public function addProduct($title, $short_title, $sub_title, $sku, $description, $photo, $location, $base_price, $selling_price, $owner, $brand) {
         $result = false;
 
         if ($this->isSkuExist($sku)) {
@@ -52,7 +53,9 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
             }
         }
         $product->owner = $owner;
-
+        if ($brand) {
+            $product->brand = $brand;
+        }
         try {
             $this->_dm->persist($product);
             $this->_dm->flush();
