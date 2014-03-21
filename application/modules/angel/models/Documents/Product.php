@@ -42,7 +42,10 @@ class Product extends AbstractDocument {
 
     /** @ODM\ReferenceOne(targetDocument="\Documents\User") */
     protected $owner;
-
+    
+    /** @ODM\ReferenceOne(targetDocument="\Documents\Brand") */
+    protected $brand;
+    
     /** @ODM\Int */
     protected $view = 0;
 
