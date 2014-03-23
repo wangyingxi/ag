@@ -2,7 +2,19 @@
 
 class Angel_ManageController extends Angel_Controller_Action {
 
-    protected $login_not_required = array('index', 'product-list', 'product-create');
+    protected $login_not_required = array(
+        'index',
+        'product-list',
+        'product-create',
+        'photo-upload',
+        'photo-create'
+    );
+
+    protected function getTmpFile($uid) {
+        $utilService = $this->_container->get('util');
+        $result = $utilService->getTmpDirectory() . '/' . $uid;
+        return $result;
+    }
 
     public function init() {
         parent::init();
@@ -20,7 +32,6 @@ class Angel_ManageController extends Angel_Controller_Action {
 
     public function productCreateAction() {
         $this->view->title = "创建商品";
-        
     }
 
     public function productEditAction() {
@@ -29,6 +40,53 @@ class Angel_ManageController extends Angel_Controller_Action {
 
     public function productDeleteAction() {
         
+    }
+
+    public function photoCreateAction() {
+
+        if ($this->request->isPost()) {
+            $tmp = $this->getParam('tmp');
+            echo $this->getTmpFile($tmp);
+            exit;
+        } else {
+
+            $fs = $this->getParam('fs');
+            if ($fs) {
+                $this->view->fileList = array();
+                $f = explode("|", $fs);
+                foreach ($f as $k => $v) {
+                    $this->view->fileList[] = array('v' => $v, 'p' => $this->getTmpFile($v));
+                }
+            }
+            
+        }
+    }
+
+    public function photoUploadAction() {
+        if ($this->request->isPost()) {
+            // POST METHOD
+            $this->_helper->layout->disableLayout();
+
+            $result = 0;
+            $upload = new Zend_File_Transfer();
+
+            $upload->addValidator('Size', false, 5120000); //5M
+
+            $uid = uniqid();
+            $destination = $this->getTmpFile($uid);
+
+            $upload->addFilter('Rename', $destination);
+
+            if ($upload->isValid()) {
+                if ($upload->receive()) {
+                    $result = $uid;
+                }
+            }
+            echo $result;
+            exit;
+        } else {
+            // GET METHOD
+        }
     }
 
 //    public function personalInfoListAction() {

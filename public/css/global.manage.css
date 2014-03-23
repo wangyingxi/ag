@@ -7,6 +7,13 @@
 form[role='form'] {
     margin-bottom:30px;
 }
+
+
+
+
+* {
+    font-family:"microsoft yahei";
+}
 .intlbd {
     background: #F0F0F0;
     border-top: 3px solid #339bfc;

@@ -7,9 +7,13 @@
         <!-- Bootstrap -->
 
         <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="/bootstrap/css/bootstrap.theme.css">
         <link href="<?php echo $this->cssPath("global.css"); ?>" rel="stylesheet" type="text/css" />
         <link href="<?php echo $this->cssPath("global.manage.css"); ?>" rel="stylesheet" type="text/css" />
-
+        
+        <script type="text/javascript" src="<?php echo $this->jsPath('jquery.1.10.2.min.js'); ?>"></script>
+        <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+        
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -68,8 +72,7 @@
         </div> <!-- /container -->
 
 
-        <script type="text/javascript" src="<?php echo $this->jsPath('jquery.1.10.2.min.js'); ?>"></script>
-        <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+        
         <script type="text/javascript">
             $(document).ready(function() {
                 

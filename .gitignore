@@ -6,4 +6,5 @@ public/user/image/*
 public/company/logo/*
 public/company/image/*
 public/company/doc/*
+public/tmp/*
 nbproject/*

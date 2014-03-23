@@ -1,0 +1,82 @@
+<style>
+    #next-step {
+        display:none;
+    }
+
+    .itm {
+    }
+    .wp {
+        background:#F0F0F0;
+        margin-bottom:30px;
+        padding:15px;
+    }
+    .wp p {
+        font-size:12px;
+    }
+    .iwp {
+        height:150px;
+        overflow:hidden;
+        position:relative;
+        width:100%;
+    }
+    .iwp img {
+        left:0;
+        position:absolute;
+        top:0;
+    }
+    .wp label {
+        color:#5cb85c;
+    }
+    .btb {
+        padding:20px 0;
+        text-align:right;
+    }
+    .op {
+        opacity: 0.5;
+    }
+</style>
+<form role="form">
+    <div class="btb">
+        <input type="button" id="generate" class="btn btn-success" value="生成缩略图" />
+    </div>
+    <div class="row">
+        <?php foreach ($this->fileList as $k => $v): ?>
+            <div class="col-md-2 itm">
+                <input type="hidden" class="tmp" value="<?php echo $v['v'] ?>"/>
+                <div class="wp">
+                    <p>
+                        <?php echo $v['v'] ?>
+                    </p>
+                    <div class="iwp">
+                        <img width="100%" src="/tmp/<?php echo $v['v'] ?>"/>
+                    </div>
+                    <label></label>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</form>
+
+<script type="text/javascript">
+    (function($) {
+        $('#generate').click(function() {
+            var wp = $('.itm .wp');
+            wp.find('label').html('waiting ...');
+            $.each(wp, function() {
+                var lb = $(this).find('label');
+                lb.html('sending ...');
+                var tmp = $(this).find('.tmp').val();
+                $.ajax({
+                    url: '/manage/photo/create',
+                    dataType: 'json',
+                    type: 'POST',
+                    data: {tmp: tmp},
+                    complete: function(response) {
+                        alert(response);
+                        lb.html('completed ...');
+                    }
+                });
+            });
+        });
+    })(jQuery);
+</script>
