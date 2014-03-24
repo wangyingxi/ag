@@ -60,9 +60,9 @@
 <script type="text/javascript">
     (function($) {
         $('#generate').click(function() {
-            var wp = $('.itm .wp');
-            wp.find('label').html('waiting ...');
-            $.each(wp, function() {
+            var itm = $('.itm');
+            itm.find('label').html('waiting ...');
+            $.each(itm, function() {
                 var lb = $(this).find('label');
                 lb.html('sending ...');
                 var tmp = $(this).find('.tmp').val();
@@ -72,7 +72,7 @@
                     type: 'POST',
                     data: {tmp: tmp},
                     complete: function(response) {
-                        alert(response);
+                        console.log(response);
                         lb.html('completed ...');
                     }
                 });

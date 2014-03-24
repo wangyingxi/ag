@@ -45,11 +45,28 @@ class Angel_ManageController extends Angel_Controller_Action {
     public function photoCreateAction() {
 
         if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
             $tmp = $this->getParam('tmp');
-            echo $this->getTmpFile($tmp);
+            $file = $this->getTmpFile($tmp);
+//            $owener = $this->me->getUser();
+            $photoModel = $this->getModel('photo');
+            try {
+                $destination = $this->getTmpFile($tmp);
+//                $result = $photoModel->addPhoto($destination, $owener);
+                $result = $photoModel->addPhoto($destination);
+                echo $result;exit;
+                if ($result) {
+                    $result = 1;
+                }
+            } catch (Exception $e) {
+                // image is not accepted
+                $result = 2;
+            }
+            echo $result;
             exit;
         } else {
-
+            // GET METHOD
             $fs = $this->getParam('fs');
             if ($fs) {
                 $this->view->fileList = array();
@@ -58,7 +75,6 @@ class Angel_ManageController extends Angel_Controller_Action {
                     $this->view->fileList[] = array('v' => $v, 'p' => $this->getTmpFile($v));
                 }
             }
-            
         }
     }
 
