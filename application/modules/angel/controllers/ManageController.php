@@ -112,7 +112,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         $result = $photoModel->getPhoto();
         $resource = array();
         foreach ($result as $r) {
-            $resource[] = array('path' => $this->view->photoImage($r->name . $r->type, 'main'),
+            $resource[] = array('path' => array('orig' => $this->view->photoImage($r->name . $r->type), 'main' => $this->view->photoImage($r->name . $r->type, 'main'), 'xlarge' => $this->view->photoImage($r->name . $r->type, 'xlarge'), 'small' => $this->view->photoImage($r->name . $r->type, 'small'), 'large' => $this->view->photoImage($r->name . $r->type, 'large')),
                 'name' => $r->name,
                 'type' => $r->type);
         }
