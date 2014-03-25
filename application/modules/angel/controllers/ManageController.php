@@ -7,7 +7,8 @@ class Angel_ManageController extends Angel_Controller_Action {
         'product-list',
         'product-create',
         'photo-upload',
-        'photo-create'
+        'photo-create',
+        'photo-list'
     );
 
     protected function getTmpFile($uid) {
@@ -55,7 +56,8 @@ class Angel_ManageController extends Angel_Controller_Action {
                 $destination = $this->getTmpFile($tmp);
 //                $result = $photoModel->addPhoto($destination, $owener);
                 $result = $photoModel->addPhoto($destination);
-                echo $result;exit;
+                echo $result;
+                exit;
                 if ($result) {
                     $result = 1;
                 }
@@ -103,6 +105,18 @@ class Angel_ManageController extends Angel_Controller_Action {
         } else {
             // GET METHOD
         }
+    }
+
+    public function photoListAction() {
+        $photoModel = $this->getModel('photo');
+        $result = $photoModel->getPhoto();
+        $resource = array();
+        foreach ($result as $r) {
+            $resource[] = array('path' => $this->view->photoImage($r->name . $r->type, 'main'),
+                'name' => $r->name,
+                'type' => $r->type);
+        }
+        $this->view->resource = $resource;
     }
 
 //    public function personalInfoListAction() {

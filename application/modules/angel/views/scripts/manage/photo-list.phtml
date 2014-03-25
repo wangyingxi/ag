@@ -1,0 +1,60 @@
+<style>
+
+
+    .itm {
+    }
+    .wp {
+        background:#F0F0F0;
+        margin-bottom:30px;
+        padding:15px;
+    }
+    .wp p {
+        font-size:12px;
+    }
+    .iwp {
+        height:230px;
+        overflow:hidden;
+        position:relative;
+        width:100%;
+    }
+    .iwp img {
+        left:0;
+        position:absolute;
+        top:0;
+    }
+    .wp label {
+        color:#5cb85c;
+    }
+    .btb {
+        padding:20px 0;
+        text-align:right;
+    }
+</style>
+<?php
+$model = $this->model;
+?>
+<div class="btb">
+    <input type="button" id="clear-cache" class="btn btn-success" value="清除缓存图片" />
+</div>
+<div class="row">
+    <?php foreach ($this->resource as $p): ?>
+        <div class="col-md-3 itm">
+            <input type="hidden" class="tmp" value="<?php echo $p['name'] ?>"/>
+            <div class="wp">
+                <p>
+                    <?php echo $p['name'] . $p['type'] ?>
+                </p>
+                <div class="iwp">
+                    <img width="100%" src="<?php echo $p['path'] ?>"/>
+                </div>
+                <label></label>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<script type="text/javascript">
+    (function($) {
+
+    })(jQuery);
+</script>

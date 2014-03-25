@@ -16,7 +16,8 @@ class Angel_Service_Util{
      * dynamic generate a unique filename
      */
     public function generateFilename($extension = ''){
-        $filename = uniqid(md5(mt_rand()), true);
+//        $filename = uniqid('md5(mt_rand())', true);
+        $filename = uniqid('', true);
         
         if(!empty($extension)){
             if(strpos($extension, '.') !== 0){
