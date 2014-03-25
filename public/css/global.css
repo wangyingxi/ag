@@ -5,5 +5,5 @@ Common css
     margin-bottom:10px;
 }
 .green {
-    color:#398439;
+    color:#398439 !important;
 }

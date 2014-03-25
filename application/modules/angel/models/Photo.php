@@ -36,6 +36,7 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
     public function getPhotoByUser($user_id) {
         $photo = $this->_dm->createQueryBuilder($this->_document_class)
                 ->field('owner.$id')->equals(new MongoId($user_id))
+                ->field('status')->equals('online')
                 ->getQuery()
                 ->execute();
         return $photo;

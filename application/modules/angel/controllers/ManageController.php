@@ -8,7 +8,8 @@ class Angel_ManageController extends Angel_Controller_Action {
         'product-create',
         'photo-upload',
         'photo-create',
-        'photo-list'
+        'photo-list',
+        'photo-clearcache'
     );
 
     protected function getTmpFile($uid) {
@@ -104,6 +105,30 @@ class Angel_ManageController extends Angel_Controller_Action {
             exit;
         } else {
             // GET METHOD
+        }
+    }
+
+    public function photoClearcacheAction() {
+        if ($this->request->isPost()) {
+            // POST METHOD
+            $this->_helper->layout->disableLayout();
+
+            $result = 0;
+            $utilService = $this->_container->get('util');
+            $tmp = $utilService->getTmpDirectory();
+            
+            try {
+                if ($od = opendir($tmp)) {
+                    while ($file = readdir($od)) {
+                        
+                        unlink($tmp . DIRECTORY_SEPARATOR . $file);
+                    }
+                }
+                echo 1;
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+            exit;
         }
     }
 

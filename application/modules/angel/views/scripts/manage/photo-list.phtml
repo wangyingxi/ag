@@ -72,6 +72,16 @@ $model = $this->model;
 
 <script type="text/javascript">
     (function($) {
-
+        $('#clear-cache').click(function() {
+            $.ajax({
+                url: '/manage/photo/clearcache',
+                dataType: 'json',
+                type: 'POST',
+                complete: function(response) {
+                    console.log(response);
+                    alert('操作成功');
+                }
+            });
+        });
     })(jQuery);
 </script>

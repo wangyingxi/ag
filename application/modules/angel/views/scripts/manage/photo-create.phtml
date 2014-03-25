@@ -25,7 +25,7 @@
         top:0;
     }
     .wp label {
-        color:#5cb85c;
+        color:#aaa;
     }
     .btb {
         padding:20px 0;
@@ -41,7 +41,7 @@
     </div>
     <div class="row">
         <?php foreach ($this->fileList as $k => $v): ?>
-            <div class="col-md-2 itm">
+            <div class="col-md-2 itm waiting">
                 <input type="hidden" class="tmp" value="<?php echo $v['v'] ?>"/>
                 <div class="wp">
                     <p>
@@ -63,7 +63,8 @@
             var itm = $('.itm');
             itm.find('label').html('waiting ...');
             $.each(itm, function() {
-                var lb = $(this).find('label');
+                var obj = $(this);
+                var lb = obj.find('label');
                 lb.html('sending ...');
                 var tmp = $(this).find('.tmp').val();
                 $.ajax({
@@ -71,9 +72,24 @@
                     dataType: 'json',
                     type: 'POST',
                     data: {tmp: tmp},
-                    complete: function(response) {
-                        console.log(response);
-                        lb.html('completed ...');
+                    success: function(response) {
+                        if (response === 1) {
+                            obj.removeClass('waiting');
+                            obj.addClass('done');
+                            lb.html('completed ...').addClass('green');
+                        } else {
+                            alert('操作失败');
+                        }
+                    },
+                    error: function() {
+                        alert('操作失败');
+                    },
+                    complete: function() {
+                        if ($('.waiting').length === 0 && $('.done').length === $('.itm').length) {
+                            $('#generate').after('全部上传完毕，<a href="/manage/photo/list">立即查看</a>');
+                            $('#generate').remove();
+
+                        }
                     }
                 });
             });

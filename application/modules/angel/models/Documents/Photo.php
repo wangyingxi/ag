@@ -17,5 +17,8 @@ class Photo extends AbstractDocument{
     
     /** @ODM\ReferenceOne(targetDocument="\Documents\User") */
     protected $owner;
+    
+    /** @ODM\String **/
+    protected $status = 'online';           // 图片状态: 'online', 'removed'
 
 }
