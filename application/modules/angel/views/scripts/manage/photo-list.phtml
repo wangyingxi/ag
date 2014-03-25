@@ -69,17 +69,36 @@ $model = $this->model;
         </div>
     <?php endforeach; ?>
 </div>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="btn-group">
 
+            <?php for ($i = 1; $i <= $this->paginator->count(); $i++) { ?>
+                <?php
+                $cls = "";
+                if ($this->paginator->getCurrentPageNumber() == $i) {
+                    $cls = 'active';
+                }
+                ?>
+                <a href="<?php echo $this->url(array('page' => $i), 'manage-photo-list') ?>" class="btn btn-default btn-sm <?php echo $cls ?>"><?php echo $i ?></a>
+            <?php } ?>
+
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     (function($) {
         $('#clear-cache').click(function() {
             $.ajax({
-                url: '/manage/photo/clearcache',
+                url: '<?php echo $this->url(array(), 'manage-photo-clear-cache') ?>',
                 dataType: 'json',
                 type: 'POST',
                 complete: function(response) {
-                    console.log(response);
-                    alert('操作成功');
+                    if (response) {
+                        alert('操作成功');
+                    } else {
+                        alert('操作失败');
+                    }
                 }
             });
         });

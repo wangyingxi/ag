@@ -68,7 +68,7 @@
                 lb.html('sending ...');
                 var tmp = $(this).find('.tmp').val();
                 $.ajax({
-                    url: '/manage/photo/create',
+                    url: '<?php echo $this->url(array(), 'manage-photo-create') ?>',
                     dataType: 'json',
                     type: 'POST',
                     data: {tmp: tmp},

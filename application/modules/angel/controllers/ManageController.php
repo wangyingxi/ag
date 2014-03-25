@@ -116,11 +116,11 @@ class Angel_ManageController extends Angel_Controller_Action {
             $result = 0;
             $utilService = $this->_container->get('util');
             $tmp = $utilService->getTmpDirectory();
-            
+
             try {
                 if ($od = opendir($tmp)) {
                     while ($file = readdir($od)) {
-                        
+
                         unlink($tmp . DIRECTORY_SEPARATOR . $file);
                     }
                 }
@@ -133,14 +133,21 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function photoListAction() {
+        $page = $this->request->getParam('page');
+        if (!$page) {
+            $page = 1;
+        }
         $photoModel = $this->getModel('photo');
-        $result = $photoModel->getPhoto();
+        $paginator = $photoModel->getPhoto();
+        $paginator->setItemCountPerPage(40);
+        $paginator->setCurrentPageNumber($page);
         $resource = array();
-        foreach ($result as $r) {
+        foreach ($paginator as $r) {
             $resource[] = array('path' => array('orig' => $this->view->photoImage($r->name . $r->type), 'main' => $this->view->photoImage($r->name . $r->type, 'main'), 'xlarge' => $this->view->photoImage($r->name . $r->type, 'xlarge'), 'small' => $this->view->photoImage($r->name . $r->type, 'small'), 'large' => $this->view->photoImage($r->name . $r->type, 'large')),
                 'name' => $r->name,
                 'type' => $r->type);
         }
+        $this->view->paginator = $paginator;
         $this->view->resource = $resource;
     }
 
