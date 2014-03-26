@@ -4,6 +4,8 @@ class Angel_ManageController extends Angel_Controller_Action {
 
     protected $login_not_required = array(
         'index',
+        'login',
+        'register',
         'product-list',
         'product-create',
         'photo-upload',
@@ -25,6 +27,14 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function indexAction() {
+        
+    }
+
+    public function registerAction() {
+        
+    }
+
+    public function loginAction() {
         
     }
 
@@ -78,6 +88,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                     $this->view->fileList[] = array('v' => $v, 'p' => $this->getTmpFile($v));
                 }
             }
+            $this->view->title = "确认保存图片";
         }
     }
 
@@ -105,6 +116,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             exit;
         } else {
             // GET METHOD
+            $this->view->title = "上传图片";
         }
     }
 
@@ -149,6 +161,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         }
         $this->view->paginator = $paginator;
         $this->view->resource = $resource;
+        $this->view->title = "图片列表";
     }
 
 //    public function personalInfoListAction() {
