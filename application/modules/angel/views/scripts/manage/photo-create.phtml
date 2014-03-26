@@ -65,7 +65,7 @@
             $.each(itm, function() {
                 var obj = $(this);
                 var lb = obj.find('label');
-                lb.html('sending ...');
+                lb.html('正在处理 ...');
                 var tmp = $(this).find('.tmp').val();
                 $.ajax({
                     url: '<?php echo $this->url(array(), 'manage-photo-create') ?>',
@@ -76,7 +76,7 @@
                         if (response === 1) {
                             obj.removeClass('waiting');
                             obj.addClass('done');
-                            lb.html('completed ...').addClass('green');
+                            lb.html('操作成功 ...').addClass('green');
                         } else {
                             alert('操作失败');
                         }
