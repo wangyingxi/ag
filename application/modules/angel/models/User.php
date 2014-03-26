@@ -35,6 +35,51 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
         return $result;
     }
     
+    public function addManageUser($email, $password, $salt, $checkemail=true){
+        $result = false;
+        
+        if(empty($email)){
+            throw new Angel_Exception_User(Angel_Exception_User::EMAIL_EMPTY);
+        }
+        else{
+            $validation = new Zend_Validate_EmailAddress();
+            if(!$validation->isValid($email)){
+                throw new Angel_Exception_User(Angel_Exception_User::EMAIL_INVALID);
+            }
+            else{
+                if($this->isEmailExist($email)){
+                    throw new Angel_Exception_User(Angel_Exception_User::EMAIL_NOT_UNIQUE);
+                }
+            }
+        }
+        
+        $user = new $this->_document_class();
+        
+        $user->email = $email;
+        $user->salt = $salt;
+        $user->password = $password;
+        $user->active_bln = true;
+        $user->email_validated_bln = !$checkemail;
+        $user->validated_bln = false;
+        
+        try{
+            $this->_dm->persist($user);
+            $this->_dm->flush();
+
+            $result = $user->id;
+        }
+        catch(Exception $e){
+            $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage()."\n".$e->getTraceAsString());
+            throw new Angel_Exception_User(Angel_Exception_User::ADD_USER_FAIL);
+        }
+        
+        // send email to the new user to notice him to active his account
+        if($result && $checkemail){
+            $this->sendAccountValidationEmail($user);
+        }
+        
+        return $result;
+    }
     /**
      * 用户注册
      * 

@@ -31,11 +31,28 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function registerAction() {
-        
+        if ($this->request->isPost()) {
+            // POST METHOD
+            $email = $this->request->getParam('email');
+            $password = $this->request->getParam('pwd');
+
+            $result = false;
+            try {
+                $userModel = $this->getModel('user');
+                $result = $userModel->addUser($email, $password, Zend_Session::getId());
+            } catch (Angel_Exception_User $e) {
+                $this->_helper->json($e->getDetail());
+            }
+
+            $this->_helper->json(($result === false) ? 0 : 1);
+        } else {
+            // GET METHOD
+            $this->view->title = "注册成为管理员";
+        }
     }
 
     public function loginAction() {
-        
+        $this->view->title = "管理员";
     }
 
     public function productListAction() {
