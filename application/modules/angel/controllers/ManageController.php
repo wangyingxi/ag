@@ -163,8 +163,6 @@ class Angel_ManageController extends Angel_Controller_Action {
     public function photoUploadAction() {
         if ($this->request->isPost()) {
             // POST METHOD
-            $this->_helper->layout->disableLayout();
-
             $result = 0;
             $upload = new Zend_File_Transfer();
 
@@ -191,8 +189,6 @@ class Angel_ManageController extends Angel_Controller_Action {
     public function photoClearcacheAction() {
         if ($this->request->isPost()) {
             // POST METHOD
-            $this->_helper->layout->disableLayout();
-
             $result = 0;
             $utilService = $this->_container->get('util');
             $tmp = $utilService->getTmpDirectory();
