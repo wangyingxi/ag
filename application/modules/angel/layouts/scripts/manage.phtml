@@ -59,9 +59,17 @@
                         </li>
 
                     </ul>
+                    <?php if(isset($this->me)): ?>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">安全退出 <i class="glyphicon glyphicon-off"></i></a></li>
+                        <li><a href="<?php echo $this->url(array(), 'manage-logout') ?>">你好 <?php echo $this->me->getUser()->email ?>, 安全退出 <i class="glyphicon glyphicon-off"></i></a></li>
                     </ul>
+                    <?php else: ?>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="<?php echo $this->url(array(), 'manage-login') ?>">登录</a></li>
+                    </ul>
+                    
+                    <?php endif; ?>
+                    
                 </div><!--/.nav-collapse -->
             </div>
         </div>

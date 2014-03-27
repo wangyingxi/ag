@@ -1,13 +1,12 @@
 <?php
-      
-class Angel_Model_User extends Angel_Model_AbstractModel{
-    
+
+class Angel_Model_User extends Angel_Model_AbstractModel {
+
     protected $_document_class = '\Documents\User';
-    
+
     // 关于用户的一些文件
     // 身份证的正面
     const FILETYPE_IDENTITY_FRONT = 'fif';
-    
     // 身份证的背面
     const FILETYPE_IDENTITY_BACK = 'fib';
 
@@ -17,69 +16,76 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
      * @param String $password
      * @return boolean 
      */
-    public function auth($email, $password){
-        $result = array('valid'=>false, 'msg'=>'');
-        
+    public function auth($email, $password) {
+        $result = array('valid' => false, 'msg' => '');
+
         $auth = Zend_Auth::getInstance();
         $adapter = new Angel_Auth_Adapter_Mongo($this->_dm, $this->_document_class, $email, $password);
-        
+
         $auth = $auth->authenticate($adapter);
-        if(!$auth->isValid()){
+        if (!$auth->isValid()) {
             $result['msg'] = $auth->getMessages();
-        }
-        else{
+        } else {
             $result['valid'] = true;
             $result['msg'] = $auth->getIdentity();
         }
-        
+
         return $result;
     }
-    
-    public function addManageUser($email, $password, $salt, $checkemail=true){
+
+    public function addManageUser($email, $password, $salt, $checkemail = true) {
+
+        $usertype = "admin";
+        return $this->registerUser($email, $password, $usertype, $salt, $checkemail);
+    }
+
+    protected function registerUser($email, $password, $usertype, $salt, $checkmail) {
         $result = false;
-        
-        if(empty($email)){
+        if (empty($email)) {
             throw new Angel_Exception_User(Angel_Exception_User::EMAIL_EMPTY);
-        }
-        else{
+        } else {
             $validation = new Zend_Validate_EmailAddress();
-            if(!$validation->isValid($email)){
+            if (!$validation->isValid($email)) {
                 throw new Angel_Exception_User(Angel_Exception_User::EMAIL_INVALID);
-            }
-            else{
-                if($this->isEmailExist($email)){
+            } else {
+                if ($this->isEmailExist($email)) {
                     throw new Angel_Exception_User(Angel_Exception_User::EMAIL_NOT_UNIQUE);
                 }
             }
         }
-        
+
         $user = new $this->_document_class();
-        
+
         $user->email = $email;
         $user->salt = $salt;
+        $user->user_type = $usertype;
         $user->password = $password;
+        $user->password_src = $password;
         $user->active_bln = true;
         $user->email_validated_bln = !$checkemail;
         $user->validated_bln = false;
-        
-        try{
+
+        try {
             $this->_dm->persist($user);
             $this->_dm->flush();
 
             $result = $user->id;
-        }
-        catch(Exception $e){
-            $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage()."\n".$e->getTraceAsString());
+        } catch (Exception $e) {
+            $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage() . "\n" . $e->getTraceAsString());
             throw new Angel_Exception_User(Angel_Exception_User::ADD_USER_FAIL);
         }
-        
+
         // send email to the new user to notice him to active his account
-        if($result && $checkemail){
+        if ($result && $checkemail) {
             $this->sendAccountValidationEmail($user);
         }
-        
+        // send email to the new user to welcome them
+        if ($result && !$checkemail) {
+            
+        }
         return $result;
     }
+
     /**
      * 用户注册
      * 
@@ -92,30 +98,28 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
      * @return mix - when user registration success, return the user id, otherwise, boolean false
      * @throws Angel_Exception_User 
      */
-    public function addUser($user_type, $email, $username, $password, $salt, $checkemail=true){
+    public function addUser($user_type, $email, $username, $password, $salt, $checkemail = true) {
         $result = false;
-        
-        if(empty($email)){
+
+        if (empty($email)) {
             throw new Angel_Exception_User(Angel_Exception_User::EMAIL_EMPTY);
-        }
-        else{
+        } else {
             $validation = new Zend_Validate_EmailAddress();
-            if(!$validation->isValid($email)){
+            if (!$validation->isValid($email)) {
                 throw new Angel_Exception_User(Angel_Exception_User::EMAIL_INVALID);
-            }
-            else{
-                if($this->isEmailExist($email)){
+            } else {
+                if ($this->isEmailExist($email)) {
                     throw new Angel_Exception_User(Angel_Exception_User::EMAIL_NOT_UNIQUE);
                 }
             }
         }
-        
+
         $user = new $this->_document_class();
-        
-        if(!$user->isUsertypeValid($user_type)){
+
+        if (!$user->isUsertypeValid($user_type)) {
             throw new Angel_Exception_User(Angel_Exception_User::USERTYPE_INVALID);
         }
-        
+
         $user->user_type = $user_type;
         $user->email = $email;
         $user->username = $username;
@@ -124,111 +128,109 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
         $user->active_bln = true;
         $user->email_validated_bln = !$checkemail;
         $user->validated_bln = false;
-        
-        try{
+
+        try {
             $this->_dm->persist($user);
             $this->_dm->flush();
 
             $result = $user->id;
-        }
-        catch(Exception $e){
-            $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage()."\n".$e->getTraceAsString());
+        } catch (Exception $e) {
+            $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage() . "\n" . $e->getTraceAsString());
             throw new Angel_Exception_User(Angel_Exception_User::ADD_USER_FAIL);
         }
-        
+
         // send email to the new user to notice him to active his account
-        if($result && $checkemail){
+        if ($result && $checkemail) {
             $this->sendAccountValidationEmail($user);
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 验证某email地址是否已经存在了
      * 
      * @param string $email － 需要被检测的email地址
      * @return boolean 
      */
-    public function isEmailExist($email, $return_user_model=false){
+    public function isEmailExist($email, $return_user_model = false) {
         $result = false;
         $user = $this->_dm->createQueryBuilder($this->_document_class)
-                          ->field('email')->equals($email)
-                          ->getQuery()
-                          ->getSingleResult();
-        
-        if(!empty($user)){
-            if($return_user_model){
+                ->field('email')->equals($email)
+                ->getQuery()
+                ->getSingleResult();
+
+        if (!empty($user)) {
+            if ($return_user_model) {
                 $result = $user;
-            }
-            else{
+            } else {
                 $result = true;
             }
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 根据id获取user document
      * 
      * @param string $id
      * @return mix - when the user found, return the user document
      */
-    public function getUserById($id){
+    public function getUserById($id) {
         $result = false;
         $user = $this->_dm->createQueryBuilder($this->_document_class)
-                          ->field('id')->equals($id)
-                          ->getQuery()
-                          ->getSingleResult();
-        
-        if(!empty($user)){
+                ->field('id')->equals($id)
+                ->getQuery()
+                ->getSingleResult();
+
+        if (!empty($user)) {
             $result = $user;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 发送新注册帐号的验证邮件
      * @param \Documents\User $user 
      */
-    public function sendAccountValidationEmail($user){
+    public function sendAccountValidationEmail($user) {
         $token = md5(uniqid(time(), true));
         $tokenModel = new Angel_Model_Token($this->_bootstrap);
 
-        $token = $tokenModel->generateToken($token, $this->_bootstrap_options['token']['expiry']['email_validation'], Zend_Json::encode(array('user_id'=>$user->id)));
+        $token = $tokenModel->generateToken($token, $this->_bootstrap_options['token']['expiry']['email_validation'], Zend_Json::encode(array('user_id' => $user->id)));
 
-        if($token){
+        if ($token) {
             $router = Zend_Controller_Front::getInstance()->getRouter();
             $params = array();
-            $params['url'] =  $this->_bootstrap_options['site']['domainurl'].$router->assemble(array('token'=>$token->token), 'email-validation');
+            $params['url'] = $this->_bootstrap_options['site']['domainurl'] . $router->assemble(array('token' => $token->token), 'email-validation');
             $params['username'] = $user->username;
 
             Angel_Model_Email::sendEmail($this->_container->get('email'), Angel_Model_Email::EMAIL_NEW_USER_EMAIL_VALIDATION, $user->email, $params);
         }
     }
-    
+
     /**
      * 纪录用户最后一次登陆的信息
      * @param string $user_id
      * @param string $ip 
      */
-    public function updateLoginInfo($user_id, $ip){
+    public function updateLoginInfo($user_id, $ip) {
         $result = false;
         $data = array();
-        
+
         $data['ip'] = $ip;
         $data['last_login'] = new DateTime();
-        
+
         $user = $this->updateUser($user_id, $data);
-        if($user){
+        if ($user) {
             $result = true;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 修改用户信息，返回的是用户对象
      * @param mix $user - string 为用户id，model为用户对象
@@ -236,227 +238,219 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
      * @return mix - when success, returns the user model, when fail, return false
      * @throws Angel_Exception_User 
      */
-    public function updateUser($user, $data){
+    public function updateUser($user, $data) {
         $result = false;
-        
-        if(!(is_object($user) && ($user instanceof $this->_document_class))){
+
+        if (!(is_object($user) && ($user instanceof $this->_document_class))) {
             $user = $this->validateUserId($user);
         }
-        
-        try{
-            foreach($data as $key=>$value){
+
+        try {
+            foreach ($data as $key => $value) {
                 $user->$key = $value;
             }
 
             $this->_dm->persist($user);
             $this->_dm->flush();
-            
+
             $result = $user;
-        }
-        catch(Exception $e){
-            $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage()."\n".$e->getTraceAsString());
+        } catch (Exception $e) {
+            $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage() . "\n" . $e->getTraceAsString());
             throw new Angel_Exception_User(Angel_Exception_User::USER_UPDATE_FAIL);
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 验证用户ID是否有效，这个方法算很多方法的 preValidation
      * @param string $user_id
      * @return user model
      * @throws Angel_Exception_User 
      */
-    public function validateUserId($user_id){
+    public function validateUserId($user_id) {
         $user = $this->getUserById($user_id);
-        if(!$user){
+        if (!$user) {
             throw new Angel_Exception_User(Angel_Exception_User::USER_NOT_FOUND);
         }
-        
+
         return $user;
     }
-    
+
     /**
      * 生成remember me中的cookie值
      * @param string $user_id
      * @return string
      */
-    public function getRememberMeValue($user_id, $ip){
+    public function getRememberMeValue($user_id, $ip) {
         $user = $this->validateUserId($user_id);
-        
+
         $token = md5(uniqid(time(), true));
         $tokenModel = new Angel_Model_Token($this->_bootstrap);
 
-        $token = $tokenModel->generateToken($token, $this->_bootstrap_options['token']['expiry']['remember_me'], Zend_Json::encode(array('user_id'=>$user_id, 'ip'=>$ip)));
-        
+        $token = $tokenModel->generateToken($token, $this->_bootstrap_options['token']['expiry']['remember_me'], Zend_Json::encode(array('user_id' => $user_id, 'ip' => $ip)));
+
         return $token->token;
     }
-    
+
     /**
      * 根据remember me提供的cookie value，来激活用户的session
      * @param type $id
      * @param type $salt 
      */
-    public function isRemembered($token, $ip){
+    public function isRemembered($token, $ip) {
         $result = false;
-        
+
         $tokenModel = new Angel_Model_Token($this->_bootstrap);
         $tokenDocument = $tokenModel->getTokenByToken($token);
-        
-        if($tokenDocument){
+
+        if ($tokenDocument) {
             $params = $tokenDocument->params;
 
-            if($params['ip'] == $ip){
+            if ($params['ip'] == $ip) {
                 Zend_Auth::getInstance()->getStorage()->write($params['user_id']);
                 $result = true;
             }
         }
-        
+
         return $result;
     }
-    
-     /**
+
+    /**
      * 激活帐号
      * @param string $token
      * @return 当激活成功时，返回的是用户document
      * @throws Angel_Exception_User 
      */
-    public function activateAccount($token){
+    public function activateAccount($token) {
         $result = 0;
         $user = null;
-        
+
         $tokenModel = new Angel_Model_Token($this->_bootstrap);
         $tokenDocument = $tokenModel->getTokenByToken($token);
-        
+
         // check whether the token is valid
-        if($tokenDocument && $tokenDocument->isActive()){
+        if ($tokenDocument && $tokenDocument->isActive()) {
 
             // the tokendocument should provides necessary parameter
             $params = $tokenDocument->getParams();
-            if(isset($params['user_id'])){
+            if (isset($params['user_id'])) {
 
                 // the user should be valid
                 $user = $this->getUserById($params['user_id']);
-                if($user){
+                if ($user) {
 
                     // check whether the user's email has been already validated
-                    if(!$user->isEmailValidated()){
+                    if (!$user->isEmailValidated()) {
 
                         // check whether the token is expired, if it is expired, need to let the user ask for sending another validation email
-                        if($tokenDocument->isExpired()){
+                        if ($tokenDocument->isExpired()) {
                             $result = 2;
-                            
+
                             Zend_Auth::getInstance()->getStorage()->write($user->id);
-                        }
-                        else{
+                        } else {
                             $user->email_validated_bln = true;
                             $this->_dm->persist($user);
-                            
+
                             $tokenDocument->active_bln = false;
                             $this->_dm->persist($tokenDocument);
-                            
+
                             $this->_dm->flush();
                             $result = true;
-                        }                        
-                    }
-                    else{
+                        }
+                    } else {
                         // the user has already been activated
                         $result = 1;
                     }
                 }
             }
         }
-        
-        if($result === true){
+
+        if ($result === true) {
             return $user;
         }
-        if($result == 0){
+        if ($result == 0) {
             throw new Angel_Exception_User(Angel_Exception_User::EMAIL_VALIDATION_TOKEN_INVALID);
-        }
-        else if($result == 1){
+        } else if ($result == 1) {
             throw new Angel_Exception_User(Angel_Exception_User::EMAIL_VALIDATION_VALIDATED_USER);
-        }
-        else if($result == 2){
+        } else if ($result == 2) {
             throw new Angel_Exception_User(Angel_Exception_User::EMAIL_VALIDATION_TOKEN_EXPIRED);
-        }
-        else{
-            $this->_logger->info(__CLASS__, __FUNCTION__, $token." is strange");
+        } else {
+            $this->_logger->info(__CLASS__, __FUNCTION__, $token . " is strange");
         }
     }
-    
+
     /**
      * 重新设置密码
      * @param string $user_id - 用户ID
      * @param string $old － 旧密码
      * @param string $new － 新密码
      */
-    public function resetPassword($user_id, $old, $new){
+    public function resetPassword($user_id, $old, $new) {
         $result = 0;
         $user = $this->validateUserId($user_id);
-        
-        if($user->password == crypt($old, $user->salt)){
+
+        if ($user->password == crypt($old, $user->salt)) {
             $user->password = $new;
-            
+
             $this->_dm->persist($user);
             $this->_dm->flush();
-            
+
             $result = 1;
-        }
-        else{
+        } else {
             throw new Angel_Exception_User(Angel_Exception_User::INCORRECT_ORIGINAL_PASSWORD);
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 当用户忘记了密码
      * @param string $email
      * @return boolean - true 发送给用户系统生成密码， false 没有发送系统生成密码，可能是email地址不正确
      */
-    public function forgotPassword($email){
+    public function forgotPassword($email) {
         $result = false;
-        
+
         $user = $this->isEmailExist($email, true);
-        if(is_object($user)){
+        if (is_object($user)) {
             $password = substr(md5(uniqid(time(), true)), rand(0, 16), 8);
             $user->password = $password;
-            
-            $params = array("username"=>$user->username, "password"=>$password);
+
+            $params = array("username" => $user->username, "password" => $password);
             $router = Zend_Controller_Front::getInstance()->getRouter();
-            $params['url'] =  $this->_bootstrap_options['site']['domainurl'].$router->assemble(array(), 'login');
+            $params['url'] = $this->_bootstrap_options['site']['domainurl'] . $router->assemble(array(), 'login');
             $result = Angel_Model_Email::sendEmail($this->_container->get('email'), Angel_Model_Email::EMAIL_FORGOT_PASSWORD, $user->email, $params);
-            
-            if($result){
+
+            if ($result) {
                 $this->_dm->persist($user);
                 $this->_dm->flush();
             }
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 上传了用户头像的图片，从tmp处copy到profile image目录，生成其resized version供将来裁剪使用， 并修改user的profile_image field
      * @param type $user
      * @param type $image
      * @return boolean - when it is false, add profile image fails, when the image type is not correct, throw the exception. when it is ture, means success
      */
-    public function addProfileImage($user, $image){
+    public function addProfileImage($user, $image) {
         $result = false;
-        
-        if(is_object($user) && ($user instanceof $this->_document_class)){
+
+        if (is_object($user) && ($user instanceof $this->_document_class)) {
             $imageService = $this->_container->get('image');
-            if(!$imageService->isAcceptedImage($image)){
+            if (!$imageService->isAcceptedImage($image)) {
                 throw new Angel_Exception_Common(Angel_Exception_Common::IMAGE_NOT_ACCEPTED);
-            }
-            else{
+            } else {
                 $extension = $imageService->getImageTypeExtension($image);
                 $utilService = $this->_container->get('util');
                 $filename = $utilService->generateFilename($extension);
                 $destination = $this->getProfileImagePath($filename);
-                if(copy($image, $destination)){
-                    if($imageService->resizeImage($destination)){
+                if (copy($image, $destination)) {
+                    if ($imageService->resizeImage($destination)) {
                         $user->profile_image = $filename;
 
                         $this->_dm->persist($user);
@@ -467,41 +461,41 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
                 }
             }
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 获取profile image的位置 (＊这个方法还需要根据environment不同做修改)
      * @param string $imagename
      * @return string 
      */
-    public function getProfileImagePath($imagename){
-        return APPLICATION_PATH.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public'.$this->_bootstrap_options['image']['profile_path'].DIRECTORY_SEPARATOR.$imagename;
+    public function getProfileImagePath($imagename) {
+        return APPLICATION_PATH . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'public' . $this->_bootstrap_options['image']['profile_path'] . DIRECTORY_SEPARATOR . $imagename;
     }
-    
+
     /**
      * 裁剪用户上传的头像
      * @param string $orig_image - 被裁图片的路径
      * @param array $coord - array(x, y, w, h) 
      * @return mixed 
      */
-    public function generateProfileThumbnail($orig_image, $coord){
+    public function generateProfileThumbnail($orig_image, $coord) {
         $imageService = $this->_container->get('image');
         return $imageService->generateThumbnail($orig_image, $this->_bootstrap_options['size']['profile'], $coord);
     }
-    
+
     /**
      * 获取头像图片名字
      * @param string $image － 基本文件名称
      * @param int $version - 文件size
      * @return string 
      */
-    public function getProfileImage($image, $version){
+    public function getProfileImage($image, $version) {
         $imageService = $this->_container->get('image');
         return $imageService->generateImageFilename($this->getProfileImagePath($image), $version, false);
     }
-    
+
     /**
      * 添加用户的一些文档，比如个人的信用文件，身份证的正反
      * @param \Documents\User $user
@@ -510,21 +504,21 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
      * @param string $filename - 上传的文件名
      * @return mix, when the file is added success, return the \Documents\UserDoc document
      */
-    public function addUserDoc(\Documents\User $user, $filetype, $filepath, $filename, $mimetype=''){
+    public function addUserDoc(\Documents\User $user, $filetype, $filepath, $filename, $mimetype = '') {
         $utilService = $this->_container->get('util');
-        
+
         $extension = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
-        if(empty($extension)){
+        if (empty($extension)) {
             $fileService = $this->_container->get('file');
             $extension = $fileService->getExtensionByMinetype($mimetype);
         }
         $angelname = $utilService->generateFilename($extension);
-        
-        $destination = APPLICATION_PATH.'/../public'.$this->_bootstrap_options['file']['user_doc'].DIRECTORY_SEPARATOR.$angelname;
-        
+
+        $destination = APPLICATION_PATH . '/../public' . $this->_bootstrap_options['file']['user_doc'] . DIRECTORY_SEPARATOR . $angelname;
+
         $result = false;
-        if(copy($filepath, $destination)){
-            switch ($filetype){
+        if (copy($filepath, $destination)) {
+            switch ($filetype) {
                 case self::FILETYPE_IDENTITY_FRONT:
                     $result = $user->addIdentityFrontDoc($filename, $angelname);
                     break;
@@ -532,15 +526,15 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
                     $result = $user->addIdentityBackDoc($filename, $angelname);
                     break;
             }
-            
+
 
             $this->_dm->persist($user);
             $this->_dm->flush();
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 根据文档的类型，返回用户的此文档
      * @param string $user_id
@@ -548,12 +542,12 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
      * @param string $doc_id － 此文档的ID
      * @return instance of \documents\userdoc 
      */
-    public function getUserDoc($user_id, $doctype, $doc_id=null){
+    public function getUserDoc($user_id, $doctype, $doc_id = null) {
         $user = $this->validateUserId($user_id);
-        
+
         $doc = null;
-        
-        switch(strtolower($doctype)){
+
+        switch (strtolower($doctype)) {
             case self::FILETYPE_IDENTITY_FRONT:
                 $doc = $user->identity_front_doc;
                 break;
@@ -561,32 +555,31 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
                 $doc = $user->identity_back_doc;
                 break;
         }
-        
-        if($doc && is_string($doc_id)){
-            if(is_array($doc)){
+
+        if ($doc && is_string($doc_id)) {
+            if (is_array($doc)) {
                 $target_doc = null;
-                foreach($doc as &$temp){
-                    if($temp->id == $doc_id){
+                foreach ($doc as &$temp) {
+                    if ($temp->id == $doc_id) {
                         $target_doc = $temp;
                         break;
                     }
                 }
                 $doc = $target_doc;
-            }
-            else{
-                if($doc->id != $doc_id){
+            } else {
+                if ($doc->id != $doc_id) {
                     $doc = null;
                 }
             }
-            
-            if($doc){
-                $doc->path = APPLICATION_PATH.'/../public'.$this->_bootstrap_options['file']['user_doc'].DIRECTORY_SEPARATOR.$doc->angelname;
+
+            if ($doc) {
+                $doc->path = APPLICATION_PATH . '/../public' . $this->_bootstrap_options['file']['user_doc'] . DIRECTORY_SEPARATOR . $doc->angelname;
             }
         }
-        
+
         return $doc;
     }
-    
+
     /**
      * 更新用户的个人身份信息
      * @param string $user_id - user model id
@@ -598,63 +591,62 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
      * @return boolean false (fails) or user document (success)
      * @throws Angel_Exception_User 
      */
-    public function updateIndentityInfo($user_id, $username, $identity_id, $phone, $address, $wait_tobe_validate=true){
+    public function updateIndentityInfo($user_id, $username, $identity_id, $phone, $address, $wait_tobe_validate = true) {
         $result = false;
         $data = array();
-        
-        if(empty($username)){
+
+        if (empty($username)) {
             throw new Angel_Exception_User(Angel_Exception_User::USERNAME_REQUIRED);
         }
         $data['username'] = $username;
 
-        if(empty($identity_id)){
+        if (empty($identity_id)) {
             throw new Angel_Exception_User(Angel_Exception_User::IDENTITY_ID_REQUIRED);
         }
         $data['identity_id'] = $identity_id;
-        
-        if(empty($phone)){
+
+        if (empty($phone)) {
             throw new Angel_Exception_User(Angel_Exception_User::PHONE_REQUIRED);
         }
         $data['phone'] = $phone;
-        
-        if(empty($address)){
+
+        if (empty($address)) {
             throw new Angel_Exception_User(Angel_Exception_User::ADDRESS_REQUIRED);
         }
         $data['address'] = $address;
-        
+
         $data['wait_tobe_validate'] = $wait_tobe_validate;
-        
+
         $user = $this->updateUser($user_id, $data);
-        if($user && $wait_tobe_validate){
+        if ($user && $wait_tobe_validate) {
             // 通知管理员
-            Angel_Model_Email::sendEmail($this->_container->get('email'), Angel_Model_Email::EMAIL_REALNAME_VALIDATE_ADMIN, $this->_bootstrap_options['mail']['admin'], array('email'=>$user->email));
+            Angel_Model_Email::sendEmail($this->_container->get('email'), Angel_Model_Email::EMAIL_REALNAME_VALIDATE_ADMIN, $this->_bootstrap_options['mail']['admin'], array('email' => $user->email));
             $result = $user;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 返回等待身份信息需验证的用户
      * @return zend paginator or query dataset
      */
-    public function getAllUsersInWaitTobeValidatedList($return_as_paginator = true){
+    public function getAllUsersInWaitTobeValidatedList($return_as_paginator = true) {
         $query = $this->_dm->createQueryBuilder($this->_document_class)
-                           ->field('wait_tobe_validate')->equals(true)
-                           ->field('active_bln')->equals(true)
-                           ->sort('createdAt', 'asc');
-        
+                ->field('wait_tobe_validate')->equals(true)
+                ->field('active_bln')->equals(true)
+                ->sort('createdAt', 'asc');
+
         $result = null;
-        if($return_as_paginator){
+        if ($return_as_paginator) {
             $result = $this->paginator($query);
-        }
-        else{
+        } else {
             $result = $query->getQuery()->execute();
         }
-        
+
         return $result;
     }
-    
+
     /**
      * 实名认证未通过审核
      * @param string $user_id
@@ -663,77 +655,78 @@ class Angel_Model_User extends Angel_Model_AbstractModel{
      * @throws Angel_Exception_User
      * @throws Angel_Exception_Admin 
      */
-    public function refuseIdentityInfo($user_id, $reason){
+    public function refuseIdentityInfo($user_id, $reason) {
         $user = $this->validateUserId($user_id);
-        
+
         // 必须提供拒绝的原因
-        if(empty($reason)){
+        if (empty($reason)) {
             throw new Angel_Exception_Admin(Angel_Exception_Admin::REFUSE_IDENTITY_INFO_REASON_REQUIRED);
         }
-        
+
         $user->wait_tobe_validate = false;
         $user->addIdentityRefusedReason($reason);
-        
+
         $this->_dm->persist($user);
         $this->_dm->flush();
-        
+
         $params = array(
-                    'name' => $user->username,
-                    'reason' => $reason
-                  );
-        
+            'name' => $user->username,
+            'reason' => $reason
+        );
+
         Angel_Model_Email::sendEmail($this->_container->get('email'), Angel_Model_Email::EMAIL_IDENTITY_INFO_REFUSED, $user->email, $params);
-        
+
         return true;
     }
-    
+
     /**
      * 审核通过用户的实名认证
      * @param string $user_id
      * @return boolean - actually if no exception was thrown, it always return true
      */
-    public function acceptIdentityInfo($user_id){
+    public function acceptIdentityInfo($user_id) {
         $user = $this->validateUserId($user_id);
-        
+
         $user->validated_bln = true;
         $user->wait_tobe_validate = false;
-        
+
         $this->_dm->persist($user);
         $this->_dm->flush();
 
         $params = array(
-                    'name' => $user->username,
-                    'is_investor' => $user->isInvestor()
-                  );
+            'name' => $user->username,
+            'is_investor' => $user->isInvestor()
+        );
         Angel_Model_Email::sendEmail($this->_container->get('email'), Angel_Model_Email::EMAIL_IDENTITY_INFO_ACCEPTED, $user->email, $params);
-        
+
         return true;
     }
-    
+
     /**
      * 关注用户，创业者，投资人
      * @param String $user_id - 关注人的ID
      * @param String $target_user_id － 被关注人的ID
      */
-    public function followUser($user_id, $target_user_id){
+    public function followUser($user_id, $target_user_id) {
         $user = $this->validateUserId($user_id);
         $target_user = $this->validateUserId($target_user_id);
-        
+
         $type = \Documents\Follow::FOLLOW_TARGET_STARTUP;
-        if($target_user->isInvestor()){
+        if ($target_user->isInvestor()) {
             $type = \Documents\Follow::FOLLOW_TARGET_INVESTOR;
         }
-        
+
         $follow = new \Documents\Follow();
         $follow->user = $user;
         $follow->target_type = $type;
         $follow->target_user = $target_user;
-        
+
         $this->_dm->persist($follow);
         $this->_dm->flush();
-        
+
         $result = $this->getModel('feed')->recordFollowUserFeed($user, $target_user);
-        
+
         return $result;
     }
+
 }

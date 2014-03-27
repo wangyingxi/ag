@@ -1,21 +1,26 @@
 <h1 class="page-title"><?php echo $this->title ?></h1>
+
+<?php if ($this->register): ?>
+<div class="alert alert-success">注册成功，请登录</div>
+<?php endif; ?>
+
 <form role="form" method="post">
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
                 <label for="email">邮箱</label>
-                <input type="email" class="form-control" id="email" placeholder="输入邮箱">
+                <input type="email" class="form-control" id="email" name="email" placeholder="输入邮箱">
             </div>
             <div class="form-group">
-                <label for="pwd">密码</label>
-                <input type="password" class="form-control" id="pwd" placeholder="输入密码">
+                <label for="password">密码</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="输入密码">
             </div>
             <div class="checkbox">
                 <label>
-                    <input type="checkbox"> 记住登录状态
+                    <input type="checkbox" id="remember" name="remember"> 记住登录状态
                 </label>
             </div>
-            <button type="submit" class="btn btn-default">确认注册</button>
+            <button type="submit" class="btn btn-default">安全登录</button>
         </div>
         <div class="col-md-4"></div>
     </div>

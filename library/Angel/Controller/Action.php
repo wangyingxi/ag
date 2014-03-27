@@ -63,7 +63,7 @@ class Angel_Controller_Action extends Zend_Controller_Action{
             }
             else{
                 if(!in_array($this->request->getActionName(), $this->login_not_required)){
-                    $this->_redirect($this->view->url(array(), 'login').'?goto='.$this->request->getRequestUri());
+                    $this->_redirect($this->view->url(array(), 'manage-login').'?goto='.$this->request->getRequestUri());
                 }
             }
         }

@@ -38,6 +38,9 @@ class User extends AbstractDocument{
     protected $password;
     
     /** @ODM\String */
+    protected $password_src;
+    
+    /** @ODM\String */
     protected $salt;
     
     /** @ODM\Boolean */
@@ -101,7 +104,7 @@ class User extends AbstractDocument{
      * @throws Angel_Exception_User 
      */
     public function setPassword($value){
-        if(strlen($value) < 6){
+        if(strlen($value) < 1){
             throw new Angel_Exception_User(Angel_Exception_User::PASSWORD_TOO_SHORT);
         }
         else if(strlen($value) > 18){
