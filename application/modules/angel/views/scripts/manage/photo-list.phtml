@@ -56,6 +56,7 @@ $model = $this->model;
         <div class="col-md-3 itm">
             <input type="hidden" class="tmp" value="<?php echo $p['name'] ?>"/>
             <div class="wp">
+                <p><?php echo $p['owner']->email . ' 上传'?></p>
                 <div class="iwp">
                     <img width="100%" src="<?php echo $p['path']['main'] ?>"/>
                 </div>

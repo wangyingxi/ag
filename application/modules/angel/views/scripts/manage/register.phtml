@@ -2,6 +2,9 @@
 <form role="form" method="post">
     <div class="row">
         <div class="col-md-4">
+            <?php if ($this->error): ?>
+                <div class="alert alert-danger"><?php echo $this->error ?></div>
+            <?php endif; ?>
             <div class="form-group">
                 <label for="email">邮箱</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="输入邮箱">
@@ -22,8 +25,8 @@
 </form>
 <script type="text/javascript">
     (function($) {
-        $('#reg').click(function(){
-            if($('#password').val() !== $('#repwd').val()) {
+        $('#reg').click(function() {
+            if ($('#password').val() !== $('#repwd').val()) {
                 alert('两次输入密码不相同，请重试');
                 return false;
             }

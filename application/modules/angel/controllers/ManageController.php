@@ -31,18 +31,23 @@ class Angel_ManageController extends Angel_Controller_Action {
             $password = $this->request->getParam('password');
 
             $result = false;
+            $error = "";
             try {
                 $userModel = $this->getModel('user');
                 $isEmailExist = $userModel->isEmailExist($email);
                 if ($isEmailExist) {
-                    $result = false;
+                    $error = "该邮箱已经存在，不能重复注册";
+                } else {
+                    $result = $userModel->addManageUser($email, $password, Zend_Session::getId(), false);
                 }
-                $result = $userModel->addManageUser($email, $password, Zend_Session::getId(), false);
             } catch (Angel_Exception_User $e) {
-                $this->_helper->json($e->getDetail());
+//                $this->_helper->json($e->getDetail());
+                $error = $e->getDetail();
             }
             if ($result) {
                 $this->_redirect($this->view->url(array(), 'manage-login') . '?register=success');
+            } else {
+                $this->view->error = $error;
             }
         } else {
             // GET METHOD
@@ -128,13 +133,12 @@ class Angel_ManageController extends Angel_Controller_Action {
             $result = 0;
             // POST METHOD
             $tmp = $this->getParam('tmp');
-            $file = $this->getTmpFile($tmp);
-//            $owener = $this->me->getUser();
+            $owner = $this->me->getUser();
             $photoModel = $this->getModel('photo');
             try {
                 $destination = $this->getTmpFile($tmp);
-//                $result = $photoModel->addPhoto($destination, $owener);
-                $result = $photoModel->addPhoto($destination);
+                $result = $photoModel->addPhoto($destination, $owner);
+//                $result = $photoModel->addPhoto($destination);
                 echo $result;
                 exit;
                 if ($result) {
@@ -221,7 +225,8 @@ class Angel_ManageController extends Angel_Controller_Action {
         foreach ($paginator as $r) {
             $resource[] = array('path' => array('orig' => $this->view->photoImage($r->name . $r->type), 'main' => $this->view->photoImage($r->name . $r->type, 'main'), 'xlarge' => $this->view->photoImage($r->name . $r->type, 'xlarge'), 'small' => $this->view->photoImage($r->name . $r->type, 'small'), 'large' => $this->view->photoImage($r->name . $r->type, 'large')),
                 'name' => $r->name,
-                'type' => $r->type);
+                'type' => $r->type,
+                'owner' => $r->owner);
         }
         $this->view->paginator = $paginator;
         $this->view->resource = $resource;
@@ -231,7 +236,11 @@ class Angel_ManageController extends Angel_Controller_Action {
     public function photoDeleteAction() {
         if ($this->request->isPost()) {
             // POST METHOD
-            
+            $id = $this->getParam('id');
+            if ($id) {
+                $owner = $this->me->getUser();
+            }
         }
     }
+
 }
