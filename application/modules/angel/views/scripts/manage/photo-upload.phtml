@@ -3,6 +3,14 @@
     #next-step {
         display:none;
     }
+    #upload-limit {
+        margin-bottom:15px;
+    }
+    #upload-limit li {
+        color:#aaa;
+        font-size:smaller;
+        font-style: italic;
+    }
 </style>
 <h1 class="page-title"><?php echo $this->title ?></h1>
 <form role="form">
@@ -12,7 +20,14 @@
                 <div class="panel-body">
 
                     <input type="file" id="file_upload" name="file_upload" />
-
+                    <ul id="upload-limit">
+                        <li>
+                            仅接受图片类型：jpg / png / gif
+                        </li>
+                        <li>
+                            上传文件大小限制：5M
+                        </li>
+                    </ul>
                     <input id="upload-all" class="btn btn-primary" value="上传图片" type="button"/>
                     <input id="cancel-all" class="btn btn-default" value="取消全部" type="button"/>
 
@@ -39,7 +54,7 @@
         $("#file_upload").uploadify({
             swf: '/uploadify/uploadify.swf',
             uploader: '/manage/photo/upload',
-            fileTypeExts: '*.jpg; *.png',
+            fileTypeExts: '*.jpg; *.png; *.gif',
             buttonText: '选择即将上传的图片',
             auto: false,
             height: 30,

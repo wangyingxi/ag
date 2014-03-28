@@ -4,6 +4,11 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
 
     protected $_document_class = '\Documents\Photo';
 
+    public function deletePhoto($id) {
+        $result = false;
+        
+    }
+    
     public function addPhoto($photo, $owner) {
         $result = false;
 //        if (is_object($owner) && ($owner instanceof $this->_document_user_class)) {
