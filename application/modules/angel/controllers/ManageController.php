@@ -99,11 +99,11 @@ class Angel_ManageController extends Angel_Controller_Action {
                 $this->view->error = "登录失败，请重试或修改密码";
             }
         } else {
-            $this->view->title = "管理员登录";
             if ($this->getParam('register') == 'success') {
                 $this->view->register = 'success';
             }
         }
+        $this->view->title = "管理员登录";
     }
 
     public function productListAction() {
