@@ -108,6 +108,9 @@ $model = $this->model;
         });
 
         $('.remove-photo').click(function() {
+            if(confirm('确认删除该图片？')) {
+                
+            }
             var $this = $(this);
             var id = $this.closest('.itm').find('.tmp').val();
             var data = {id: id};
