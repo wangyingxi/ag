@@ -54,9 +54,11 @@ $model = $this->model;
 <div class="row">
     <?php foreach ($this->resource as $p): ?>
         <div class="col-md-3 itm">
-            <input type="hidden" class="tmp" value="<?php echo $p['name'] ?>"/>
+            <input type="hidden" class="tmp" value="<?php echo $p['id'] ?>"/>
             <div class="wp">
-                <p><?php echo $p['owner']->email . ' 上传'?></p>
+                <p><?php echo $p['owner']->email . ' 上传' ?>
+                    <button class="pull-right btn btn-xs btn-danger remove-photo">删除</button>
+                </p>
                 <div class="iwp">
                     <img width="100%" src="<?php echo $p['path']['main'] ?>"/>
                 </div>
@@ -95,12 +97,34 @@ $model = $this->model;
                 url: '<?php echo $this->url(array(), 'manage-photo-clear-cache') ?>',
                 dataType: 'json',
                 type: 'POST',
-                complete: function(response) {
+                s: function(response) {
                     if (response) {
                         alert('操作成功');
                     } else {
                         alert('操作失败');
                     }
+                }
+            });
+        });
+
+        $('.remove-photo').click(function() {
+            var $this = $(this);
+            var id = $this.closest('.itm').find('.tmp').val();
+            var data = {id: id};
+            $.ajax({
+                url: '<?php echo $this->url(array(), 'manage-photo-remove') ?>',
+                dataType: 'json',
+                data: data,
+                type: 'POST',
+                success: function(response) {
+                    if (response) {
+                        alert('删除成功');
+                    } else {
+                        alert('删除失败');
+                    }
+                },
+                complete: function() {
+                    location.reload();
                 }
             });
         });

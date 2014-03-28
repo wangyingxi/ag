@@ -5,8 +5,32 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
     protected $_document_class = '\Documents\Photo';
     protected $_document_user_class = '\Documents\User';
 
-    public function deletePhoto($id, $owner) {
+    public function removePhoto($id, $owner) {
         $result = false;
+        if (is_object($owner) && ($owner instanceof $this->_document_user_class)) {
+            $photo = $this->getPhotoById($id);
+            if ($owner->id == $photo->owner->id) {
+                // when owner is self
+                // remove mongo document
+                try {
+//                    $result = $this->removePhotoById($id);
+                    $result = $this->_dm->createQueryBuilder($this->_document_class)
+                            ->remove()
+                            ->field('id')
+                            ->equals($id)
+                            ->getQuery()
+                            ->execute();
+                    
+                    echo $result;exit;
+                    // delete files
+                } catch (Exception $e) {
+                    $result = false;
+                }
+            } else {
+                
+            }
+        }
+        return $result;
     }
 
     public function addPhoto($photo, $owner) {
@@ -35,6 +59,26 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
                 }
             }
         }
+        return $result;
+    }
+
+    /**
+     * 根据id获取photo document
+     * 
+     * @param string $id
+     * @return mix - when the photo found, return the photo document
+     */
+    public function getPhotoById($id) {
+        $result = false;
+        $photo = $this->_dm->createQueryBuilder($this->_document_class)
+                ->field('id')->equals($id)
+                ->getQuery()
+                ->getSingleResult();
+
+        if (!empty($photo)) {
+            $result = $photo;
+        }
+
         return $result;
     }
 

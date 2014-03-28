@@ -123,7 +123,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         
     }
 
-    public function productDeleteAction() {
+    public function productRemoveAction() {
         
     }
 
@@ -225,6 +225,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         foreach ($paginator as $r) {
             $resource[] = array('path' => array('orig' => $this->view->photoImage($r->name . $r->type), 'main' => $this->view->photoImage($r->name . $r->type, 'main'), 'xlarge' => $this->view->photoImage($r->name . $r->type, 'xlarge'), 'small' => $this->view->photoImage($r->name . $r->type, 'small'), 'large' => $this->view->photoImage($r->name . $r->type, 'large')),
                 'name' => $r->name,
+                'id' => $r->id,
                 'type' => $r->type,
                 'owner' => $r->owner);
         }
@@ -233,12 +234,17 @@ class Angel_ManageController extends Angel_Controller_Action {
         $this->view->title = "图片列表";
     }
 
-    public function photoDeleteAction() {
+    public function photoRemoveAction() {
         if ($this->request->isPost()) {
+            
             // POST METHOD
             $id = $this->getParam('id');
             if ($id) {
                 $owner = $this->me->getUser();
+                if ($owner) {
+                    $photoModel = $this->getModel('photo');
+                    $photoModel->removePhoto($id, $owner);
+                }
             }
         }
     }
