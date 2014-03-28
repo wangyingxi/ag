@@ -252,10 +252,10 @@ class Angel_Service_Image{
     public function saveImage($image, $image_type, $path){
         $result = false;
         if($image_type == IMAGETYPE_JPEG){
-            $result = imagejpeg($image, $path, 75);
+            $result = imagejpeg($image, $path, 85);
         }
         else if($image_type == IMAGETYPE_PNG){
-            $result = imagepng($image, $path, 75);
+            $result = imagepng($image, $path, 85);
         }
         else if($image_type == IMAGETYPE_GIF){
             $result = imagegif($image, $path);
