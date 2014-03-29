@@ -112,7 +112,8 @@ $model = $this->model;
                 return;
             }
             var $this = $(this);
-            var id = $this.closest('.itm').find('.tmp').val();
+            var container = $this.closest('.itm');
+            var id = container.find('.tmp').val();
             var data = {id: id};
             $.ajax({
                 url: '<?php echo $this->url(array(), 'manage-photo-remove') ?>',
@@ -121,7 +122,7 @@ $model = $this->model;
                 type: 'POST',
                 success: function(response) {
                     if (response) {
-                        alert('删除成功');
+                        container.remove();
                     } else {
                         alert('删除失败');
                     }
