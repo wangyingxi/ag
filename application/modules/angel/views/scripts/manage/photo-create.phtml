@@ -40,6 +40,10 @@
     .itm[status='sent'] .wp {
         opacity:0.5;
     }
+    .itm[status='failed'] .wp {
+        background:#8c0000;
+        opacity:0.5;
+    }
 </style>
 <h1 class="page-title"><?php echo $this->title ?></h1>
 <form role="form">
@@ -48,7 +52,7 @@
     </div>
     <div class="row">
         <?php foreach ($this->fileList as $k => $v): ?>
-            <div class="col-md-2 itm waiting">
+            <div class="col-md-2 itm">
                 <input type="hidden" class="tmp" value="<?php echo $v['v'] ?>"/>
                 <div class="wp">
                     <p>
@@ -63,7 +67,7 @@
         <?php endforeach; ?>
     </div>
     <div id='prot'></div>
-        
+
 </form>
 
 <script type="text/javascript">
@@ -74,9 +78,11 @@
             $('#prot').html(new Date());
             var $itm = $('.itm');
             var sending = $('.itm[status="sending"]').length;
-            var sent = $('.itm[status="sent"]').length;
-            if (sent === $itm.length) {
+            var done = $('.itm[status="sent"], .itm[status="failed"]').length;
+            if (done === $itm.length) {
                 clearInterval(intervalId);
+                $('#generate').after('操作完毕，<a href="/manage/photo/list">立即查看</a>');
+                $('#generate').remove();
             }
             if (sending === 0) {
                 $itm = $('.itm');
@@ -103,23 +109,12 @@
                 data: {tmp: tmp},
                 success: function(response) {
                     if (response === 1) {
-                        obj.removeClass('waiting');
-                        obj.addClass('done');
                         obj.attr('status', 'sent');
                         lb.html('操作成功 ...').addClass('green');
 
                     } else {
-                        alert('操作失败');
-                    }
-                },
-                error: function() {
-                    alert('操作失败');
-                },
-                complete: function() {
-                    if ($('.waiting').length === 0 && $('.done').length === $('.itm').length) {
-                        $('#generate').after('全部上传完毕，<a href="/manage/photo/list">立即查看</a>');
-                        $('#generate').remove();
-
+                        obj.attr('status', 'failed');
+                        lb.html('操作失败 ...').addClass('white');
                     }
                 }
             });
