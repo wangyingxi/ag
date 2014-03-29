@@ -97,7 +97,7 @@ $model = $this->model;
                 url: '<?php echo $this->url(array(), 'manage-photo-clear-cache') ?>',
                 dataType: 'json',
                 type: 'POST',
-                s: function(response) {
+                success: function(response) {
                     if (response) {
                         alert('操作成功');
                     } else {
