@@ -204,10 +204,11 @@ class Angel_ManageController extends Angel_Controller_Action {
                         unlink($tmp . DIRECTORY_SEPARATOR . $file);
                     }
                 }
-                echo 1;
+                $result = 1;
             } catch (Exception $e) {
-                echo $e->getMessage();
+                $result = 0;
             }
+            echo $result;
             exit;
         }
     }
@@ -236,16 +237,18 @@ class Angel_ManageController extends Angel_Controller_Action {
 
     public function photoRemoveAction() {
         if ($this->request->isPost()) {
-            
+            $result = 0;
             // POST METHOD
             $id = $this->getParam('id');
             if ($id) {
                 $owner = $this->me->getUser();
                 if ($owner) {
                     $photoModel = $this->getModel('photo');
-                    $photoModel->removePhoto($id, $owner);
+                    $result = $photoModel->removePhoto($id, $owner);
                 }
             }
+            echo $result;
+            exit;
         }
     }
 
