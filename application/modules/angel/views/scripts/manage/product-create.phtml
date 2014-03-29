@@ -17,7 +17,13 @@
             </div>
             <div class="form-group">
                 <label>商品唯一编号：</label>
-                <input type="text" class="form-control" id="sku">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="sku">
+                    <span class='input-group-btn'>
+                        <input class='btn btn-default' type='button' value='检查可用性'/>
+                    </span>
+                </div>
+                
             </div>
             <div class="form-group">
                 <label>商品状态：</label>
@@ -29,6 +35,7 @@
             <div class="form-group">
                 <label>商品图片：</label>
                 <div id="photo">
+                    <input type="button" value="重新加载图片" id="refresh-photos"/>
                 </div>
             </div>
             <div class="form-group">
@@ -37,7 +44,11 @@
             </div>
             <div class="form-group">
                 <label>商品所在地（仓储）：</label>
-                <input type="text" class="form-control" id="location" value="cn">
+                <select id="location">
+                    <option value="cn" selected="true">中国本地发货</option>
+                    <option value="uk">英国仓储</option>
+                    <option value="us">美国仓储</option>
+                </select>
             </div>
             <div class="form-group">
                 <label>采购价：</label>
@@ -86,6 +97,16 @@
 
 <script type="text/javascript">
     (function($) {
-
+        $('#testing-btn').click(function(){
+            $.ajax({
+                url:'<?php echo $this->url(array(), 'manage-photo-list-home')?>?format=json',
+                dataType:'json',
+                type: 'POST',
+                success: function(response){
+                    console.log(response);
+                }
+                
+            });
+        });
     })(jQuery);
 </script>

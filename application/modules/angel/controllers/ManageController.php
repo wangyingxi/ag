@@ -230,9 +230,16 @@ class Angel_ManageController extends Angel_Controller_Action {
                 'type' => $r->type,
                 'owner' => $r->owner);
         }
-        $this->view->paginator = $paginator;
-        $this->view->resource = $resource;
-        $this->view->title = "图片列表";
+        // JSON FORMAT
+        if ($this->getParam('format') == 'json') {
+            $this->_helper->json(array('data' => $resource, 
+                'page' => $paginator->getCurrentPageNumber(), 
+                'count' => $paginator->count()));
+        } else {
+            $this->view->paginator = $paginator;
+            $this->view->resource = $resource;
+            $this->view->title = "图片列表";
+        }
     }
 
     public function photoRemoveAction() {
