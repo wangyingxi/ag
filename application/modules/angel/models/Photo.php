@@ -9,7 +9,7 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
         $result = false;
         if (is_object($owner) && ($owner instanceof $this->_document_user_class)) {
             $photo = $this->getPhotoById($id);
-            if ($owner->id == $photo->owner->id) {
+            if ($owner->id == $photo->owner->id || $owner->user_type = 'admin') {
                 // when owner is self
                 // remove mongo document
                 try {
