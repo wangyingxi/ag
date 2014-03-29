@@ -39,7 +39,7 @@ class Angel_Service_Image {
                 if (empty($coord)) {
                     $coord = $this->getCropCoord($des_w, $des_h, $src_w, $src_h);
                 }
-                
+
                 if ($image_type == IMAGETYPE_PNG) {
                     $src = imagecreatefrompng($filepath);
                     imagesavealpha($src, true); //这里很重要;
@@ -61,6 +61,28 @@ class Angel_Service_Image {
             }
         }
 
+        return $result;
+    }
+
+    /**
+     * delete all various thumbnail 
+     * @param string $filepath - the original image file path
+     * @return boolean - fails false, success true  
+     */
+    public function deleteThumbnail($filepath, $size_arr) {
+        $result = false;
+        try {
+            foreach ($size_arr as $size) {
+                $tmp = explode('*', $size);
+                $des_w = $tmp[0];
+                $target_filename = $this->generateImageFilename($filepath, $des_w);
+                unlink($target_filename);
+            }
+            unlink($filepath);
+            $result = true;
+        } catch (Exception $e) {
+            
+        }
         return $result;
     }
 

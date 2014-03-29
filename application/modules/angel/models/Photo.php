@@ -10,17 +10,21 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
         if (is_object($owner) && ($owner instanceof $this->_document_user_class)) {
             $photo = $this->getPhotoById($id);
             if ($owner->id == $photo->owner->id || $owner->user_type = 'admin') {
-                // when owner is self
-                // remove mongo document
+                // when owner is self or admin
                 try {
-//                    $result = $this->removePhotoById($id);
+                    // remove document
                     $result = $this->_dm->createQueryBuilder($this->_document_class)
                             ->remove()
                             ->field('id')
                             ->equals($id)
                             ->getQuery()
                             ->execute();
+
                     // delete files
+                    $imageService = $this->_container->get('image');
+                    $filename = $photo->name . $photo->type;
+                    $target = $this->getPhotoPath($filename);
+                    $imageService->deleteThumbnail($target, $this->_bootstrap_options['size']['photo']);
                 } catch (Exception $e) {
                     $result = false;
                 }
