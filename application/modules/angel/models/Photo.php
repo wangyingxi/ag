@@ -20,8 +20,6 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
                             ->equals($id)
                             ->getQuery()
                             ->execute();
-                    
-                    echo $result;exit;
                     // delete files
                 } catch (Exception $e) {
                     $result = false;
