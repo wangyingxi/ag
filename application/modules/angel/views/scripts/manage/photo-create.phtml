@@ -34,6 +34,12 @@
     .op {
         opacity: 0.5;
     }
+    .itm[status='sending'] .wp {
+        background:#8dd88b;
+    }
+    .itm[status='sent'] .wp {
+        opacity:0.5;
+    }
 </style>
 <h1 class="page-title"><?php echo $this->title ?></h1>
 <form role="form">
@@ -56,44 +62,73 @@
             </div>
         <?php endforeach; ?>
     </div>
+    <div id='prot'></div>
+        
 </form>
 
 <script type="text/javascript">
+    var intervalId = false;
     (function($) {
-        $('#generate').click(function() {
-            var itm = $('.itm');
-            itm.find('label').html('waiting ...');
-            $.each(itm, function() {
-                var obj = $(this);
-                var lb = obj.find('label');
-                lb.html('正在处理 ...');
-                var tmp = $(this).find('.tmp').val();
-                $.ajax({
-                    url: '<?php echo $this->url(array(), 'manage-photo-create') ?>',
-                    dataType: 'json',
-                    type: 'POST',
-                    data: {tmp: tmp},
-                    success: function(response) {
-                        if (response === 1) {
-                            obj.removeClass('waiting');
-                            obj.addClass('done');
-                            lb.html('操作成功 ...').addClass('green');
-                        } else {
-                            alert('操作失败');
-                        }
-                    },
-                    error: function() {
-                        alert('操作失败');
-                    },
-                    complete: function() {
-                        if ($('.waiting').length === 0 && $('.done').length === $('.itm').length) {
-                            $('#generate').after('全部上传完毕，<a href="/manage/photo/list">立即查看</a>');
-                            $('#generate').remove();
 
-                        }
+        var generate = function() {
+            $('#prot').html(new Date());
+            var $itm = $('.itm');
+            var sending = $('.itm[status="sending"]').length;
+            var sent = $('.itm[status="sent"]').length;
+            if (sent === $itm.length) {
+                clearInterval(intervalId);
+            }
+            if (sending === 0) {
+                $itm = $('.itm');
+                $.each($itm, function() {
+                    var $this = $(this);
+                    if (!$this.attr('status')) {
+
+                        generateItem($this);
+                        return false;
                     }
                 });
+            }
+        };
+
+        var generateItem = function(obj) {
+            obj.attr('status', 'sending');
+            var lb = obj.find('label');
+            lb.html('正在处理 ...');
+            var tmp = obj.find('.tmp').val();
+            $.ajax({
+                url: '<?php echo $this->url(array(), 'manage-photo-create') ?>',
+                dataType: 'json',
+                type: 'POST',
+                data: {tmp: tmp},
+                success: function(response) {
+                    if (response === 1) {
+                        obj.removeClass('waiting');
+                        obj.addClass('done');
+                        obj.attr('status', 'sent');
+                        lb.html('操作成功 ...').addClass('green');
+
+                    } else {
+                        alert('操作失败');
+                    }
+                },
+                error: function() {
+                    alert('操作失败');
+                },
+                complete: function() {
+                    if ($('.waiting').length === 0 && $('.done').length === $('.itm').length) {
+                        $('#generate').after('全部上传完毕，<a href="/manage/photo/list">立即查看</a>');
+                        $('#generate').remove();
+
+                    }
+                }
             });
+        };
+
+        $('#generate').click(function() {
+
+            intervalId = setInterval(generate, 500);
+            $(this).prop('disabled', true);
         });
     })(jQuery);
 </script>

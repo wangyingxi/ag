@@ -4,6 +4,12 @@ Common css
 .marginbottom10px {
     margin-bottom:10px;
 }
+.marginbottom20px {
+    margin-bottom:20px;
+}
+.marginbottom50px {
+    margin-bottom:50px;
+}
 .green {
     color:#398439 !important;
 }
