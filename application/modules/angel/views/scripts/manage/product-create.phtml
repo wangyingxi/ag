@@ -10,6 +10,35 @@
     .curreny-rate {
         width:80px;
     }
+    table {
+        font-size:12px;
+        margin:10px 0;
+    }
+    table td.col1, table td.col3, table td.col2, table td.col4 {
+        padding:2px 0;
+        width:90px;
+    }
+    table td.col2, table td.col4 {
+        width:150px;
+    }
+    table td input[type='number'] {
+        background: #F0F0F0;
+        width: 80px;
+    }
+    .input-group-addon {
+        width:80px;
+        text-align:center;
+    }
+    .price {
+        text-align:center;
+    }
+
+    #base-rmb {
+        background:#ffff80;
+        display:inline-block;
+        margin:0 10px;
+        width:150px;
+    }
 </style>
 
 <h1 class="page-title"><?php echo $this->title ?></h1>
@@ -48,8 +77,25 @@
             </div>
             <div class="form-group">
                 <label>商品图片：</label>
-                <div id="photo">
-                    <input type="button" value="重新加载图片" id="refresh-photos"/>
+                <div id="photo" class='panel panel-info'>
+                    <div class='panel-body gy-photo'>
+                        <input type='hidden' class='gy-result'/>
+                        <input type="button" value="选择图片" class="gy-reload"/>
+                        <div class='gy-photo-container' style='margin-top:10px'>
+                            <div class='gy-photo-item' style='background:#FFF;border:1px solid #ddd;width:120px;height:120px;display:inline-block;margin-bottom:10px;margin-right:10px;'>
+                            </div>
+                            <div class='gy-photo-item' style='background:#FFF;border:1px solid #ddd;width:120px;height:120px;display:inline-block;margin-bottom:10px;margin-right:10px;'>
+                            </div>
+                            <div class='gy-photo-item' style='background:#FFF;border:1px solid #ddd;width:120px;height:120px;display:inline-block;margin-bottom:10px;margin-right:10px;'>
+                            </div>
+                            <div class='gy-photo-item' style='background:#FFF;border:1px solid #ddd;width:120px;height:120px;display:inline-block;margin-bottom:10px;margin-right:10px;'>
+                            </div>
+                            <div class='gy-photo-item' style='background:#FFF;border:1px solid #ddd;width:120px;height:120px;display:inline-block;margin-bottom:10px;margin-right:10px;'>
+                            </div>
+                            <div class='gy-photo-item' style='background:#FFF;border:1px solid #ddd;width:120px;height:120px;display:inline-block;margin-bottom:10px;margin-right:10px;'>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -66,7 +112,7 @@
             </div>
             <div class="form-group">
                 <label>采购价：</label>
-                <input type="number" class="form-control" id="base_price">
+                <input type="text" class="form-control" id="base_price">
             </div>
             <div class="form-group">
                 <label>售价：</label>
@@ -75,25 +121,23 @@
                         输入人民币金额计算出各货币下售价
                     </p>
                     <div>
-                        RMB: <input type="number" class="text text-center"/> 元 &nbsp;&nbsp;
-                        <input type="button" value="计算"/>
+                        RMB: <input type="number" id='base-rmb' class="text text-center form-control"/> 元 &nbsp;&nbsp;
+                        <input type="button" id='calculate' value="计算"/>
 
                         <div class="paddingbox20px">
                             <table>
                                 <tr>
-                                    <td> 
+                                    <td class="col1"> 
                                         USD RATE : 
                                     </td>
-                                    <td>
-                                        <input type="number" class="curreny-rate" value="<?php echo $this->bootstrap_options['currency']['usd'] ?>" />
+                                    <td class="col2">
+                                        <input type="number" class="curreny-rate text-center form-control" for='price-usd' value="<?php echo $this->currency['usd'] ?>" />
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        GBP RATE :
+                                    <td class="col3"> 
+                                        GBP RATE : 
                                     </td>
-                                    <td>
-                                        <input type="number" class="curreny-rate" value="<?php echo $this->bootstrap_options['currency']['gbp'] ?>" />
+                                    <td class="col4">
+                                        <input type="number" class="curreny-rate text-center form-control" for='price-gbp' value="<?php echo $this->currency['gbp'] ?>" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -101,15 +145,13 @@
                                         EUR RATE :
                                     </td>
                                     <td>
-                                        <input type="number" class="curreny-rate" value="<?php echo $this->bootstrap_options['currency']['eur'] ?>" />
+                                        <input type="number" class="curreny-rate text-center form-control" for='price-eur' value="<?php echo $this->currency['eur'] ?>" />
                                     </td>
-                                </tr>
-                                <tr>
                                     <td>
                                         HKD RATE :
                                     </td>
                                     <td>
-                                        <input type="number" class="curreny-rate" value="<?php echo $this->bootstrap_options['currency']['hkd'] ?>" />
+                                        <input type="number" class="curreny-rate text-center form-control" for='price-hkd' value="<?php echo $this->currency['hkd'] ?>" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -117,37 +159,44 @@
                                         AUD RATE :
                                     </td>
                                     <td>
-                                        <input type="number" class="curreny-rate" value="<?php echo $this->bootstrap_options['currency']['aud'] ?>" />
+                                        <input type="number" class="curreny-rate text-center form-control" for='price-aud' value="<?php echo $this->currency['aud'] ?>" />
                                     </td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                             </table>
                         </div>
                     </div>
-                </div>
-                <div class="input-group input-group">
-                    <span class="input-group-addon">$ USD</span>
-                    <input type="number" class="form-control">
+
+                    <div class='clear_20px'>
+                    </div>
+
+                    <div class="input-group input-group">
+                        <span class="input-group-addon">$ USD</span>
+                        <input type="number" id='price-usd' class="form-control price">
+                    </div>
+
+                    <div class="input-group input-group">
+                        <span class="input-group-addon">£ GBP</span>
+                        <input type="number" id='price-gbp' class="form-control price">
+                    </div>
+
+                    <div class="input-group input-group">
+                        <span class="input-group-addon">€ EUR</span>
+                        <input type="number" id='price-eur' class="form-control price">
+                    </div>
+
+                    <div class="input-group input-group">
+                        <span class="input-group-addon">$ HKD</span>
+                        <input type="number" id='price-hkd' class="form-control price">
+                    </div>
+
+                    <div class="input-group input-group">
+                        <span class="input-group-addon">$ AUD</span>
+                        <input type="number" id='price-aud' class="form-control price">
+                    </div>
                 </div>
 
-                <div class="input-group input-group">
-                    <span class="input-group-addon">£ GBP</span>
-                    <input type="number" class="form-control">
-                </div>
-
-                <div class="input-group input-group">
-                    <span class="input-group-addon">€ EUR</span>
-                    <input type="number" class="form-control">
-                </div>
-
-                <div class="input-group input-group">
-                    <span class="input-group-addon">$ HKD</span>
-                    <input type="number" class="form-control">
-                </div>
-
-                <div class="input-group input-group">
-                    <span class="input-group-addon">$ AUD</span>
-                    <input type="number" class="form-control">
-                </div>
             </div>
             <div class="form-group">
                 <label>商品品牌：</label>
@@ -156,7 +205,7 @@
                 <label>商品分类：</label>
             </div>
 
-            <button type="submit" disabled="disabled" class="btn btn-default">确认提交</button>
+            <button type="submit" class="btn btn-default">确认提交</button>
 
         </form>
     </div>
@@ -171,6 +220,18 @@
                 type: 'POST',
                 success: function(response) {
                     console.log(response);
+                }
+
+            });
+        });
+
+        $('#calculate').click(function() {
+            var baseprice = $('#base-rmb').val();
+            $.each($('.curreny-rate'), function() {
+                var rate = $(this).val();
+                var result = baseprice / rate;
+                if (result) {
+                    $('#' + $(this).attr('for')).val(result.toFixed(2) * 1);
                 }
 
             });

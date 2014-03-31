@@ -117,6 +117,7 @@ class Angel_ManageController extends Angel_Controller_Action {
 
     public function productCreateAction() {
         $this->view->title = "创建商品";
+        $this->view->currency = $this->bootstrap_options['currency'];
     }
 
     public function productEditAction() {
