@@ -1,7 +1,21 @@
+<style>
+    ul {
+        margin:0
+    }
+    ul li {
+        margin:0;
+        list-style: none;
+
+    }
+    .curreny-rate {
+        width:80px;
+    }
+</style>
+
 <h1 class="page-title"><?php echo $this->title ?></h1>
 <div class="row">
     <div class="col-md-8">
-        
+
         <form role="form">
             <div class="form-group">
                 <label>商品全称：</label>
@@ -23,7 +37,7 @@
                         <input class='btn btn-default' type='button' value='检查可用性'/>
                     </span>
                 </div>
-                
+
             </div>
             <div class="form-group">
                 <label>商品状态：</label>
@@ -56,7 +70,60 @@
             </div>
             <div class="form-group">
                 <label>售价：</label>
+                <div class="alert alert-info">
+                    <p class="marginbottom10px">
+                        输入人民币金额计算出各货币下售价
+                    </p>
+                    <div>
+                        RMB: <input type="number" class="text text-center"/> 元 &nbsp;&nbsp;
+                        <input type="button" value="计算"/>
 
+                        <div class="paddingbox20px">
+                            <table>
+                                <tr>
+                                    <td> 
+                                        USD RATE : 
+                                    </td>
+                                    <td>
+                                        <input type="number" class="curreny-rate" value="<?php echo $this->bootstrap_options['currency']['usd'] ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        GBP RATE :
+                                    </td>
+                                    <td>
+                                        <input type="number" class="curreny-rate" value="<?php echo $this->bootstrap_options['currency']['gbp'] ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        EUR RATE :
+                                    </td>
+                                    <td>
+                                        <input type="number" class="curreny-rate" value="<?php echo $this->bootstrap_options['currency']['eur'] ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        HKD RATE :
+                                    </td>
+                                    <td>
+                                        <input type="number" class="curreny-rate" value="<?php echo $this->bootstrap_options['currency']['hkd'] ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        AUD RATE :
+                                    </td>
+                                    <td>
+                                        <input type="number" class="curreny-rate" value="<?php echo $this->bootstrap_options['currency']['aud'] ?>" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <div class="input-group input-group">
                     <span class="input-group-addon">$ USD</span>
                     <input type="number" class="form-control">
@@ -97,15 +164,15 @@
 
 <script type="text/javascript">
     (function($) {
-        $('#testing-btn').click(function(){
+        $('#testing-btn').click(function() {
             $.ajax({
-                url:'<?php echo $this->url(array(), 'manage-photo-list-home')?>?format=json',
-                dataType:'json',
+                url: '<?php echo $this->url(array(), 'manage-photo-list-home') ?>?format=json',
+                dataType: 'json',
                 type: 'POST',
-                success: function(response){
+                success: function(response) {
                     console.log(response);
                 }
-                
+
             });
         });
     })(jQuery);
