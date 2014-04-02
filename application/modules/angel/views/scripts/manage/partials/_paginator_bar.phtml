@@ -1,0 +1,13 @@
+<div class="btn-group">
+
+    <?php for ($i = 1; $i <= $this->page_count; $i++) { ?>
+        <?php
+        $cls = "";
+        if ($this->current_page_no == $i) {
+            $cls = 'active';
+        }
+        ?>
+        <a href="<?php echo $this->url(array('page' => $i), 'manage-photo-list') ?>" class="btn btn-default btn-sm <?php echo $cls ?>"><?php echo $i ?></a>
+    <?php } ?>
+
+</div>

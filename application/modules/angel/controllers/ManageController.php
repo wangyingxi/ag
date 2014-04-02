@@ -221,7 +221,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         }
         $photoModel = $this->getModel('photo');
         $paginator = $photoModel->getPhoto();
-        $paginator->setItemCountPerPage(40);
+        $paginator->setItemCountPerPage(20);
         $paginator->setCurrentPageNumber($page);
         $resource = array();
         foreach ($paginator as $r) {
