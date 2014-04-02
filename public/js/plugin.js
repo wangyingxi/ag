@@ -1,10 +1,71 @@
 (function($) {
     var DURATION = 100;
 
-    $.fn.photoSelector = function(options) {
-        var trigger = $(this);
-        
-    };
+    var methods = {
+        init: function(options) {
+            var trigger = $(this);
+            trigger.prop('disabled', true);
+            if (!options)
+                options = {};
+            // options.multiSelect
+            var multiSelect = false;
+            if (options.multiSelect)
+                multiSelect = true;
+
+            alert(trigger.modalId());
+
+            var launchBtn = $("<input>")
+                    .attr('type', 'button')
+                    .attr('data-toggle', 'modal')
+                    .attr('data-target', '#' + modalId)
+                    .addClass('btn btn-success btn-sm')
+                    .val('选择图片');
+
+
+            trigger.append(launchBtn);
+
+            trigger.prop('disabled', false);
+        },
+        modalId: function() {
+            var modalId = 'gy' + new Date().getTime();
+            // 避免重复id
+            if ($('#' + modalId).length > 0)
+                modalId += new Date().getTime();
+
+            var modalHtml = '<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">';
+            modalHtml += '<div class="modal-dialog">';
+            modalHtml += '<div class="modal-content">';
+            modalHtml += '<div class="modal-header">';
+            modalHtml += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+            modalHtml += '<h4 class="modal-title">选择图片</h4>';
+            modalHtml += '</div>';
+            modalHtml += '<div class="modal-body"></div>';
+            modalHtml += '<div class="modal-footer">';
+            modalHtml += '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
+            modalHtml += '<button type="button" class="btn btn-primary">Save changes</button>';
+            modalHtml += '</div>';
+            modalHtml += '</div>';
+            modalHtml += '</div>';
+            modalHtml += '</div>';
+
+            var modalPopup = $(modalHtml).attr('id', modalId);
+            $('body').append(modalPopup);
+
+            return modalId;
+        }
+    }
+
+    $.fn.photoSelector = function(method) {
+
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof method === 'object' || !method) {
+            return methods.init.apply(this, arguments);
+        } else {
+            $.error('The method ' + method + ' does not exist in $.uploadify');
+        }
+
+    }
 
     $.queryString = {
         data: {},

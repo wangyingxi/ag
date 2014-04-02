@@ -79,7 +79,7 @@
                 <label>商品图片：</label>
                 <div id="photo" class='panel panel-info'>
                     <div class='panel-body gy-photo'>
-                        <input type='hidden' class='gy-result'/>
+<!--                        <input type='hidden' class='gy-result'/>
                         <div class="text-right">
                             <input type="button" value="选择图片" class="btn btn-success btn-sm gy-reload" data-toggle="modal" data-target=".gy-photo-modal"/>
                         </div>
@@ -96,7 +96,7 @@
                             </div>
                             <div class='gy-photo-item' style='background:#FFF;border:1px solid #ddd;width:120px;height:120px;display:inline-block;margin-bottom:10px;margin-right:10px;'>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -213,25 +213,6 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade gy-photo-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">选择图片</h4>
-            </div>
-            <div class="modal-body">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
 <script type="text/javascript">
     (function($) {
         $('#testing-btn').click(function() {
@@ -254,12 +235,10 @@
                 if (result) {
                     $('#' + $(this).attr('for')).val(result.toFixed(2) * 1);
                 }
-
             });
         });
         
-        $('.gy-reload').click(function(){
-            
-        });
+        $('.gy-photo').photoSelector();
+        
     })(jQuery);
 </script>
