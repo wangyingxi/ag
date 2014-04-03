@@ -3,14 +3,14 @@
 
     var methods = {
         init: function(options) {
-            var trigger = $(this);
-            trigger.prop('disabled', true);
+            var $this = $(this);
+            $this.prop('disabled', true);
             if (!options)
                 options = {};
-
+            // 初始化Setting默认值
             var settings = {
-                multiSelect: false,
-                modalId: ""
+                multi:  true,
+                url:    '/manage/photo/list?format=json'
             };
             var modalId = function() {
                 var modalId = 'gy' + new Date().getTime();
@@ -38,10 +38,10 @@
                 $('body').append(modalPopup);
 
                 return modalId;
-            }
-            options.modalId = modalId;
-            
+            };
+            settings.modalId = modalId;
             $.extend(settings, options);
+            $this.data('settings', settings);
             
             var launchBtn = $("<input>")
                     .attr('type', 'button')
@@ -49,11 +49,26 @@
                     .attr('data-target', '#' + modalId())
                     .addClass('btn btn-success btn-sm')
                     .val('选择图片');
-
-            trigger.append(launchBtn);
-
-            trigger.prop('disabled', false);
+            
+            $this.append(launchBtn);
+            
+            var bt = $("<input type='button' value='select' />");
+//            bt.click(function(){
+//                $this.photoSelector('refresh');
+//            });
+            $this.append(bt);
+            
+            
+            
+            $this.prop('disabled', false);
         },
+        
+        refresh:function(page) {
+            var $this = $(this);
+            var settings = $this.data('settings')
+            var url = settings.url;
+            alert();
+        }
     }
 
     $.fn.photoSelector = function(method) {
