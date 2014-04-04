@@ -234,6 +234,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         // JSON FORMAT
         if ($this->getParam('format') == 'json') {
             $this->_helper->json(array('data' => $resource, 
+                'code' => 200,
                 'page' => $paginator->getCurrentPageNumber(), 
                 'count' => $paginator->count()));
         } else {

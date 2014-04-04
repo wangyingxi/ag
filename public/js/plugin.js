@@ -1,18 +1,21 @@
 (function($) {
     var DURATION = 100;
 
-    var methods = {
+    var photoSelectorMethods = {
         init: function(options) {
             var $this = $(this);
             $this.prop('disabled', true);
             if (!options)
                 options = {};
+
             // 初始化Setting默认值
             var settings = {
-                multi:  true,
-                url:    '/manage/photo/list?format=json'
+                multi: true,
+                url: '/manage/photo/list'
             };
-            var modalId = function() {
+
+            // 生成modal框
+            var generateModalId = function() {
                 var modalId = 'gy' + new Date().getTime();
                 // 避免重复id
                 if ($('#' + modalId).length > 0)
@@ -26,9 +29,10 @@
                 modalHtml += '<h4 class="modal-title">选择图片</h4>';
                 modalHtml += '</div>';
                 modalHtml += '<div class="modal-body"></div>';
+                modalHtml += '<div class="modal-page"></div>';
                 modalHtml += '<div class="modal-footer">';
-                modalHtml += '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
-                modalHtml += '<button type="button" class="btn btn-primary">Save changes</button>';
+                modalHtml += '<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>';
+                modalHtml += '<button type="button" class="btn btn-primary select-btn">选择</button>';
                 modalHtml += '</div>';
                 modalHtml += '</div>';
                 modalHtml += '</div>';
@@ -39,44 +43,101 @@
 
                 return modalId;
             };
-            settings.modalId = modalId;
+
+            // 合并settings
+            settings.modalId = generateModalId();
             $.extend(settings, options);
             $this.data('settings', settings);
-            
+
+            // “选择图片”按钮
             var launchBtn = $("<input>")
                     .attr('type', 'button')
                     .attr('data-toggle', 'modal')
-                    .attr('data-target', '#' + modalId())
+                    .attr('data-target', '#' + settings.modalId)
                     .addClass('btn btn-success btn-sm')
                     .val('选择图片');
-            
+            launchBtn.click(function() {
+                $this.photoSelector('start');
+            });
+
             $this.append(launchBtn);
-            
-            var bt = $("<input type='button' value='select' />");
-//            bt.click(function(){
-//                $this.photoSelector('refresh');
-//            });
-            $this.append(bt);
-            
-            
-            
             $this.prop('disabled', false);
         },
-        
-        refresh:function(page) {
+        refresh: function(resource) {
+            alert(resource.page);
+        },
+        request: function(param) {
             var $this = $(this);
-            var settings = $this.data('settings')
+            var settings = $this.data('settings');
             var url = settings.url;
-            alert();
+            var data = {format: 'json', 'page': param.page};
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                data: data,
+                success: function(response) {
+                    if (response.code === 200) {
+                        param();
+                    }
+                }
+            });
+        },
+        start: function() {
+            var page = 1;
+            var $this = $(this);
+            var settings = $this.data('settings');
+            var url = settings.url;
+            var modalId = settings.modalId;
+            var $modal = $('#' + modalId);
+            var data = {format: 'json', 'page': page};
+            if (!$modal.attr('loaded')) {
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    data: data,
+                    success: function(response) {
+                        if (response.code === 200) {
+
+                            var pageNo = response.page;
+                            var count = response.count;
+                            var resource = response.data;
+                            // 显示图片
+                            $this.photoSelector('refresh', {page: 1, data: resource});
+                            // 显示pagebar
+                            for (var i = 1; i <= count; i++) {
+                                var ACTIVECLS = 'active';
+                                var pageBtn = $("<input>").attr('type', 'button').attr('page', i).addClass('btn btn-default btn-xs').val(i);
+                                if (pageNo === i) {
+                                    pageBtn.addClass(ACTIVECLS);
+                                }
+                                pageBtn.click(function() {
+                                    var selfBtn = $(this);
+                                    if (!selfBtn.hasClass(ACTIVECLS)) {
+                                        // 调整class
+                                        selfBtn.siblings('.btn-default').removeClass(ACTIVECLS);
+                                        selfBtn.addClass(ACTIVECLS);
+                                        // 刷新图片
+                                        var pgn = selfBtn.attr('page');
+                                        $this.photoSelector('refresh', {page: pgn});
+                                    }
+                                });
+                                $modal.find('.modal-page').append(pageBtn);
+                            }
+                        }
+
+                    }
+                });
+            }
+            $modal.attr('loaded', true);
         }
     }
 
     $.fn.photoSelector = function(method) {
 
-        if (methods[method]) {
-            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        if (photoSelectorMethods[method]) {
+            return photoSelectorMethods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof method === 'object' || !method) {
-            return methods.init.apply(this, arguments);
+            return photoSelectorMethods.init.apply(this, arguments);
         } else {
             $.error('The method ' + method + ' does not exist in $.uploadify');
         }
