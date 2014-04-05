@@ -63,72 +63,127 @@
             $this.append(launchBtn);
             $this.prop('disabled', false);
         },
-        refresh: function(resource) {
-            alert(resource.page);
+        renderPhoto: function(resource) {
+            var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
+            var modalBody = $modal.find('.modal-body');
+            modalBody.empty();
+            console.log(resource.length);
+            if (resource) {
+                $.each(resource, function(i, j) {
+                    var item = $(j);
+                    console.log(item[0].id);
+//                    alert(item.id);
+                    // 调整selected属性
+                    $modal.attr('selected');
+                });
+            }
+
         },
-        request: function(param) {
-            var $this = $(this);
-            var settings = $this.data('settings');
+        renderPagebar: function(param) {
+            var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
+
+            // 显示pagebar
+            var pagebar = $modal.find('.modal-page');
+            pagebar.empty();
+            for (var i = 1; i <= param.count; i++) {
+                var ACTIVECLS = 'active';
+                var pageBtn = $("<input>").attr('type', 'button').attr('page', i).addClass('btn btn-default btn-xs').val(i);
+                if (param.page === i) {
+                    pageBtn.addClass(ACTIVECLS);
+                }
+                pageBtn.click(function() {
+                    var selfBtn = $(this);
+                    if (!selfBtn.hasClass(ACTIVECLS)) {
+                        // 调整class
+                        selfBtn.siblings('.btn-default').removeClass(ACTIVECLS);
+                        selfBtn.addClass(ACTIVECLS);
+                        // 刷新图片
+                        var pgn = selfBtn.attr('page');
+                        $this.photoSelector('request', pgn);
+                    }
+                });
+                pagebar.append(pageBtn);
+            }
+        },
+        renderSelected: function(param) {
+//            alert(resource.page);
+        },
+        request: function(page) {
+            var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
+
             var url = settings.url;
-            var data = {format: 'json', 'page': param.page};
+            var data = {format: 'json', 'page': page};
             $.ajax({
                 url: url,
                 dataType: 'json',
                 data: data,
                 success: function(response) {
                     if (response.code === 200) {
-                        param();
+//                        var pageNo = response.page;
+                        var count = response.count;
+                        var resource = response.data;
+                        // 显示图片
+                        $this.photoSelector('renderPhoto', resource);
+
+                        if (!$modal.attr('loaded')) {
+                            // 显示pagebar
+                            $this.photoSelector('renderPagebar', {page: page, count: count});
+                            $modal.attr('loaded', true);
+                        }
                     }
                 }
             });
         },
         start: function() {
-            var page = 1;
-            var $this = $(this);
-            var settings = $this.data('settings');
-            var url = settings.url;
-            var modalId = settings.modalId;
-            var $modal = $('#' + modalId);
-            var data = {format: 'json', 'page': page};
-            if (!$modal.attr('loaded')) {
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    data: data,
-                    success: function(response) {
-                        if (response.code === 200) {
-
-                            var pageNo = response.page;
-                            var count = response.count;
-                            var resource = response.data;
-                            // 显示图片
-                            $this.photoSelector('refresh', {page: 1, data: resource});
-                            // 显示pagebar
-                            for (var i = 1; i <= count; i++) {
-                                var ACTIVECLS = 'active';
-                                var pageBtn = $("<input>").attr('type', 'button').attr('page', i).addClass('btn btn-default btn-xs').val(i);
-                                if (pageNo === i) {
-                                    pageBtn.addClass(ACTIVECLS);
-                                }
-                                pageBtn.click(function() {
-                                    var selfBtn = $(this);
-                                    if (!selfBtn.hasClass(ACTIVECLS)) {
-                                        // 调整class
-                                        selfBtn.siblings('.btn-default').removeClass(ACTIVECLS);
-                                        selfBtn.addClass(ACTIVECLS);
-                                        // 刷新图片
-                                        var pgn = selfBtn.attr('page');
-                                        $this.photoSelector('refresh', {page: pgn});
-                                    }
-                                });
-                                $modal.find('.modal-page').append(pageBtn);
-                            }
-                        }
-
-                    }
-                });
-            }
-            $modal.attr('loaded', true);
+            var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
+            $this.photoSelector('request', 1);
+//            var $this = $(this);
+//            var settings = $this.data('settings');
+//            var modalId = settings.modalId;
+//            var $modal = $('#' + modalId);
+//            if (!$modal.attr('loaded')) {
+//                var page = 1;
+//                var $this = $(this);
+//                var settings = $this.data('settings');
+//                var url = settings.url;
+//                var data = {format: 'json', 'page': page};
+//                $.ajax({
+//                    url: url,
+//                    dataType: 'json',
+//                    data: data,
+//                    success: function(response) {
+//                        if (response.code === 200) {
+//
+//                            var pageNo = response.page;
+//                            var count = response.count;
+//                            var resource = response.data;
+//                            // 显示图片
+//                            $this.photoSelector('refresh', {page: 1, data: resource});
+//                            // 显示pagebar
+//                            for (var i = 1; i <= count; i++) {
+//                                var ACTIVECLS = 'active';
+//                                var pageBtn = $("<input>").attr('type', 'button').attr('page', i).addClass('btn btn-default btn-xs').val(i);
+//                                if (pageNo === i) {
+//                                    pageBtn.addClass(ACTIVECLS);
+//                                }
+//                                pageBtn.click(function() {
+//                                    var selfBtn = $(this);
+//                                    if (!selfBtn.hasClass(ACTIVECLS)) {
+//                                        // 调整class
+//                                        selfBtn.siblings('.btn-default').removeClass(ACTIVECLS);
+//                                        selfBtn.addClass(ACTIVECLS);
+//                                        // 刷新图片
+//                                        var pgn = selfBtn.attr('page');
+//                                        $this.photoSelector('refresh', {page: pgn});
+//                                    }
+//                                });
+//                                $modal.find('.modal-page').append(pageBtn);
+//                            }
+//                        }
+//
+//                    }
+//                });
+//            }
         }
     }
 

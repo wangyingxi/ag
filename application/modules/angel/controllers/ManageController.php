@@ -139,9 +139,6 @@ class Angel_ManageController extends Angel_Controller_Action {
             try {
                 $destination = $this->getTmpFile($tmp);
                 $result = $photoModel->addPhoto($destination, $owner);
-//                $result = $photoModel->addPhoto($destination);
-                echo $result;
-                exit;
                 if ($result) {
                     $result = 1;
                 }
