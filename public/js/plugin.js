@@ -76,17 +76,21 @@
             // write css
             var style = "<style>";
             style += ".modal-page {margin:15px; text-align:center;}";
-            style += ".gallery {display:inline-block; margin:5px; padding:5px;}";
+            style += ".gallery {display:inline-block; margin:5px; padding:5px;position:relative;}";
             style += ".gallery:hover {background-color:skyblue;cursor:pointer;}";
+            style += ".gallery.choosen {background:#FFF !important; cursor:default !important;}";
             style += ".gallery .checkbt {display:inline-block; margin:5px;}";
             style += ".gallery-img {height:90px; width:90px;}";
             style += ".gallery.selected {background-color:lightgreen !important;}";
             style += ".modal-page input {margin:0 2px;}";
-            style += ".gy-sd {border:1px solid #eee;display:inline-block;padding:10px;margin:10px;position:relative;}";
+            style += ".gy-sd {border:1px solid #eee;display:inline-block;padding:10px;margin:0 5px 5px 0;position:relative;}";
             style += ".gy-sd img {height:90px;width:90px}";
             style += ".gy-sd .rm, .gy-sd .lt, .gy-sd .rt {background:#FFF;border:none;color:#888;border:0 0 0 2px;height:24px;line-height:24px;margin:0;right:0; top:0;padding:0;position:absolute;width:24px;}";
             style += ".gy-sd .lt, .gy-sd .rt {left:0; right:auto; top:42px;}";
             style += ".gy-sd .rt {left:auto; right:0;}";
+            style += ".gallery .label-success {display:none;position:absolute;left:0;top:0;}";
+            style += ".gallery.choosen {opacity:0.5}";
+            style += ".gallery.choosen .label-success {display:block;}";
             style += "</style>";
             return style;
         },
@@ -112,14 +116,17 @@
                             .attr('name', name)
                             .attr('type', type);
                     gallery.append(img);
+                    gallery.append($("<span>").addClass('label label-success').html('已选择'));
                     gallery.click(function() {
-                        if (!settings.multi) {
-                            $(this).closest('.modal-body')
-                                    .find('.gallery.selected')
-                                    .removeClass('selected');
+                        if (!gallery.hasClass('choosen')) {
+                            if (!settings.multi) {
+                                $(this).closest('.modal-body')
+                                        .find('.gallery.selected')
+                                        .removeClass('selected');
+                            }
+                            $(this).closest('.gallery')
+                                    .toggleClass('selected');
                         }
-                        $(this).closest('.gallery')
-                                .toggleClass('selected');
                     });
                     if ($.inArray(name, arr) >= 0) {
                         gallery.addClass('selected');
@@ -154,6 +161,21 @@
                 pagebar.append(pageBtn);
             }
         },
+        renderChoosen: function() {
+            var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
+            var s = $this.attr('save');
+            if (s) {
+                s = JSON.parse(s);
+                var galleries = $modal.find('.gallery');
+                $.each(galleries, function() {
+                    var name = $(this).attr('name');
+                    if (s[name]) {
+                        $(this).addClass('choosen');
+                    }
+
+                });
+            }
+        },
         request: function(page) {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
 
@@ -175,6 +197,8 @@
                             $this.photoSelector('renderPagebar', {page: page, count: count});
                             $modal.attr('loaded', true);
                         }
+                        
+                        $this.photoSelector('renderChoosen');
                     }
                 }
             });
@@ -184,6 +208,8 @@
 
             if (!$modal.attr('loaded')) {
                 $this.photoSelector('request', 1);
+            } else {
+                $this.photoSelector('renderChoosen');
             }
         },
         save: function() {
@@ -222,9 +248,28 @@
                 $.each(save, function(name, path) {
                     var item = $('<div>').addClass('gy-sd')
                             .attr('name', name);
-                    item.append($("<button>").attr('type', 'button').html('&times;').addClass('rm'));
-                    item.append($("<button>").attr('type', 'button').html('&lt;').addClass('lt'));
-                    item.append($("<button>").attr('type', 'button').html('&gt;').addClass('rt'));
+                    var rm = $("<button>").attr('type', 'button').html('&times;').addClass('rm');
+                    rm.click(function(){
+                        // 删除
+                        
+                        $this.photoSelector('renderChoosen');
+                    });
+                    item.append(rm);
+                    var lt = $("<button>").attr('type', 'button').html('&lt;').addClass('lt');
+                    lt.click(function(){
+                        // 左移
+                        
+                        $this.photoSelector('renderChoosen');
+                        
+                    });
+                    item.append(lt);
+                    var rt = $("<button>").attr('type', 'button').html('&gt;').addClass('rt');
+                    rt.click(function(){
+                        // 右移
+                        
+                        $this.photoSelector('renderChoosen');
+                    });
+                    item.append(rt);
                     item.append($("<img>").attr('src', path));
                     gyPhotoSelected.append(item);
                 });
