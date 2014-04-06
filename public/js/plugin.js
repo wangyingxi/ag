@@ -10,12 +10,13 @@
 
             // 初始化Setting默认值
             var settings = {
+                separator: ';',
                 multi: true,
                 url: '/manage/photo/list'
             };
 
             // 生成modal框
-            var generateModalId = function() {
+            var generateModal = function($this) {
                 var modalId = 'gy' + new Date().getTime();
                 // 避免重复id
                 if ($('#' + modalId).length > 0)
@@ -26,26 +27,32 @@
                 modalHtml += '<div class="modal-content">';
                 modalHtml += '<div class="modal-header">';
                 modalHtml += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
-                modalHtml += '<h4 class="modal-title">选择图片</h4>';
+                modalHtml += '<h4 class="modal-title">添加图片</h4>';
                 modalHtml += '</div>';
                 modalHtml += '<div class="modal-body"></div>';
                 modalHtml += '<div class="modal-page"></div>';
                 modalHtml += '<div class="modal-footer">';
                 modalHtml += '<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>';
-                modalHtml += '<button type="button" class="btn btn-primary select-btn">选择</button>';
                 modalHtml += '</div>';
                 modalHtml += '</div>';
                 modalHtml += '</div>';
                 modalHtml += '</div>';
 
                 var modalPopup = $(modalHtml).attr('id', modalId);
+                var selectBtn = $("<button>")
+                        .attr('type', 'button')
+                        .attr('class', 'btn btn-primary select-btn')
+                        .html('选择');
+                selectBtn.click(function() {
+                    $this.photoSelector('save');
+                });
+                modalPopup.find('.modal-footer').append(selectBtn);
                 $('body').append(modalPopup);
-
                 return modalId;
             };
 
             // 合并settings
-            settings.modalId = generateModalId();
+            settings.modalId = generateModal($this);
             $.extend(settings, options);
             $this.data('settings', settings);
 
@@ -62,22 +69,64 @@
 
             $this.append(launchBtn);
             $this.prop('disabled', false);
+
+            $('body').append($this.photoSelector('style'));
+        },
+        style: function() {
+            // write css
+            var style = "<style>";
+            style += ".modal-page {margin:15px; text-align:center;}";
+            style += ".gallery {display:inline-block; margin:5px; padding:5px;}";
+            style += ".gallery:hover {background-color:skyblue;cursor:pointer;}";
+            style += ".gallery .checkbt {display:inline-block; margin:5px;}";
+            style += ".gallery-img {height:90px; width:90px;}";
+            style += ".gallery.selected {background-color:lightgreen !important;}";
+            style += ".modal-page input {margin:0 2px;}";
+            style += ".gy-sd {border:1px solid #eee;display:inline-block;padding:10px;margin:10px;position:relative;}";
+            style += ".gy-sd img {height:90px;width:90px}";
+            style += ".gy-sd .rm, .gy-sd .lt, .gy-sd .rt {background:#FFF;border:none;color:#888;border:0 0 0 2px;height:24px;line-height:24px;margin:0;right:0; top:0;padding:0;position:absolute;width:24px;}";
+            style += ".gy-sd .lt, .gy-sd .rt {left:0; right:auto; top:42px;}";
+            style += ".gy-sd .rt {left:auto; right:0;}";
+            style += "</style>";
+            return style;
         },
         renderPhoto: function(resource) {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
             var modalBody = $modal.find('.modal-body');
             modalBody.empty();
-            console.log(resource.length);
             if (resource) {
-                $.each(resource, function(i, j) {
-                    var item = $(j);
-                    console.log(item[0].id);
-//                    alert(item.id);
-                    // 调整selected属性
-                    $modal.attr('selected');
+                var selected = $modal.attr('selected');
+                var arr = false;
+                if (selected) {
+                    arr = selected.split(settings.separator);
+                }
+                $.each(resource, function() {
+                    var item = $(this);
+                    var name = item[0].name;
+                    var type = item[0].type;
+                    var img = $('<img>')
+                            .addClass('gallery-img')
+                            .attr('src', item[0].path.small);
+                    var gallery = $('<div>')
+                            .addClass('gallery')
+                            .attr('name', name)
+                            .attr('type', type);
+                    gallery.append(img);
+                    gallery.click(function() {
+                        if (!settings.multi) {
+                            $(this).closest('.modal-body')
+                                    .find('.gallery.selected')
+                                    .removeClass('selected');
+                        }
+                        $(this).closest('.gallery')
+                                .toggleClass('selected');
+                    });
+                    if ($.inArray(name, arr) >= 0) {
+                        gallery.addClass('selected');
+                    }
+                    modalBody.append(gallery);
                 });
             }
-
         },
         renderPagebar: function(param) {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
@@ -87,7 +136,7 @@
             pagebar.empty();
             for (var i = 1; i <= param.count; i++) {
                 var ACTIVECLS = 'active';
-                var pageBtn = $("<input>").attr('type', 'button').attr('page', i).addClass('btn btn-default btn-xs').val(i);
+                var pageBtn = $("<input>").attr('type', 'button').attr('page', i).addClass('btn btn-default btn-sm').val(i);
                 if (param.page === i) {
                     pageBtn.addClass(ACTIVECLS);
                 }
@@ -98,15 +147,12 @@
                         selfBtn.siblings('.btn-default').removeClass(ACTIVECLS);
                         selfBtn.addClass(ACTIVECLS);
                         // 刷新图片
-                        var pgn = selfBtn.attr('page');
-                        $this.photoSelector('request', pgn);
+                        var page = selfBtn.attr('page');
+                        $this.photoSelector('request', page);
                     }
                 });
                 pagebar.append(pageBtn);
             }
-        },
-        renderSelected: function(param) {
-//            alert(resource.page);
         },
         request: function(page) {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
@@ -119,7 +165,6 @@
                 data: data,
                 success: function(response) {
                     if (response.code === 200) {
-//                        var pageNo = response.page;
                         var count = response.count;
                         var resource = response.data;
                         // 显示图片
@@ -136,56 +181,56 @@
         },
         start: function() {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
-            $this.photoSelector('request', 1);
-//            var $this = $(this);
-//            var settings = $this.data('settings');
-//            var modalId = settings.modalId;
-//            var $modal = $('#' + modalId);
-//            if (!$modal.attr('loaded')) {
-//                var page = 1;
-//                var $this = $(this);
-//                var settings = $this.data('settings');
-//                var url = settings.url;
-//                var data = {format: 'json', 'page': page};
-//                $.ajax({
-//                    url: url,
-//                    dataType: 'json',
-//                    data: data,
-//                    success: function(response) {
-//                        if (response.code === 200) {
-//
-//                            var pageNo = response.page;
-//                            var count = response.count;
-//                            var resource = response.data;
-//                            // 显示图片
-//                            $this.photoSelector('refresh', {page: 1, data: resource});
-//                            // 显示pagebar
-//                            for (var i = 1; i <= count; i++) {
-//                                var ACTIVECLS = 'active';
-//                                var pageBtn = $("<input>").attr('type', 'button').attr('page', i).addClass('btn btn-default btn-xs').val(i);
-//                                if (pageNo === i) {
-//                                    pageBtn.addClass(ACTIVECLS);
-//                                }
-//                                pageBtn.click(function() {
-//                                    var selfBtn = $(this);
-//                                    if (!selfBtn.hasClass(ACTIVECLS)) {
-//                                        // 调整class
-//                                        selfBtn.siblings('.btn-default').removeClass(ACTIVECLS);
-//                                        selfBtn.addClass(ACTIVECLS);
-//                                        // 刷新图片
-//                                        var pgn = selfBtn.attr('page');
-//                                        $this.photoSelector('refresh', {page: pgn});
-//                                    }
-//                                });
-//                                $modal.find('.modal-page').append(pageBtn);
-//                            }
-//                        }
-//
-//                    }
-//                });
-//            }
+
+            if (!$modal.attr('loaded')) {
+                $this.photoSelector('request', 1);
+            }
+        },
+        save: function() {
+            var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
+            var arr = $modal.find('.selected');
+            // 检查图片是否已经存在
+            var se = $this.attr('save');
+            var sn = new Array();
+            if (se) {
+                se = JSON.parse(se);
+                $.each(se, function(name, path) {
+                    sn.push(name);
+                });
+            } else {
+                se = {};
+            }
+            $.each(arr, function() {
+                var name = $(this).attr('name');
+                if ($.inArray(name, sn) >= 0) {
+                    // 忽略
+                } else {
+                    se[name] = $(this).find('.gallery-img').attr('src');
+                }
+            });
+            $this.attr('save', JSON.stringify(se));
+            $modal.modal('hide');
+            $this.photoSelector('display');
+        },
+        display: function() {
+            var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
+            var save = $this.attr('save');
+            var gyPhotoSelected = $this.find('.gy-photo-selected');
+            gyPhotoSelected.empty();
+            if (save) {
+                save = JSON.parse(save);
+                $.each(save, function(name, path) {
+                    var item = $('<div>').addClass('gy-sd')
+                            .attr('name', name);
+                    item.append($("<button>").attr('type', 'button').html('&times;').addClass('rm'));
+                    item.append($("<button>").attr('type', 'button').html('&lt;').addClass('lt'));
+                    item.append($("<button>").attr('type', 'button').html('&gt;').addClass('rt'));
+                    item.append($("<img>").attr('src', path));
+                    gyPhotoSelected.append(item);
+                });
+            }
         }
-    }
+    };
 
     $.fn.photoSelector = function(method) {
 
