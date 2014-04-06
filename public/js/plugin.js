@@ -197,7 +197,7 @@
                             $this.photoSelector('renderPagebar', {page: page, count: count});
                             $modal.attr('loaded', true);
                         }
-                        
+
                         $this.photoSelector('renderChoosen');
                     }
                 }
@@ -249,24 +249,37 @@
                     var item = $('<div>').addClass('gy-sd')
                             .attr('name', name);
                     var rm = $("<button>").attr('type', 'button').html('&times;').addClass('rm');
-                    rm.click(function(){
+                    rm.click(function() {
                         // 删除
-                        
+
                         $this.photoSelector('renderChoosen');
                     });
                     item.append(rm);
                     var lt = $("<button>").attr('type', 'button').html('&lt;').addClass('lt');
-                    lt.click(function(){
+                    lt.click(function() {
                         // 左移
-                        
+                        var gysd = $(this).closest('.gy-photo-selected').find('.gy-sd');
+                        var gysdItem = $(this).closest('.gy-sd');
+                        var index = gysd.index(gysdItem);
+                        if (index > 0) {
+                            var gysdItemCopy = gysdItem.clone(true);
+                            gysdItem.remove();
+                            var ltElem = gysdItem.prev();
+                            ltElem.before(gysdItemCopy);
+                        }
                         $this.photoSelector('renderChoosen');
-                        
+
                     });
                     item.append(lt);
                     var rt = $("<button>").attr('type', 'button').html('&gt;').addClass('rt');
-                    rt.click(function(){
+                    rt.click(function() {
                         // 右移
-                        
+                        var gysd = $(this).closest('.gy-photo-selected').find('.gy-sd');
+                        var gysdItem = $(this).closest('.gy-sd');
+                        var index = gysd.index(gysdItem);
+                        if (index < gysd.length - 1) {
+                            var rtElem = gysdItem.next();
+                        }
                         $this.photoSelector('renderChoosen');
                     });
                     item.append(rt);
