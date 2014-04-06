@@ -164,7 +164,7 @@
         renderChoosen: function() {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
             var s = $this.attr('save');
-            if (s) {
+            if (s && s !== "{}") {
                 s = JSON.parse(s);
                 var galleries = $modal.find('.gallery');
                 $.each(galleries, function() {
@@ -172,7 +172,6 @@
                     if (s[name]) {
                         $(this).addClass('choosen');
                     }
-
                 });
             }
         },
@@ -239,6 +238,7 @@
             $this.photoSelector('display');
         },
         display: function() {
+            // 选中图片显示在gy-photo container中
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
             var save = $this.attr('save');
             var gyPhotoSelected = $this.find('.gy-photo-selected');
@@ -251,36 +251,43 @@
                     var rm = $("<button>").attr('type', 'button').html('&times;').addClass('rm');
                     rm.click(function() {
                         // 删除
-
+                        var gysdItem = $(this).closest('.gy-sd');
+                        var ce = JSON.parse($this.attr('save'));
+                        delete ce[gysdItem.attr('name')];
+                        gysdItem.remove();
+                        $this.attr('save', JSON.stringify(ce));
                         $this.photoSelector('renderChoosen');
                     });
                     item.append(rm);
                     var lt = $("<button>").attr('type', 'button').html('&lt;').addClass('lt');
                     lt.click(function() {
-                        // 左移
-                        var gysd = $(this).closest('.gy-photo-selected').find('.gy-sd');
                         var gysdItem = $(this).closest('.gy-sd');
-                        var index = gysd.index(gysdItem);
-                        if (index > 0) {
+                        var ltElem = gysdItem.prev();
+                        if (ltElem.length > 0) {
+                            // 左移
                             var gysdItemCopy = gysdItem.clone(true);
                             gysdItem.remove();
-                            var ltElem = gysdItem.prev();
                             ltElem.before(gysdItemCopy);
                         }
-                        $this.photoSelector('renderChoosen');
-
                     });
                     item.append(lt);
                     var rt = $("<button>").attr('type', 'button').html('&gt;').addClass('rt');
                     rt.click(function() {
-                        // 右移
-                        var gysd = $(this).closest('.gy-photo-selected').find('.gy-sd');
                         var gysdItem = $(this).closest('.gy-sd');
-                        var index = gysd.index(gysdItem);
-                        if (index < gysd.length - 1) {
-                            var rtElem = gysdItem.next();
+                        var rtElem = gysdItem.next();
+                        if (rtElem.length > 0) {
+                            // 右移
+                            var gysdItemCopy = gysdItem.clone(true);
+                            gysdItem.remove();
+                            rtElem.after(gysdItemCopy);
                         }
-                        $this.photoSelector('renderChoosen');
+//                        var gysd = $(this).closest('.gy-photo-selected').find('.gy-sd');
+//                        var gysdItem = $(this).closest('.gy-sd');
+//                        var index = gysd.index(gysdItem);
+//                        if (index < gysd.length - 1) {
+//                            var rtElem = gysdItem.next();
+//                        }
+//                        $this.photoSelector('renderChoosen');
                     });
                     item.append(rt);
                     item.append($("<img>").attr('src', path));
