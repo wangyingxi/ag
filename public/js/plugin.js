@@ -2,12 +2,15 @@
     var DURATION = 100;
 
     var photoSelectorMethods = {
-        init: function(options) {
+        init: function(options, save) {
             var $this = $(this);
             $this.prop('disabled', true);
-            if (!options)
+            if (!options) {
                 options = {};
-
+            }
+            if(save) {
+                alert(save);
+            }
             // 初始化Setting默认值
             var settings = {
                 separator: ';',
@@ -314,6 +317,11 @@
         }
     };
 
+    /*
+     * 启动方法
+     * @param {type} method     传递字符串，将被识别为方法名; 传递对象，将作为init方法的参数（一般是options）, 并调用init方法
+     * @returns {unresolved}
+     */
     $.fn.photoSelector = function(method) {
         if (photoSelectorMethods[method]) {
             return photoSelectorMethods[method].apply(this, Array.prototype.slice.call(arguments, 1));
