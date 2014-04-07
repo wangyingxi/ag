@@ -63,7 +63,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="sku">
                     <span class='input-group-btn'>
-                        <input class='btn btn-default' type='button' value='检查可用性'/>
+                        <input class='btn btn-default' id="is-exist" type='button' value='检查可用性'/>
                     </span>
                 </div>
 
@@ -196,21 +196,11 @@
         </form>
     </div>
 </div>
+<div class="message-tip">
 
+</div>
 <script type="text/javascript">
     (function($) {
-        $('#testing-btn').click(function() {
-            $.ajax({
-                url: '<?php echo $this->url(array(), 'manage-photo-list-home') ?>?format=json',
-                dataType: 'json',
-                type: 'POST',
-                success: function(response) {
-                    console.log(response);
-                }
-
-            });
-        });
-
         $('#calculate').click(function() {
             var baseprice = $('#base-rmb').val();
             $.each($('.curreny-rate'), function() {
@@ -222,7 +212,26 @@
             });
         });
         
-        $('.gy-photo').photoSelector(false, "hello");
-        
+        $('#is-exist').click(function() {
+            
+//            $.ajax({
+//                url: '<?php echo $this->url(array(), 'manage-photo-list-home') ?>?format=json',
+//                dataType: 'json',
+//                type: 'POST',
+//                success: function(response) {
+//                    if (response === 1) {
+//                        // existing
+//
+//                    } else {
+//                        // not existing
+//
+//                    }
+//                }
+//            });
+        });
+
+//        $('.gy-photo').photoSelector(false, "set save here");
+        $('.gy-photo').photoSelector();
+
     })(jQuery);
 </script>

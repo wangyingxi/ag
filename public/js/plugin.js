@@ -8,9 +8,6 @@
             if (!options) {
                 options = {};
             }
-            if(save) {
-                
-            }
             // 初始化Setting默认值
             var settings = {
                 separator: ';',
@@ -72,6 +69,15 @@
 
             $this.append(launchBtn);
             $this.prop('disabled', false);
+
+            // 设置save初始化图片
+            if (typeof save === 'object') {
+                save = JSON.stringify(save);
+            }
+            if (save) {
+                $this.attr('save', save);
+                $this.photoSelector('display');
+            }
 
             $('body').append($this.photoSelector('style'));
         },
