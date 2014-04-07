@@ -250,7 +250,7 @@
             gyPhotoSelected.empty();
             if (save) {
                 save = JSON.parse(save);
-                
+
                 // 重组save值
                 var redisplay = function(trigger) {
                     var result = "";
@@ -315,7 +315,6 @@
     };
 
     $.fn.photoSelector = function(method) {
-
         if (photoSelectorMethods[method]) {
             return photoSelectorMethods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof method === 'object' || !method) {
@@ -323,8 +322,7 @@
         } else {
             $.error('The method ' + method + ' does not exist in $.uploadify');
         }
-
-    }
+    };
 
     $.queryString = {
         data: {},
