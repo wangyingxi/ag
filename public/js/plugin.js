@@ -166,14 +166,18 @@
             var s = $this.attr('save');
             if (s && s !== "{}") {
                 s = JSON.parse(s);
-                var galleries = $modal.find('.gallery');
-                $.each(galleries, function() {
-                    var name = $(this).attr('name');
-                    if (s[name]) {
-                        $(this).addClass('choosen');
-                    }
-                });
             }
+            var galleries = $modal.find('.gallery');
+            $.each(galleries, function() {
+                var name = $(this).attr('name');
+                if (s && s[name]) {
+                    // 标为已选择状态
+                    $(this).addClass('choosen');
+                } else {
+                    // 取消掉的照片恢复可选状态
+                    $(this).removeClass('choosen');
+                }
+            });
         },
         request: function(page) {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
@@ -196,7 +200,6 @@
                             $this.photoSelector('renderPagebar', {page: page, count: count});
                             $modal.attr('loaded', true);
                         }
-
                         $this.photoSelector('renderChoosen');
                     }
                 }
@@ -232,6 +235,8 @@
                 } else {
                     se[name] = $(this).find('.gallery-img').attr('src');
                 }
+
+                $(this).removeClass('selected');
             });
             $this.attr('save', JSON.stringify(se));
             $modal.modal('hide');
@@ -245,6 +250,23 @@
             gyPhotoSelected.empty();
             if (save) {
                 save = JSON.parse(save);
+                
+                // 重组save值
+                var redisplay = function(trigger) {
+                    var result = "";
+                    var gs = $this.find('.gy-sd');
+                    $.each(gs, function() {
+                        if (!result)
+                            result = {};
+                        var n = $(this).attr('name');
+                        var p = $(this).find('img').attr('src');
+                        result[n] = p;
+                    });
+                    if (result)
+                        result = JSON.stringify(result);
+                    $this.attr('save', result);
+                };
+
                 $.each(save, function(name, path) {
                     var item = $('<div>').addClass('gy-sd')
                             .attr('name', name);
@@ -252,10 +274,8 @@
                     rm.click(function() {
                         // 删除
                         var gysdItem = $(this).closest('.gy-sd');
-                        var ce = JSON.parse($this.attr('save'));
-                        delete ce[gysdItem.attr('name')];
                         gysdItem.remove();
-                        $this.attr('save', JSON.stringify(ce));
+                        redisplay($(this));
                         $this.photoSelector('renderChoosen');
                     });
                     item.append(rm);
@@ -268,6 +288,8 @@
                             var gysdItemCopy = gysdItem.clone(true);
                             gysdItem.remove();
                             ltElem.before(gysdItemCopy);
+
+                            redisplay($(this));
                         }
                     });
                     item.append(lt);
@@ -280,14 +302,9 @@
                             var gysdItemCopy = gysdItem.clone(true);
                             gysdItem.remove();
                             rtElem.after(gysdItemCopy);
+
+                            redisplay($(this));
                         }
-//                        var gysd = $(this).closest('.gy-photo-selected').find('.gy-sd');
-//                        var gysdItem = $(this).closest('.gy-sd');
-//                        var index = gysd.index(gysdItem);
-//                        if (index < gysd.length - 1) {
-//                            var rtElem = gysdItem.next();
-//                        }
-//                        $this.photoSelector('renderChoosen');
                     });
                     item.append(rt);
                     item.append($("<img>").attr('src', path));
