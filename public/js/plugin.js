@@ -9,7 +9,7 @@
                 options = {};
             }
             if(save) {
-                alert(save);
+                
             }
             // 初始化Setting默认值
             var settings = {
