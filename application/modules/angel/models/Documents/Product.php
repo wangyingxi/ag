@@ -51,21 +51,27 @@ class Product extends AbstractDocument {
 
     /** @ODM\Int */
     protected $sold = 0;
-
+    
     /**
      * 添加图片
      */
-    public function addPhoto($name, $type, $description, $owner) {
-        $photo = new \Documents\Photo();
-        $photo->name = $name;
-        $photo->description = $description;
-        $photo->type = $type;
-        $photo->owner = $owner;
-
-        $this->photo[] = $photo;
-
-        return $photo;
+    public function addPhoto(\Document\Photo $p) {
+        $this->photo[] = $p;
     }
+    /**
+     * 添加图片
+     */
+//    public function addPhoto($name, $type, $description, $owner) {
+//        $photo = new \Documents\Photo();
+//        $photo->name = $name;
+//        $photo->description = $description;
+//        $photo->type = $type;
+//        $photo->owner = $owner;
+//
+//        $this->photo[] = $photo;
+//
+//        return $photo;
+//    }
 
     public function addSellingPrice($currency, $amount) {
         $priceDoc = new \Documents\PriceDoc();

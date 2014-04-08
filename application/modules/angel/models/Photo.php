@@ -83,7 +83,27 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
 
         return $result;
     }
+    
+    /**
+     * 根据name获取photo document
+     * 
+     * @param string $name
+     * @return mix - when the photo found, return the photo document
+     */
+    public function getPhotoByName($name) {
+        $result = false;
+        $photo = $this->_dm->createQueryBuilder($this->_document_class)
+                ->field('name')->equals($name)
+                ->getQuery()
+                ->getSingleResult();
 
+        if (!empty($photo)) {
+            $result = $photo;
+        }
+
+        return $result;
+    }
+    
     public function getPhotoByUser($user_id, $return_as_paginator = true) {
         $query = $this->_dm->createQueryBuilder($this->_document_class)
                 ->field('owner.$id')->equals(new MongoId($user_id))

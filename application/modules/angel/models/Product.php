@@ -21,16 +21,16 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
      * @return mix - when user registration success, return the user id, otherwise, boolean false
      * @throws Angel_Exception_Product 
      */
-    public function addProduct($title, $short_title, $sub_title, $sku, $description, $photo, $location, $base_price, $selling_price, $owner, $brand) {
+    public function addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $brand) {
         $result = false;
 
         if ($this->isSkuExist($sku)) {
-            throw new Angel_Exception_User(Angel_Exception_Product::PRODUCT_SKU_EXIST);
+            throw new Angel_Exception_Product(Angel_Exception_Product::PRODUCT_SKU_EXIST);
         }
         if (!is_float($base_price)) {
-            throw new Angel_Exception_User(Angel_Exception_Product::PRODUCT_PRICE_INVALID);
+            throw new Angel_Exception_Product(Angel_Exception_Product::PRODUCT_PRICE_INVALID);
         }
-
+        
         $product = new $this->_document_class();
         if (is_array($photo)) {
             foreach ($photo as $p) {
@@ -41,15 +41,16 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
         $product->short_title = $short_title;
         $product->sub_title = $sub_title;
         $product->sku = $sku;
+        $product->status = $status;
         $product->description = $description;
         $product->location = $location;
         $product->base_price = $base_price;
         if (is_array($selling_price)) {
-            foreach ($selling_price as $k => $v) {
-                if (!is_float($v)) {
-                    throw new Angel_Exception_User(Angel_Exception_Product::PRODUCT_PRICE_INVALID);
+            foreach ($selling_price as $price) {
+                if (!is_float($price->amount)) {
+                    throw new Angel_Exception_Product(Angel_Exception_Product::PRODUCT_PRICE_INVALID);
                 }
-                $product->addSellingPrice($k, $v);
+                $product->addSellingPrice($price->currency, $price->amount);
             }
         }
         $product->owner = $owner;
@@ -63,7 +64,7 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
             $result = $product->id;
         } catch (Exception $e) {
             $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage() . "\n" . $e->getTraceAsString());
-            throw new Angel_Exception_User(Angel_Exception_User::ADD_PRODUCT_FAIL);
+            throw new Angel_Exception_Product(Angel_Exception_Product::ADD_PRODUCT_FAIL);
         }
 
         return $result;
@@ -130,7 +131,7 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
     }
 
     /**
-     * 纪录用户最后一次登陆的信息
+     * 记录用户最后一次登录的信息
      * @param string $user_id
      * @param string $ip 
      */

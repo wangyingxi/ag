@@ -116,6 +116,69 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function productCreateAction() {
+
+        if ($this->request->isPost()) {
+            // POST METHOD
+            $title = $this->request->getParam('title');
+            $short_title = $this->request->getParam('short_title');
+            $sub_title = $this->request->getParam('sub_title');
+            $sku = $this->request->getParam('sku');
+            $status = $this->request->getParam('status');
+            $description = $this->request->getParam('description');
+
+            $photo = $this->request->getParam('photo');
+            if ($photo) {
+                $photo = json_decode($photo);
+                $photoModel = $this->getModel('photo');
+                $photoArray = array();
+                foreach ($photo as $name => $path) {
+                    $photoObj = $photoModel->getPhotoByName($name);
+                    if ($photoObj) {
+                        $photoArray[] = $photoObj;
+                    }
+                }
+                $photo = $photoArray;
+            }
+
+            $location = $this->request->getParam('location');
+            $base_price = floatval($this->request->getParam('base_price'));
+
+            $selling_price = array();
+            foreach ($this->bootstrap_options['currency'] as $key => $val) {
+                $price = $this->request->getParam('price_' . $key);
+                if ($price) {
+                    $pd = new \Documents\PriceDoc();
+                    $pd->currency = $key;
+                    $pd->amount = floatval($val);
+                    $selling_price[] = $pd;
+                }
+            }
+
+            $result = false;
+            $error = "";
+            try {
+                $productModel = $this->getModel('product');
+                $isSkuExist = false;
+                if ($sku) {
+                    $isSkuExist = $productModel->isSkuExist($sku);
+                }
+                if ($isSkuExist) {
+                    $error = "该SKU已经存在，不能重复使用";
+                } else {
+                    $owner = $this->me->getUser();
+                    $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $brand);
+                }
+            } catch (Angel_Exception_Product $e) {
+                $error = $e->getDetail();
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+            if ($result) {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-product-list'));
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
+            }
+        }
         $this->view->title = "创建商品";
         $this->view->currency = $this->bootstrap_options['currency'];
     }
@@ -126,6 +189,11 @@ class Angel_ManageController extends Angel_Controller_Action {
 
     public function productRemoveAction() {
         
+    }
+
+    public function resultAction() {
+        $this->view->error = $this->request->getParam('error');
+        $this->view->redirectUrl = $this->request->getParam('redirectUrl');
     }
 
     public function photoCreateAction() {
@@ -230,9 +298,9 @@ class Angel_ManageController extends Angel_Controller_Action {
         }
         // JSON FORMAT
         if ($this->getParam('format') == 'json') {
-            $this->_helper->json(array('data' => $resource, 
+            $this->_helper->json(array('data' => $resource,
                 'code' => 200,
-                'page' => $paginator->getCurrentPageNumber(), 
+                'page' => $paginator->getCurrentPageNumber(),
                 'count' => $paginator->count()));
         } else {
             $this->view->paginator = $paginator;

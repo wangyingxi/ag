@@ -7,7 +7,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 class PriceDoc extends AbstractDocument{
     
     /** @ODM\String */
-    protected $currency = 'us';
+    protected $currency = 'usd';
     
     /** @ODM\Float */
     protected $amount = 0;
