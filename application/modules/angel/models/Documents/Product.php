@@ -31,8 +31,8 @@ class Product extends AbstractDocument {
     /** @ODM\ReferenceMany(targetDocument="\Documents\Photo") */
     protected $photo = array();
 
-    /** @ODM\String */
-    protected $location = 'cn';
+    /** @ODM\Collection */
+    protected $location = array('cn');
 
     /** @ODM\Float */
     protected $base_price = 0;                      // 商品进价
@@ -55,7 +55,7 @@ class Product extends AbstractDocument {
     /**
      * 添加图片
      */
-    public function addPhoto(\Document\Photo $p) {
+    public function addPhoto(\Documents\Photo $p) {
         $this->photo[] = $p;
     }
     /**

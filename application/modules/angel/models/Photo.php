@@ -95,7 +95,7 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
         $photo = $this->_dm->createQueryBuilder($this->_document_class)
                 ->field('name')->equals($name)
                 ->getQuery()
-                ->execute();
+                ->getSingleResult();
 
         if (!empty($photo)) {
             $result = $photo;

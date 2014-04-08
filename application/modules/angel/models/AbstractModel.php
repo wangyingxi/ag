@@ -22,6 +22,18 @@ abstract class Angel_Model_AbstractModel{
         $this->_logger = $this->_bootstrap->getResource('logger');
     }
     
+    public function getAll($return_as_paginator = true) {
+        $query = $this->_dm->createQueryBuilder($this->_document_class)
+                ->sort('created_at', -1);
+        $result = null;
+        if ($return_as_paginator) {
+            $result = $this->paginator($query);
+        } else {
+            $result = $query->getQuery()->execute();
+        }
+        return $result;
+    }
+    
     public function getDocumentClass(){
         return $this->_document_class;
     }

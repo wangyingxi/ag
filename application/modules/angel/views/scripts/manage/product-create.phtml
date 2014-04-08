@@ -1,6 +1,7 @@
 <style>
     ul {
-        margin:0
+        margin:0;
+        padding:0;
     }
     ul li {
         margin:0;
@@ -38,6 +39,20 @@
         display:inline-block;
         margin:0 10px;
         width:150px;
+    }
+    .location-ul {
+        background:#EEE;
+        border-radius:4px;
+        margin-top:5px;
+        padding:15px;
+    }
+    .location-ul label {
+        font-weight:normal;
+    }
+    .location-ul li {
+        float:left;
+        margin:0;
+        margin-right:20px;
     }
 </style>
 
@@ -90,11 +105,18 @@
             </div>
             <div class="form-group">
                 <label>商品所在地（仓储）：</label>
-                <select id="location" name="location">
-                    <option value="cn" selected="true">中国本地发货</option>
-                    <option value="uk">英国仓储</option>
-                    <option value="us">美国仓储</option>
-                </select>
+                <input type="hidden" id="location" name='location'/>
+                <ul class='location-ul clearfix'>
+                    <li>
+                        <input type="checkbox" checked="checked" id="cn"/> <label for="cn">中国本地发货</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="uk"/> <label for="uk">英国仓储</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="us"/> <label for="us">美国仓储</label>
+                    </li>
+                </ul>
             </div>
             <div class="form-group">
                 <label>采购价：</label>
@@ -211,12 +233,28 @@
         $('input[data-toggle="popover"]').popover({animation: false});
 
         $('#save-btn').click(function() {
+            // 保存选中的图片
             var save = $('#gy-photo').attr('save');
             if (!save || save === '{}') {
                 $('#photo').val('');
             } else {
                 $('#photo').val(save);
             }
+
+            // 保存选中的location
+            var location = $('.location-ul input[type="checkbox"]:checked');
+            if (location.length) {
+                var locations = new Array();
+                $.each(location, function() {
+                    var c = $(this).attr('id');
+                    if (c)
+                        locations.push($(this).attr('id'));
+                });
+                location = locations.join('<?php echo $this->separator ?>');
+            } else {
+                location = '';
+            }
+            $('#location').val(location);
         });
 
         $('#is-exist').click(function() {

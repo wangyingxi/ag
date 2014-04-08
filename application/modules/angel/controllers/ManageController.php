@@ -7,6 +7,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         'register',
         'logout'
     );
+    protected $SEPARATOR = ';';
 
     protected function getTmpFile($uid) {
         $utilService = $this->_container->get('util');
@@ -112,11 +113,43 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function productListAction() {
-        
+        $page = $this->request->getParam('page');
+        if (!$page) {
+            $page = 1;
+        }
+        $productModel = $this->getModel('product');
+        $paginator = $productModel->getAll();
+        $paginator->setItemCountPerPage(20);
+        $paginator->setCurrentPageNumber($page);
+        $resource = array();
+        foreach ($paginator as $r) {
+            $path = 'default path';
+            if (count($r->photo)) {
+                $path = $this->view->photoImage($r->photo[0]->name . $r->photo[0]->type, 'main');
+            }
+
+            $resource[] = array('title' => $r->title,
+                'id' => $r->id,
+                'sub_title' => $r->sub_title,
+                'location' => $r->location,
+                'path' => $path,
+                'owner' => $r->owner);
+        }
+
+        // JSON FORMAT
+        if ($this->getParam('format') == 'json') {
+            $this->_helper->json(array('data' => $resource,
+                'code' => 200,
+                'page' => $paginator->getCurrentPageNumber(),
+                'count' => $paginator->count()));
+        } else {
+            $this->view->paginator = $paginator;
+            $this->view->resource = $resource;
+            $this->view->title = "商品列表";
+        }
     }
 
     public function productCreateAction() {
-
         if ($this->request->isPost()) {
             // POST METHOD
             $title = $this->request->getParam('title');
@@ -135,14 +168,19 @@ class Angel_ManageController extends Angel_Controller_Action {
                     $photoObj = $photoModel->getPhotoByName($name);
                     if ($photoObj) {
                         $photoArray[] = $photoObj;
-                        print_r($photoObj);
                     }
                 }
-                exit;
                 $photo = $photoArray;
             }
 
             $location = $this->request->getParam('location');
+            if ($location) {
+                $tmp = split($this->SEPARATOR, $location);
+                if (count($tmp)) {
+                    $location = $tmp;
+                }
+            }
+
             $base_price = floatval($this->request->getParam('base_price'));
 
             $selling_price = array();
@@ -183,6 +221,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         }
         $this->view->title = "创建商品";
         $this->view->currency = $this->bootstrap_options['currency'];
+        $this->view->separator = $this->SEPARATOR;
     }
 
     public function productEditAction() {
