@@ -95,7 +95,7 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
         $photo = $this->_dm->createQueryBuilder($this->_document_class)
                 ->field('name')->equals($name)
                 ->getQuery()
-                ->getSingleResult();
+                ->execute();
 
         if (!empty($photo)) {
             $result = $photo;
@@ -103,7 +103,6 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
 
         return $result;
     }
-    
     public function getPhotoByUser($user_id, $return_as_paginator = true) {
         $query = $this->_dm->createQueryBuilder($this->_document_class)
                 ->field('owner.$id')->equals(new MongoId($user_id))

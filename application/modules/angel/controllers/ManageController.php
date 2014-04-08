@@ -135,8 +135,10 @@ class Angel_ManageController extends Angel_Controller_Action {
                     $photoObj = $photoModel->getPhotoByName($name);
                     if ($photoObj) {
                         $photoArray[] = $photoObj;
+                        print_r($photoObj);
                     }
                 }
+                exit;
                 $photo = $photoArray;
             }
 
