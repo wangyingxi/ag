@@ -48,15 +48,15 @@
         <form role="form">
             <div class="form-group">
                 <label>商品全称：</label>
-                <input type="text" class="form-control" id="title">
+                <input type="text" class="form-control" id="title" data-toggle="popover">
             </div>
             <div class="form-group">
                 <label>商品简称：</label>
-                <input type="text" class="form-control" id="short_title">
+                <input type="text" class="form-control" id="short_title" data-toggle="popover">
             </div>
             <div class="form-group">
                 <label>商品附标题：</label>
-                <input type="text" class="form-control" id="sub_title">
+                <input type="text" class="form-control" id="sub_title" data-toggle="popover">
             </div>
             <div class="form-group">
                 <label>商品唯一编号：</label>
@@ -211,9 +211,11 @@
                 }
             });
         });
-        
+
+        $('#title').popover({animation: false});
         $('#is-exist').click(function() {
-            
+            $('#title').attr('data-content', 'content').attr('data-original-title', 'title');
+            $('#title').popover('show');
 //            $.ajax({
 //                url: '<?php echo $this->url(array(), 'manage-photo-list-home') ?>?format=json',
 //                dataType: 'json',
