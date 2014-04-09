@@ -24,3 +24,6 @@ form[role='form'] {
     font-size:24px;
     margin-bottom:30px;
 }
+.short-txt {
+    width:80px;
+}

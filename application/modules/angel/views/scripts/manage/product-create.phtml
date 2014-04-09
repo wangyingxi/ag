@@ -40,19 +40,22 @@
         margin:0 10px;
         width:150px;
     }
-    .location-ul {
+    .location-ul, .scale-ul {
         background:#EEE;
         border-radius:4px;
         margin-top:5px;
         padding:15px;
     }
-    .location-ul label {
+    .location-ul label, .scale-ul label {
         font-weight:normal;
     }
-    .location-ul li {
+    .location-ul li, .scale-ul li {
         float:left;
         margin:0;
         margin-right:20px;
+    }
+    .scale-ul li {
+        margin-right: 30px;
     }
 </style>
 
@@ -78,7 +81,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="sku" name="sku" data-toggle="popover" data-placement="bottom">
                     <span class='input-group-btn'>
-                        <input class='btn btn-default' id="is-exist" type='button' value='检查可用性'/>
+                        <input class='btn btn-default' id="is-sku-exist" type='button' value='检查可用性'/>
                     </span>
                 </div>
             </div>
@@ -120,7 +123,7 @@
             </div>
             <div class="form-group">
                 <label>采购价：</label>
-                <input type="text" class="form-control" id="base_price" name="base_price">
+                <input type="number" step="0.01" class="form-control" id="base_price" name="base_price">
             </div>
             <div class="form-group">
                 <label>售价：</label>
@@ -207,6 +210,28 @@
 
             </div>
             <div class="form-group">
+                <label>商品规格：</label>
+                <input type="hidden" id="location" name='scale'/>
+                <ul class='scale-ul clearfix'>
+                    <li>
+                        <label>重量(kg)</label>
+                        <input type="number" step="0.01" class="form-control short-txt" id="scale_weight" name="scale_weight">
+                    </li>
+                    <li>
+                        <label>长(cm)</label>
+                        <input type="number" step="0.01" class="form-control short-txt" id="scale_length" name="scale_length">
+                    </li>
+                    <li>
+                        <label>宽(cm)</label>
+                        <input type="number" step="0.01" class="form-control short-txt" id="scale_width" name="scale_width">
+                    </li>
+                    <li>
+                        <label>高(cm)</label>
+                        <input type="number" step="0.01" class="form-control short-txt" id="scale_height" name="scale_height">
+                    </li>
+                </ul>
+            </div>
+            <div class="form-group">
                 <label>商品品牌：</label>
             </div>
             <div class="form-group">
@@ -257,23 +282,29 @@
             $('#location').val(location);
         });
 
-        $('#is-exist').click(function() {
-            $('#sku').attr('data-content', 'content').attr('data-original-title', 'title');
-            $('#sku').popover('show');
-//            $.ajax({
-//                url: '<?php echo $this->url(array(), 'manage-photo-list-home') ?>?format=json',
-//                dataType: 'json',
-//                type: 'POST',
-//                success: function(response) {
-//                    if (response === 1) {
-//                        // existing
-//
-//                    } else {
-//                        // not existing
-//
-//                    }
-//                }
-//            });
+        $('#is-sku-exist').click(function() {
+            var sku = $('#sku').val();
+            if (sku) {
+//                $('#sku').attr('data-content', 'content').attr('data-original-title', 'title');
+//                $('#sku').popover('show');
+                $.ajax({
+                    url: '<?php echo $this->url(array(), 'manage-check-sku') ?>',
+                    dataType: 'json',
+                    type: 'POST',
+                    data: {sku: sku},
+                    success: function(response) {
+                        if (response === 1) {
+                            // existing
+                            alert('抱歉，已经存在，无法使用');
+                        } else {
+                            // not existing
+                            alert('该SKU可以使用');
+                        }
+                    }
+                });
+            } else {
+                alert("请输入SKU值");
+            }
         });
 
 //        $('.gy-photo').photoSelector(false, "set save here");

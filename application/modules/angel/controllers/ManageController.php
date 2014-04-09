@@ -118,6 +118,25 @@ class Angel_ManageController extends Angel_Controller_Action {
         $this->view->title = "管理员登录";
     }
 
+    public function checkSkuAction() {
+        if ($this->request->isPost()) {
+            $sku = $this->request->getParam('sku');
+            if ($sku) {
+                $sku = strtolower($sku);
+                $productModel = $this->getModel('product');
+                $result = $productModel->isSkuExist($sku);
+                if ($result)
+                    echo 1;
+                else
+                    echo 0;
+            } else {
+                // 空SKU均可使用
+                echo 0;
+            }
+            exit;
+        }
+    }
+
     public function productListAction() {
         $page = $this->request->getParam('page');
         if (!$page) {
@@ -200,6 +219,12 @@ class Angel_ManageController extends Angel_Controller_Action {
                 }
             }
 
+            $scale = array();
+            $scale['weight'] = $this->request->getParam('scale_weight');
+            $scale['height'] = $this->request->getParam('scale_height');
+            $scale['width'] = $this->request->getParam('scale_width');
+            $scale['length'] = $this->request->getParam('scale_length');
+
             $result = false;
             $error = "";
             try {
@@ -211,8 +236,9 @@ class Angel_ManageController extends Angel_Controller_Action {
                 if ($isSkuExist) {
                     $error = "该SKU已经存在，不能重复使用";
                 } else {
+                    $sku = strtolower($sku);
                     $owner = $this->me->getUser();
-                    $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $brand);
+                    $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand);
                 }
             } catch (Angel_Exception_Product $e) {
                 $error = $e->getDetail();
