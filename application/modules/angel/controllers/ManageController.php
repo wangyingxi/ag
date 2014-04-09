@@ -29,6 +29,9 @@ class Angel_ManageController extends Angel_Controller_Action {
         if ($this->request->isPost()) {
             // POST METHOD
             $email = $this->request->getParam('email');
+            if ($email) {
+                $email = strtolower($email);
+            }
             $password = $this->request->getParam('password');
 
             $result = false;
@@ -70,6 +73,9 @@ class Angel_ManageController extends Angel_Controller_Action {
     public function loginAction() {
         if ($this->request->isPost()) {
             $email = $this->request->getParam('email');
+            if ($email) {
+                $email = strtolower($email);
+            }
             $password = $this->request->getParam('password');
             // remember's value: on or null
             $remember = $this->request->getParam('remember', 'off');
