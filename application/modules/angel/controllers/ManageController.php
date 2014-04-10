@@ -250,10 +250,24 @@ class Angel_ManageController extends Angel_Controller_Action {
             } else {
                 $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
             }
+        } else {
+            // GET METHOD
+            $this->view->title = "创建商品";
+            $this->view->currency = $this->bootstrap_options['currency'];
+            $this->view->separator = $this->SEPARATOR;
+
+            $copyId = $this->request->getParam('copyId');
+            if ($copyId) {
+                // 复制一个商品
+                $productModel = $this->getModel('product');
+                $photoModel = $this->getModel('photo');
+                $target = $productModel->getProductById($copyId);
+                if ($target) {
+                    $this->view->title = "复制并创建商品";
+                    $this->view->model = $target;
+                }
+            }
         }
-        $this->view->title = "创建商品";
-        $this->view->currency = $this->bootstrap_options['currency'];
-        $this->view->separator = $this->SEPARATOR;
     }
 
     public function productEditAction() {

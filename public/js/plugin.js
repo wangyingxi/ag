@@ -1,6 +1,43 @@
 (function($) {
     var DURATION = 100;
 
+    $.fn.setSelectValue = function(options) {
+        if (!options) {
+            options = {};
+        }
+        var settings = {
+            cls: "",
+            tagName: "select"
+        };
+        $.extend(settings, options);
+
+        var $this = $(this);
+        if ($this.get(0).tagName.toLowerCase() === settings.tagName) {
+            var val = $this.attr('value');
+            if (val) {
+                $.each($this.find('option'), function() {
+                    if (val === $(this).attr('value')) {
+                        $(this).prop('selected', true);
+                    } else {
+                        $(this).prop('selected', false);
+                    }
+                });
+            }
+        } else {
+            throw("dev exception : wrong tagname");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
     var photoSelectorMethods = {
         init: function(options, save) {
             var $this = $(this);
