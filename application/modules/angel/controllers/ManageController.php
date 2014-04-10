@@ -212,13 +212,9 @@ class Angel_ManageController extends Angel_Controller_Action {
             foreach ($this->bootstrap_options['currency'] as $key => $val) {
                 $price = $this->request->getParam('price_' . $key);
                 if ($price) {
-                    $pd = new \Documents\PriceDoc();
-                    $pd->currency = $key;
-                    $pd->amount = floatval($val);
-                    $selling_price[] = $pd;
+                    $selling_price[$key] = floatval($price);
                 }
             }
-
             $scale = array();
             $scale['weight'] = $this->request->getParam('scale_weight');
             $scale['height'] = $this->request->getParam('scale_height');
@@ -255,23 +251,103 @@ class Angel_ManageController extends Angel_Controller_Action {
             $this->view->title = "创建商品";
             $this->view->currency = $this->bootstrap_options['currency'];
             $this->view->separator = $this->SEPARATOR;
+            $this->view->location = $this->bootstrap_options['stock_location'];
+            
 
-            $copyId = $this->request->getParam('copyId');
-            if ($copyId) {
+        }
+    }
+
+    public function productSaveAction() {
+        if ($this->request->isPost()) {
+            // POST METHOD
+            $title = $this->request->getParam('title');
+            $short_title = $this->request->getParam('short_title');
+            $sub_title = $this->request->getParam('sub_title');
+            $sku = $this->request->getParam('sku');
+            $status = $this->request->getParam('status');
+            $description = $this->request->getParam('description');
+
+            $photo = $this->request->getParam('photo');
+            if ($photo) {
+                $photo = json_decode($photo);
+                $photoModel = $this->getModel('photo');
+                $photoArray = array();
+                foreach ($photo as $name => $path) {
+                    $photoObj = $photoModel->getPhotoByName($name);
+                    if ($photoObj) {
+                        $photoArray[] = $photoObj;
+                    }
+                }
+                $photo = $photoArray;
+            }
+
+            $location = $this->request->getParam('location');
+            if ($location) {
+                $tmp = split($this->SEPARATOR, $location);
+                if (count($tmp)) {
+                    $location = $tmp;
+                }
+            }
+
+            $base_price = floatval($this->request->getParam('base_price'));
+
+            $selling_price = array();
+            foreach ($this->bootstrap_options['currency'] as $key => $val) {
+                $price = $this->request->getParam('price_' . $key);
+                if ($price) {
+                    $selling_price[$key] = floatval($price);
+                }
+            }
+            $scale = array();
+            $scale['weight'] = $this->request->getParam('scale_weight');
+            $scale['height'] = $this->request->getParam('scale_height');
+            $scale['width'] = $this->request->getParam('scale_width');
+            $scale['length'] = $this->request->getParam('scale_length');
+
+            $result = false;
+            $error = "";
+            try {
+                $productModel = $this->getModel('product');
+                $isSkuExist = false;
+                if ($sku) {
+                    $isSkuExist = $productModel->isSkuExist($sku);
+                }
+                if ($isSkuExist) {
+                    $error = "该SKU已经存在，不能重复使用";
+                } else {
+                    $sku = strtolower($sku);
+                    $owner = $this->me->getUser();
+                    $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand);
+                }
+            } catch (Angel_Exception_Product $e) {
+                $error = $e->getDetail();
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+            if ($result) {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-product-list'));
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
+            }
+        } else {
+            // GET METHOD
+            $this->view->title = "编辑商品";
+            $this->view->currency = $this->bootstrap_options['currency'];
+            $this->view->separator = $this->SEPARATOR;
+            $this->view->location = $this->bootstrap_options['stock_location'];
+            
+            $id = $this->request->getParam('id');
+            if ($id && $this->request->getParam('copy')) {
                 // 复制一个商品
                 $productModel = $this->getModel('product');
                 $photoModel = $this->getModel('photo');
-                $target = $productModel->getProductById($copyId);
+                $target = $productModel->getProductById($id);
                 if ($target) {
                     $this->view->title = "复制并创建商品";
                     $this->view->model = $target;
                 }
             }
         }
-    }
-
-    public function productEditAction() {
-        
     }
 
     public function productRemoveAction() {

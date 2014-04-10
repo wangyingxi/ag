@@ -58,6 +58,9 @@
         margin-right: 30px;
     }
 </style>
+<?php
+$model = $this->model;
+?>
 <h1 class="page-title"><?php echo $this->title ?></h1>
 <div class="row">
     <div class="col-md-8">
@@ -65,28 +68,28 @@
         <form role="form" method="post">
             <div class="form-group">
                 <label>商品全称：</label>
-                <input type="text" class="form-control" id="title" name="title" data-toggle="popover" value="">
+                <input type="text" class="form-control" id="title" name="title" data-toggle="popover" value="<?php echo $model->title ?>">
             </div>
             <div class="form-group">
                 <label>商品简称：</label>
-                <input type="text" class="form-control" id="short_title" name="short_title" data-toggle="popover" value="">
+                <input type="text" class="form-control" id="short_title" name="short_title" data-toggle="popover" value="<?php echo $model->short_title ?>">
             </div>
             <div class="form-group">
                 <label>商品附标题：</label>
-                <input type="text" class="form-control" id="sub_title" name="sub_title" data-toggle="popover" value="">
+                <input type="text" class="form-control" id="sub_title" name="sub_title" data-toggle="popover" value="<?php echo $model->sub_title ?>">
             </div>
             <div class="form-group">
                 <label>商品唯一编号：</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="sku" name="sku" data-toggle="popover" data-placement="bottom" value="">
+                    <input type="text" class="form-control" id="sku" name="sku" data-toggle="popover" data-placement="bottom" value="<?php echo $model->sku ?>">
                     <span class='input-group-btn'>
-                        <input class='btn btn-default' id="is-sku-exist" type='button' value='检查可用性'/>
+                        <input class='btn btn-default' id="is-sku-exist" origin-sku="<?php echo $model->sku ?>" type='button' value='检查可用性'/>
                     </span>
                 </div>
             </div>
             <div class="form-group">
                 <label>商品状态：</label>
-                <select id="status" name="status">
+                <select id="status" name="status" value="<?php echo $model->status ?>">
                     <option value="online" selected="selected">在线出售</option>
                     <option value="soldout">售完</option>
                 </select>
@@ -103,32 +106,30 @@
             </div>
             <div class="form-group">
                 <label>描述：</label>
-                <textarea row="10" class="form-control" id="description" name="description"></textarea>
+                <textarea row="10" class="form-control" id="description" name="description"><?php echo $model->description ?></textarea>
             </div>
             <div class="form-group">
                 <label>商品所在地（仓储）：</label>
                 <input type="hidden" id="location" name='location'/>
                 <ul class='location-ul clearfix'>
-                    <!--                    <li>
-                                            <input type="checkbox" checked="checked" id="cn"/> <label for="cn">中国本地发货</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" id="uk"/> <label for="uk">英国仓储</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" id="us"/> <label for="us">美国仓储</label>
-                                        </li>-->
-
                     <?php foreach ($this->location as $key => $val): ?>
+                        <?php
+                        $checked = '';
+                        if (in_array($key, $model->location)) {
+                            $checked = 'checked="checked"';
+                        } else {
+//                            echo $key;exit;
+                        }
+                        ?>
                         <li>
-                            <input type="checkbox" id="<?php echo $key ?>"/> <label for="<?php echo $key ?>"><?php echo $val; ?>仓储</label>
+                            <input type="checkbox" <?php echo $checked; ?> id="<?php echo $key ?>"/> <label for="<?php echo $key ?>"><?php echo $val; ?>仓储</label>
                         </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
             <div class="form-group">
                 <label>采购价：</label>
-                <input type="number" step="0.01" class="form-control" id="base_price" name="base_price" value="">
+                <input type="number" step="0.01" class="form-control" id="base_price" name="base_price" value="<?php echo $model->base_price ?>">
             </div>
             <div class="form-group">
                 <label>售价：</label>
@@ -189,27 +190,27 @@
 
                     <div class="input-group input-group">
                         <span class="input-group-addon">$ USD</span>
-                        <input type="number" id='price_usd' step="0.01" name='price_usd' class="form-control price">
+                        <input type="number" id='price_usd' step="0.01" name='price_usd' class="form-control price" value="<?php echo $model->selling_price['usd'] ?>">
                     </div>
 
                     <div class="input-group input-group">
                         <span class="input-group-addon">£ GBP</span>
-                        <input type="number" id='price_gbp' step="0.01" name='price_gbp' class="form-control price">
+                        <input type="number" id='price_gbp' step="0.01" name='price_gbp' class="form-control price" value="<?php echo $model->selling_price['gbp'] ?>">
                     </div>
 
                     <div class="input-group input-group">
                         <span class="input-group-addon">€ EUR</span>
-                        <input type="number" id='price_eur' step="0.01" name='price_eur' class="form-control price">
+                        <input type="number" id='price_eur' step="0.01" name='price_eur' class="form-control price" value="<?php echo $model->selling_price['eur'] ?>">
                     </div>
 
                     <div class="input-group input-group">
                         <span class="input-group-addon">$ HKD</span>
-                        <input type="number" id='price_hkd' step="0.01" name='price_hkd' class="form-control price">
+                        <input type="number" id='price_hkd' step="0.01" name='price_hkd' class="form-control price" value="<?php echo $model->selling_price['hkd'] ?>">
                     </div>
 
                     <div class="input-group input-group">
                         <span class="input-group-addon">$ AUD</span>
-                        <input type="number" id='price_aud' step="0.01" name='price_aud' class="form-control price">
+                        <input type="number" id='price_aud' step="0.01" name='price_aud' class="form-control price" value="<?php echo $model->selling_price['aud'] ?>">
                     </div>
                 </div>
 
@@ -219,19 +220,19 @@
                 <ul class='scale-ul clearfix'>
                     <li>
                         <label>重量(kg)</label>
-                        <input type="number" step="0.01" class="form-control short-txt" id="scale_weight" name="scale_weight">
+                        <input type="number" step="0.01" class="form-control short-txt" id="scale_weight" name="scale_weight" value="<?php echo $model->scale['weight'] ?>">
                     </li>
                     <li>
                         <label>长(cm)</label>
-                        <input type="number" step="0.01" class="form-control short-txt" id="scale_length" name="scale_length">
+                        <input type="number" step="0.01" class="form-control short-txt" id="scale_length" name="scale_length" value="<?php echo $model->scale['length'] ?>">
                     </li>
                     <li>
                         <label>宽(cm)</label>
-                        <input type="number" step="0.01" class="form-control short-txt" id="scale_width" name="scale_width">
+                        <input type="number" step="0.01" class="form-control short-txt" id="scale_width" name="scale_width" value="<?php echo $model->scale['width'] ?>">
                     </li>
                     <li>
                         <label>高(cm)</label>
-                        <input type="number" step="0.01" class="form-control short-txt" id="scale_height" name="scale_height">
+                        <input type="number" step="0.01" class="form-control short-txt" id="scale_height" name="scale_height" value="<?php echo $model->scale['height'] ?>">
                     </li>
                 </ul>
             </div>
@@ -249,6 +250,7 @@
 </div>
 <script type="text/javascript">
     (function($) {
+
         $('input[data-toggle="popover"]').popover({animation: false});
 
         productSaveBtn('<?php echo $this->separator ?>');
@@ -257,7 +259,7 @@
 
 //        $('.gy-photo').photoSelector(false, "set save here");
         $('.gy-photo').photoSelector();
-
+        $('select').setSelectValue();
 
     })(jQuery);
 </script>

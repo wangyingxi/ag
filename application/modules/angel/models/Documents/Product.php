@@ -37,7 +37,7 @@ class Product extends AbstractDocument {
     /** @ODM\Float */
     protected $base_price = 0;                      // 商品进价
 
-    /** @ODM\EmbedMany(targetDocument="\Documents\PriceDoc") */
+    /** @ODM\Hash */
     protected $selling_price = array();             // 商品售价（各种货币）
 
     /** @ODM\ReferenceOne(targetDocument="\Documents\User") */

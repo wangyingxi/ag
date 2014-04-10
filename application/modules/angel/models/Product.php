@@ -46,14 +46,16 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
         $product->description = $description;
         $product->location = $location;
         $product->base_price = $base_price;
-        if (is_array($selling_price)) {
-            foreach ($selling_price as $price) {
-                if (!is_float($price->amount)) {
-                    throw new Angel_Exception_Product(Angel_Exception_Product::PRODUCT_PRICE_INVALID);
-                }
-                $product->addSellingPrice($price->currency, $price->amount);
-            }
-        }
+//        if (is_array($selling_price)) {
+//            foreach ($selling_price as $currency => $amount) {
+//                if (!is_float($amount)) {
+//                    throw new Angel_Exception_Product(Angel_Exception_Product::PRODUCT_PRICE_INVALID);
+//                }
+//                $product->selling_price->$currency = $amount;
+//            }
+//                var_dump($product->selling_price);exit;
+//        }
+        $product->selling_price = $selling_price;
         $product->scale = $scale;
         $product->owner = $owner;
         if ($brand) {
