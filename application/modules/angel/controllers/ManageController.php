@@ -183,43 +183,11 @@ class Angel_ManageController extends Angel_Controller_Action {
             $sku = $this->request->getParam('sku');
             $status = $this->request->getParam('status');
             $description = $this->request->getParam('description');
-
-            $photo = $this->request->getParam('photo');
-            if ($photo) {
-                $photo = json_decode($photo);
-                $photoModel = $this->getModel('photo');
-                $photoArray = array();
-                foreach ($photo as $name => $path) {
-                    $photoObj = $photoModel->getPhotoByName($name);
-                    if ($photoObj) {
-                        $photoArray[] = $photoObj;
-                    }
-                }
-                $photo = $photoArray;
-            }
-
-            $location = $this->request->getParam('location');
-            if ($location) {
-                $tmp = split($this->SEPARATOR, $location);
-                if (count($tmp)) {
-                    $location = $tmp;
-                }
-            }
-
+            $photo = $this->getPhoto();
+            $location = $this->getLocation();
             $base_price = floatval($this->request->getParam('base_price'));
-
-            $selling_price = array();
-            foreach ($this->bootstrap_options['currency'] as $key => $val) {
-                $price = $this->request->getParam('price_' . $key);
-                if ($price) {
-                    $selling_price[$key] = floatval($price);
-                }
-            }
-            $scale = array();
-            $scale['weight'] = $this->request->getParam('scale_weight');
-            $scale['height'] = $this->request->getParam('scale_height');
-            $scale['width'] = $this->request->getParam('scale_width');
-            $scale['length'] = $this->request->getParam('scale_length');
+            $selling_price = $this->getSellingPrice();
+            $scale = $this->getScale();
 
             $result = false;
             $error = "";
@@ -256,30 +224,99 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function productSaveAction() {
+        $id = $this->request->getParam('id');
+        $copy = $this->request->getParam('copy');
+
         if ($this->request->isPost()) {
-            
+            // POST METHOD
+            $title = $this->request->getParam('title');
+            $short_title = $this->request->getParam('short_title');
+            $sub_title = $this->request->getParam('sub_title');
+            $sku = $this->request->getParam('sku');
+            $status = $this->request->getParam('status');
+            $description = $this->request->getParam('description');
+            $photo = $this->getPhoto();
+            $location = $this->getLocation();
+            $base_price = floatval($this->request->getParam('base_price'));
+            $selling_price = $this->getSellingPrice();
+            $scale = $this->getScale();
+
+            $result = false;
+            $error = "";
+
+            try {
+                $productModel = $this->getModel('product');
+                $isSkuExist = false;
+                $owner = $this->me->getUser();
+                if ($copy) {
+                    // COPY NEW
+                    // Checking Sku Available
+                    $sku = strtolower($sku);
+                    if ($sku) {
+                        $isSkuExist = $productModel->isSkuExist($sku);
+                    }
+                    if ($isSkuExist) {
+                        $error = "该SKU已经存在，不能重复使用";
+                    } else {
+                        $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand);
+                    }
+                } else {
+                    // EDIT
+                    // Checking Sku Available
+                    $sku = strtolower($sku);
+                    $os = $this->request->getParam('origin-sku');
+                    if (!($os && $os == $sku)) {
+                        $isSkuExist = $productModel->isSkuExist($sku);
+                    }
+                    if ($isSkuExist) {
+                        $error = "该SKU已经存在，不能重复使用";
+                    } else {
+                        $result = $productModel->saveProduct($id, $title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand);
+                    }
+                }
+            } catch (Angel_Exception_Product $e) {
+                $error = $e->getDetail();
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+            if ($result) {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-product-list'));
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
+            }
         } else {
-            
-            $notFoundMsg = '未找到目标商品';
-            
             // GET METHOD
+            $notFoundMsg = '未找到目标商品';
+
             $this->view->title = "编辑商品";
             $this->view->currency = $this->bootstrap_options['currency'];
             $this->view->separator = $this->SEPARATOR;
             $this->view->location = $this->bootstrap_options['stock_location'];
 
-            $id = $this->request->getParam('id');
             if ($id) {
                 $productModel = $this->getModel('product');
                 $photoModel = $this->getModel('photo');
                 $target = $productModel->getProductById($id);
-                if(!$target) {
+                if (!$target) {
                     $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
                 }
-                if ($this->request->getParam('copy')) {
+                if ($copy) {
                     // 复制一个商品
                     $this->view->title = "复制并创建商品";
-                    $this->view->model = $target;
+                    $this->view->copy = $copy;
+                }
+                $this->view->model = $target;
+
+                $photo = $target->photo;
+                if ($photo) {
+                    $saveObj = array();
+                    foreach ($photo as $p) {
+                        $name = $p->name;
+                        $saveObj[$name] = $this->view->photoImage($p->name . $p->type, 'small');
+                    }
+                    if(!count($saveObj))
+                        $saveObj = false;
+                    $this->view->photo = $saveObj;
                 }
             } else {
                 $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
@@ -288,7 +325,70 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function productRemoveAction() {
-        
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $id = $this->getParam('id');
+            if ($id) {
+                $owner = $this->me->getUser();
+                if ($owner) {
+                    $productModel = $this->getModel('product');
+                    $result = $productModel->removeProduct($id, $owner);
+                }
+            }
+            echo $result;
+            exit;
+        }
+    }
+
+    protected function getPhoto() {
+        $paramPhoto = $this->request->getParam('photo');
+        if ($paramPhoto) {
+            $paramPhoto = json_decode($paramPhoto);
+            $photoModel = $this->getModel('photo');
+            $photoArray = array();
+            foreach ($paramPhoto as $name => $path) {
+                $photoObj = $photoModel->getPhotoByName($name);
+                if ($photoObj) {
+                    $photoArray[] = $photoObj;
+                }
+            }
+            return $photoArray;
+        } else {
+            return false;
+        }
+    }
+
+    protected function getLocation() {
+        $paramLocation = $this->request->getParam('location');
+        if ($paramLocation) {
+            $tmp = split($this->SEPARATOR, $paramLocation);
+            if (count($tmp)) {
+                $paramLocation = $tmp;
+                return $paramLocation;
+            }
+        }
+        return false;
+    }
+
+    protected function getSellingPrice() {
+        $result = array();
+        foreach ($this->bootstrap_options['currency'] as $key => $val) {
+            $price = $this->request->getParam('price_' . $key);
+            if ($price) {
+                $result[$key] = floatval($price);
+            }
+        }
+        return $result;
+    }
+
+    protected function getScale() {
+        $result = array();
+        $result['weight'] = $this->request->getParam('scale_weight');
+        $result['height'] = $this->request->getParam('scale_height');
+        $result['width'] = $this->request->getParam('scale_width');
+        $result['length'] = $this->request->getParam('scale_length');
+        return $result;
     }
 
     public function resultAction() {
@@ -366,7 +466,6 @@ class Angel_ManageController extends Angel_Controller_Action {
             try {
                 if ($od = opendir($tmp)) {
                     while ($file = readdir($od)) {
-
                         unlink($tmp . DIRECTORY_SEPARATOR . $file);
                     }
                 }

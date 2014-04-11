@@ -14,11 +14,11 @@ function isSkuExist(url) {
         var sku = $('#sku').val();
         if (sku) {
             var os = $(this).attr('origin-sku');
-            if(sku === os) {
+            if (sku === os) {
                 alert(okmsg);
                 return;
             }
-            
+
             $.ajax({
                 url: url,
                 dataType: 'json',
@@ -88,5 +88,29 @@ function productSaveBtn(separator) {
             location = '';
         }
         $('#location').val(location);
+    });
+}
+
+function removeObject($this, url) {
+    if (!confirm('确认删除该对象？')) {
+        return;
+    }
+    var container = $this.closest('.itm');
+    var id = container.find('.tmp').val();
+    var data = {id: id};
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        data: data,
+        type: 'POST',
+        success: function(response) {
+            if (response) {
+                container.fadeOut(400, function() {
+                    container.remove();
+                });
+            } else {
+                alert('删除失败');
+            }
+        }
     });
 }

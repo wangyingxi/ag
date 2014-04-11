@@ -65,7 +65,7 @@ $model = $this->model;
                     <p><i><?php echo $p['sub_title'] ?></i></p>
                 </div>
                 <div class="btn-group">
-                    <a href="#" class="btn btn-info btn-sm">编辑</a>
+                    <a href="<?php echo $this->url(array(), 'manage-product-save') . '?id=' . $p['id'] ?>" class="btn btn-info btn-sm">编辑</a>
                     <a href="<?php echo $this->url(array(), 'manage-product-save') . '?copy=true&&id=' . $p['id'] ?>" class="btn btn-default btn-sm">复制</a>
                 </div>
             </div>
@@ -79,30 +79,8 @@ $model = $this->model;
 </div>
 <script type="text/javascript">
     (function($) {
-
         $('.remove-product').click(function() {
-            if (!confirm('确认删除该商品？')) {
-                return;
-            }
-            var $this = $(this);
-            var container = $this.closest('.itm');
-            var id = container.find('.tmp').val();
-            var data = {id: id};
-//            $.ajax({
-//                url: '<?php echo $this->url(array(), 'manage-photo-remove') ?>',
-//                dataType: 'json',
-//                data: data,
-//                type: 'POST',
-//                success: function(response) {
-//                    if (response) {
-//                        container.fadeOut(400, function(){
-//                            container.remove();
-//                        });
-//                    } else {
-//                        alert('删除失败');
-//                    }
-//                }
-//            });
+            removeObject($(this), '<?php echo $this->url(array(), 'manage-product-remove') ?>');
         });
     })(jQuery);
 </script>

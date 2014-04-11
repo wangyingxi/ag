@@ -26,17 +26,7 @@
         } else {
             throw("dev exception : wrong tagname");
         }
-    }
-
-
-
-
-
-
-
-
-
-
+    };
 
     var photoSelectorMethods = {
         init: function(options, save) {

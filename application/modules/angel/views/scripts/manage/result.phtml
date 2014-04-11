@@ -2,11 +2,11 @@
 <?php
 $cls = "alert-success";
 $msg = "操作成功";
-$lnk = "， <a href='" . $this->redirectUrl . "' class='btn'>下一步</a>";
+$lnk = "， <a href='" . $this->redirectUrl . "' class='btn btn-success'>下一步</a>";
 if ($this->error) {
     $cls = "alert-danger";
     $msg = "操作失败（失败原因：" . $this->error . "）";
-    $lnk = "， <a href='javascript:history.go(-1);' class='btn'>返回上一页</a>";
+    $lnk = "， <a href='javascript:history.go(-1);' class='btn btn-danger'>返回上一页</a>";
 }
 
 ?>

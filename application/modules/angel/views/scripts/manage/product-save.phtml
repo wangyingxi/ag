@@ -81,9 +81,17 @@ $model = $this->model;
             <div class="form-group">
                 <label>商品唯一编号：</label>
                 <div class="input-group">
+                    <?php
+                    $skuValue = $model->sku;
+                    if ($this->copy) {
+                        $skuValue = "";
+                    }
+                    ?>
+                    
                     <input type="text" class="form-control" id="sku" name="sku" data-toggle="popover" data-placement="bottom" value="<?php echo $model->sku ?>">
                     <span class='input-group-btn'>
-                        <input class='btn btn-default' id="is-sku-exist" origin-sku="<?php echo $model->sku ?>" type='button' value='检查可用性'/>
+                        <input class='btn btn-default' id="is-sku-exist" origin-sku="<?php echo $skuValue ?>" type='button' value='检查可用性'/>
+                        <input type="hidden" name="origin-sku" value="<?php echo $skuValue ?>" />
                     </span>
                 </div>
             </div>
@@ -257,8 +265,9 @@ $model = $this->model;
         calculatePrice();
         isSkuExist('<?php echo $this->url(array(), 'manage-check-sku') ?>');
 
-//        $('.gy-photo').photoSelector(false, "set save here");
-        $('.gy-photo').photoSelector();
+
+        $('.gy-photo').photoSelector(false, <?php echo json_encode($this->photo) ?>);
+//        $('.gy-photo').photoSelector();
         $('select').setSelectValue();
 
     })(jQuery);
