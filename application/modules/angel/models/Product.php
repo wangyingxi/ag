@@ -91,7 +91,7 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
             throw new Angel_Exception_Product(Angel_Exception_Product::PRODUCT_PRICE_INVALID);
         }
 
-        $product = $this->getProductById($id);
+        $product = $this->getById($id);
         if (!$product) {
             throw new Angel_Exception_Product(Angel_Exception_Product::PRODUCT_NOT_FOUND);
         }
@@ -149,29 +149,9 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
         return $result;
     }
 
-    /**
-     * 根据id获取user document
-     * 
-     * @param string $id
-     * @return mix - when the user found, return the user document
-     */
-    public function getProductById($id) {
-        $result = false;
-        $user = $this->_dm->createQueryBuilder($this->_document_class)
-                ->field('id')->equals($id)
-                ->getQuery()
-                ->getSingleResult();
-
-        if (!empty($user)) {
-            $result = $user;
-        }
-
-        return $result;
-    }
-
     public function removeProduct($id) {
         $result = false;
-        $product = $this->getProductById($id);
+        $product = $this->getById($id);
         try {
             // remove document
             $result = $this->_dm->createQueryBuilder($this->_document_class)

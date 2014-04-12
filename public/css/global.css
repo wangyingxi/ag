@@ -22,3 +22,6 @@ Common css
 .white {
     color:white !important;
 }
+.relative {
+    position:relative !important;
+}

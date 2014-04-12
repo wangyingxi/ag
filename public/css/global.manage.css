@@ -27,3 +27,7 @@ form[role='form'] {
 .short-txt {
     width:80px;
 }
+.btb {
+    padding:20px 0;
+    text-align:right;
+}

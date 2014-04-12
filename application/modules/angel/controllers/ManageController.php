@@ -144,7 +144,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         }
         $productModel = $this->getModel('product');
         $paginator = $productModel->getAll();
-        $paginator->setItemCountPerPage(20);
+        $paginator->setItemCountPerPage($this->bootstrap_options['default_page_size']);
         $paginator->setCurrentPageNumber($page);
         $resource = array();
         foreach ($paginator as $r) {
@@ -210,7 +210,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                 $error = $e->getMessage();
             }
             if ($result) {
-                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-product-list'));
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-product-list-home'));
             } else {
                 $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
             }
@@ -280,7 +280,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                 $error = $e->getMessage();
             }
             if ($result) {
-                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-product-list'));
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-product-list-home'));
             } else {
                 $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
             }
@@ -296,7 +296,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             if ($id) {
                 $productModel = $this->getModel('product');
                 $photoModel = $this->getModel('photo');
-                $target = $productModel->getProductById($id);
+                $target = $productModel->getById($id);
                 if (!$target) {
                     $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
                 }
@@ -482,7 +482,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         }
         $photoModel = $this->getModel('photo');
         $paginator = $photoModel->getAll();
-        $paginator->setItemCountPerPage(20);
+        $paginator->setItemCountPerPage($this->bootstrap_options['default_page_size']);
         $paginator->setCurrentPageNumber($page);
         $resource = array();
         foreach ($paginator as $r) {
@@ -520,10 +520,97 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function phototypeListAction() {
-        if ($this->request->isPost()) {
-            
+        $page = $this->request->getParam('page');
+        if (!$page) {
+            $page = 1;
+        }
+        $phototypeModel = $this->getModel('phototype');
+        $paginator = $phototypeModel->getAll();
+        $paginator->setItemCountPerPage($this->bootstrap_options['default_page_size']);
+        $paginator->setCurrentPageNumber($page);
+        $resource = array();
+        foreach ($paginator as $r) {
+            $resource[] = array('id' => $r->id,
+                'name' => $r->name,
+                'description' => $r->description,
+                'owner' => $r->owner);
+        }
+        // JSON FORMAT
+        if ($this->getParam('format') == 'json') {
+            $this->_helper->json(array('data' => $resource,
+                'code' => 200,
+                'page' => $paginator->getCurrentPageNumber(),
+                'count' => $paginator->count()));
         } else {
+            $this->view->paginator = $paginator;
+            $this->view->resource = $resource;
             $this->view->title = "图片分类列表";
+        }
+    }
+
+    public function phototypeCreateAction() {
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $name = $this->request->getParam('name');
+            $description = $this->request->getParam('description');
+            $owner = $this->me->getUser();
+            $phototypeModel = $this->getModel('phototype');
+            try {
+                $result = $phototypeModel->addPhototype($name, $description, $owner);
+            } catch (Angel_Exception_Phototype $e) {
+                $error = $e->getDetail();
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+            if ($result) {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-phototype-list-home'));
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
+            }
+        } else {
+            // GET METHOD
+            $this->view->title = "创建图片分类";
+        }
+    }
+
+    public function phototypeSaveAction() {
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $id = $this->request->getParam('id');
+            $name = $this->request->getParam('name');
+            $description = $this->request->getParam('description');
+            $phototypeModel = $this->getModel('phototype');
+            try {
+                $result = $phototypeModel->savePhototype($id, $name, $description);
+            } catch (Angel_Exception_Phototype $e) {
+                $error = $e->getDetail();
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+            if ($result) {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-phototype-list-home'));
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
+            }
+        } else {
+            // GET METHOD
+            $this->view->title = "编辑图片分类";
+        }
+    }
+    
+    public function phototypeRemoveAction() {
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $id = $this->getParam('id');
+            if ($id) {
+                $phototypeModel = $this->getModel('phototype');
+                $result = $phototypeModel->removePhototype($id);
+            }
+            echo $result;
+            exit;
         }
     }
 
