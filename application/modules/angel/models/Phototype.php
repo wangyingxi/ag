@@ -5,17 +5,18 @@ class Angel_Model_Phototype extends Angel_Model_AbstractModel {
     protected $_document_class = '\Documents\Phototype';
 
     public function removePhototype($id) {
-
+                
         $result = false;
         $phototype = $this->getById($id);
         if (!$phototype) {
             throw new Angel_Exception_Phototype(Angel_Exception_Phototype::PHOTOTYPE_NOT_FOUND);
         }
-        $photoModel = $this->getModel('photo');
-        $ps = $photoModel->getPhotoByPhototype($id);
-        if (!empty($ps)) {
-            throw new Angel_Exception_Phototype(Angel_Exception_Phototype::PHOTOTYPE_CANT_BE_REMOVED);
-        }
+//        待检查， 为什么不能在Model中采用getModel方法
+//        $photoModel = $this->getModel('photo');
+//        $ps = $photoModel->getPhotoByPhototype($id);
+//        if (!empty($ps)) {
+//            throw new Angel_Exception_Phototype(Angel_Exception_Phototype::PHOTOTYPE_CANT_BE_REMOVED);
+//        }
         try {
             // remove document
             $result = $this->_dm->createQueryBuilder($this->_document_class)
