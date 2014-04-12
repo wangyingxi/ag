@@ -1,0 +1,90 @@
+<style>
+
+
+    .itm {
+    }
+    .wp {
+        background:#F0F0F0;
+        margin-bottom:30px;
+        padding:15px;
+    }
+    .wp p {
+        font-size:12px;
+    }
+    .iwp {
+        height:230px;
+        overflow:hidden;
+        position:relative;
+        width:100%;
+    }
+    .iwp img {
+        left:0;
+        position:absolute;
+        top:0;
+    }
+    .wp label {
+        color:#5cb85c;
+    }
+    .btb {
+        padding:20px 0;
+        text-align:right;
+    }
+    .wp ul {
+        display:block;
+        margin:15px 0 0;
+        padding:0;
+    }
+    .wp ul li {
+        display:inline-block;
+        margin-bottom:10px;
+        margin-right:5px;
+        list-style: none;
+    }
+    .btn-group {
+        margin-top:15px;
+    }
+</style>
+<?php
+$model = $this->model;
+?>
+<h1 class="page-title"><?php echo $this->title ?></h1>
+
+<div class="row">
+    <?php foreach ($this->resource as $p): ?>
+        <div class="col-md-12 itm">
+            <input type="hidden" class="tmp" value="<?php echo $p['id'] ?>"/>
+            <div class="wp">
+                <p><?php echo $p['owner']->email . ' 上传' ?>
+                    <button class="pull-right btn btn-xs btn-danger remove-photo">删除</button>
+                </p>
+                <div class="iwp">
+                    <img width="100%" src="<?php echo $p['path']['main'] ?>"/>
+                </div>
+                <div class="btn-group">
+                    <a href="<?php echo $p['path']['small'] ?>" target="_blank" class="btn btn-default btn-sm">小</a>
+                    <a href="<?php echo $p['path']['main'] ?>" target="_blank" class="btn btn-default btn-sm">中</a>
+                    <a href="<?php echo $p['path']['large'] ?>" target="_blank" class="btn btn-default btn-sm">大</a>
+                    <a href="<?php echo $p['path']['xlarge'] ?>" target="_blank" class="btn btn-default btn-sm">超</a>
+                    <a href="<?php echo $p['path']['orig'] ?>" target="_blank" class="btn btn-success btn-sm">原</a>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <?php echo $this->partial('manage/partials/_paginator_bar.phtml', array('current_page_no' => $this->paginator->getCurrentPageNumber(), 'page_count' => $this->paginator->count())); ?>
+    </div>
+</div>
+<script type="text/javascript">
+    (function($) {
+        
+        $('.remove-phototype').click(function() {
+        <?php 
+        /*
+            removeObject($(this), '<?php echo $this->url(array(), 'manage-photo-remove') ?>');
+        */
+        ?>
+        });
+    })(jQuery);
+</script>

@@ -85,15 +85,6 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
      * @throws Angel_Exception_Product 
      */
     public function saveProduct($id, $title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand) {
-
-//        参看并修改结构
-//        foreach ($data as $key => $value) {
-//            $company->$key = $value;
-//        }
-//
-//        $this->_dm->persist($company);
-//        $this->_dm->flush();
-
         $result = false;
 
         if (!is_float($base_price)) {
@@ -155,7 +146,6 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
         if (!empty($product)) {
             $result = true;
         }
-
         return $result;
     }
 
@@ -178,27 +168,20 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
 
         return $result;
     }
-    
-    public function removeProduct($id, $owner) {
+
+    public function removeProduct($id) {
         $result = false;
-        if (is_object($owner) && ($owner instanceof $this->_document_user_class)) {
-            $product = $this->getProductById($id);
-            if ($owner->id == $product->owner->id || $owner->user_type = 'admin') {
-                // when owner is self or admin
-                try {
-                    // remove document
-                    $result = $this->_dm->createQueryBuilder($this->_document_class)
-                            ->remove()
-                            ->field('id')
-                            ->equals($id)
-                            ->getQuery()
-                            ->execute();
-                } catch (Exception $e) {
-                    $result = false;
-                }
-            } else {
-                
-            }
+        $product = $this->getProductById($id);
+        try {
+            // remove document
+            $result = $this->_dm->createQueryBuilder($this->_document_class)
+                    ->remove()
+                    ->field('id')
+                    ->equals($id)
+                    ->getQuery()
+                    ->execute();
+        } catch (Exception $e) {
+            $result = false;
         }
         return $result;
     }

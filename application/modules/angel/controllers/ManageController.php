@@ -183,7 +183,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $sku = $this->request->getParam('sku');
             $status = $this->request->getParam('status');
             $description = $this->request->getParam('description');
-            $photo = $this->getPhoto();
+            $photo = $this->decodePhoto();
             $location = $this->getLocation();
             $base_price = floatval($this->request->getParam('base_price'));
             $selling_price = $this->getSellingPrice();
@@ -235,7 +235,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $sku = $this->request->getParam('sku');
             $status = $this->request->getParam('status');
             $description = $this->request->getParam('description');
-            $photo = $this->getPhoto();
+            $photo = $this->decodePhoto();
             $location = $this->getLocation();
             $base_price = floatval($this->request->getParam('base_price'));
             $selling_price = $this->getSellingPrice();
@@ -314,7 +314,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                         $name = $p->name;
                         $saveObj[$name] = $this->view->photoImage($p->name . $p->type, 'small');
                     }
-                    if(!count($saveObj))
+                    if (!count($saveObj))
                         $saveObj = false;
                     $this->view->photo = $saveObj;
                 }
@@ -330,18 +330,15 @@ class Angel_ManageController extends Angel_Controller_Action {
             // POST METHOD
             $id = $this->getParam('id');
             if ($id) {
-                $owner = $this->me->getUser();
-                if ($owner) {
-                    $productModel = $this->getModel('product');
-                    $result = $productModel->removeProduct($id, $owner);
-                }
+                $productModel = $this->getModel('product');
+                $result = $productModel->removeProduct($id);
             }
             echo $result;
             exit;
         }
     }
 
-    protected function getPhoto() {
+    protected function decodePhoto() {
         $paramPhoto = $this->request->getParam('photo');
         if ($paramPhoto) {
             $paramPhoto = json_decode($paramPhoto);
@@ -484,7 +481,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $page = 1;
         }
         $photoModel = $this->getModel('photo');
-        $paginator = $photoModel->getPhoto();
+        $paginator = $photoModel->getAll();
         $paginator->setItemCountPerPage(20);
         $paginator->setCurrentPageNumber($page);
         $resource = array();
@@ -514,14 +511,19 @@ class Angel_ManageController extends Angel_Controller_Action {
             // POST METHOD
             $id = $this->getParam('id');
             if ($id) {
-                $owner = $this->me->getUser();
-                if ($owner) {
-                    $photoModel = $this->getModel('photo');
-                    $result = $photoModel->removePhoto($id, $owner);
-                }
+                $photoModel = $this->getModel('photo');
+                $result = $photoModel->removePhoto($id);
             }
             echo $result;
             exit;
+        }
+    }
+
+    public function phototypeListAction() {
+        if ($this->request->isPost()) {
+            
+        } else {
+            $this->view->title = "图片分类列表";
         }
     }
 
