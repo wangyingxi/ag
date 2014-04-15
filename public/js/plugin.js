@@ -139,29 +139,24 @@
             modalMenu.empty();
 
             var addLi = function(containerUl, name, phototypeId, description, liCls) {
-                var $li = $("<li>");
+                var $li = $("<li>").attr('phototype-id', phototypeId);
                 if (liCls)
                     $li.addClass(liCls);
                 var $a = $("<a>").attr("href", "javascript:void(0)")
-                        .attr('phototype-id', phototypeId)
                         .attr('title', description)
                         .html(name);
                 $li.append($a);
                 $li.click(function() {
-                    var $this = $(this).closest('li');
+                    var obj = $(this).closest('li');
                     var cls = "active";
-                    if (!$this.hasClass(cls)) {
-                        $this.siblings('li').removeClass(cls);
-                        $this.addClass(cls);
+                    if (!obj.hasClass(cls)) {
+                        obj.siblings('li').removeClass(cls);
+                        obj.addClass(cls);
 
                         // request
-                        var pid = $this.attr('phototype-id');
-                        if (pid) {
-                            // request by pid
-                        } else {
-                            // request all
-                            console.log($(this).html());
-                        }
+                        var pid = obj.attr('phototype-id');
+                        $modal.attr('loaded', null);
+                        $this.photoSelector('request', {phototype: pid});
                     }
                 });
                 containerUl.append($li);
@@ -241,7 +236,7 @@
                         selfBtn.addClass(ACTIVECLS);
                         // 刷新图片
                         var page = selfBtn.attr('page');
-                        $this.photoSelector('request', page);
+                        $this.photoSelector('request', {page: page});
                     }
                 });
                 pagebar.append(pageBtn);
@@ -265,11 +260,18 @@
                 }
             });
         },
-        request: function(page) {
+        request: function(param) {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
+            if (!param)
+                param = {};
+            if (!param.page)
+                param.page = 1;
 
             var url = settings.url;
-            var data = {format: 'json', 'page': page};
+            var data = {format: 'json', page: param.page};
+            if (param.phototype)
+                data.phototype = param.phototype;
+
             $.ajax({
                 url: url,
                 dataType: 'json',
@@ -283,7 +285,7 @@
 
                         if (!$modal.attr('loaded')) {
                             // 显示pagebar
-                            $this.photoSelector('renderPagebar', {page: page, count: count});
+                            $this.photoSelector('renderPagebar', {page: param.page, count: count});
                             $modal.attr('loaded', true);
                         }
                         $this.photoSelector('renderChoosen');
@@ -317,7 +319,6 @@
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
 
             if (!$modal.attr('loaded')) {
-                $this.photoSelector('request', 1);
                 $this.photoSelector('requestMenu');
             } else {
                 $this.photoSelector('renderChoosen');
