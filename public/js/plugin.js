@@ -39,7 +39,8 @@
             var settings = {
                 separator: ';',
                 multi: true,
-                url: '/manage/photo/list'
+                url: '/manage/photo/list',
+                phototypeUrl: '/manage/phototype/list'
             };
 
             // 生成modal框
@@ -56,6 +57,7 @@
                 modalHtml += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
                 modalHtml += '<h4 class="modal-title">添加图片</h4>';
                 modalHtml += '</div>';
+                modalHtml += '<div class="modal-menu"></div>';
                 modalHtml += '<div class="modal-body"></div>';
                 modalHtml += '<div class="modal-page"></div>';
                 modalHtml += '<div class="modal-footer">';
@@ -127,8 +129,48 @@
             style += ".gallery .label-success {display:none;position:absolute;left:0;top:0;}";
             style += ".gallery.choosen {opacity:0.5}";
             style += ".gallery.choosen .label-success {display:block;}";
+            style += ".modal-menu .nav {margin-top:10px; padding: 0 20px;}";
             style += "</style>";
             return style;
+        },
+        renderMenu: function(resource) {
+            var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
+            var modalMenu = $modal.find('.modal-menu');
+            modalMenu.empty();
+
+            var addLi = function(containerUl, name, phototypeId, description, liCls) {
+                var $li = $("<li>");
+                if (liCls)
+                    $li.addClass(liCls);
+                var $a = $("<a>").attr("href", "javascript:void(0)")
+                        .attr('phototype-id', phototypeId)
+                        .attr('title', description)
+                        .html(name);
+                $li.append($a);
+                $li.click(function() {
+                    var $this = $(this).closest('li');
+                    var cls = "active";
+                    if (!$this.hasClass(cls)) {
+                        $this.siblings('li').removeClass(cls);
+                        $this.addClass(cls);
+                    }
+                });
+                containerUl.append($li);
+            };
+
+            var $ul = $("<ul>").addClass("nav nav-tabs");
+            addLi($ul, "全部", null, null, 'active');
+            if (resource) {
+                $.each(resource, function() {
+
+                    var item = $(this);
+                    var name = item[0].name;
+                    var description = item[0].description;
+                    var phototypeId = item[0].id;
+                    addLi($ul, name, phototypeId, description);
+                    modalMenu.append($ul);
+                });
+            }
         },
         renderPhoto: function(resource) {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
@@ -241,11 +283,34 @@
                 }
             });
         },
+        requestMenu: function() {
+            var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
+
+            var phototypeUrl = settings.phototypeUrl;
+            if (!phototypeUrl)
+                return;
+            var data = {format: 'json'};
+            $.ajax({
+                url: phototypeUrl,
+                dataType: 'json',
+                data: data,
+                success: function(response) {
+                    if (response.code === 200) {
+                        var resource = response.data;
+                        if (!$modal.attr('loaded')) {
+                            // 显示menu
+                            $this.photoSelector('renderMenu', resource);
+                        }
+                    }
+                }
+            });
+        },
         start: function() {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
 
             if (!$modal.attr('loaded')) {
                 $this.photoSelector('request', 1);
+                $this.photoSelector('requestMenu');
             } else {
                 $this.photoSelector('renderChoosen');
             }

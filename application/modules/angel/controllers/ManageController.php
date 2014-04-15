@@ -477,11 +477,18 @@ class Angel_ManageController extends Angel_Controller_Action {
 
     public function photoListAction() {
         $page = $this->request->getParam('page');
+        $phototype = $this->request->getParam('phototype');
         if (!$page) {
             $page = 1;
         }
         $photoModel = $this->getModel('photo');
-        $paginator = $photoModel->getAll();
+
+        $paginator = null;
+        if (!$phototype) {
+            $paginator = $photoModel->getAll();
+        } else {
+            $paginator = $photoModel->getPhotoByPhototype($phototype);
+        }
         $paginator->setItemCountPerPage($this->bootstrap_options['default_page_size']);
         $paginator->setCurrentPageNumber($page);
         $resource = array();
@@ -575,6 +582,8 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function phototypeSaveAction() {
+        $notFoundMsg = '未找到目标图片分类';
+
         if ($this->request->isPost()) {
             $result = 0;
             // POST METHOD
@@ -597,9 +606,21 @@ class Angel_ManageController extends Angel_Controller_Action {
         } else {
             // GET METHOD
             $this->view->title = "编辑图片分类";
+
+            $id = $this->request->getParam("id");
+            if ($id) {
+                $phototypeModel = $this->getModel('phototype');
+                $target = $phototypeModel->getById($id);
+                if (!$target) {
+                    $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
+                }
+                $this->view->model = $target;
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
+            }
         }
     }
-    
+
     public function phototypeRemoveAction() {
         if ($this->request->isPost()) {
             $result = 0;

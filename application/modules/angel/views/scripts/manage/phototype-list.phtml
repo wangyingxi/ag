@@ -11,7 +11,7 @@ $model = $this->model;
 ?>
 <h1 class="page-title"><?php echo $this->title ?></h1>
 <div class="btb">
-    <a id="clear-cache" class="btn btn-success" href="<?php echo $this->url(array(), 'manage-phototype-create')?>">新建图片分类</a>
+    <a id="clear-cache" class="btn btn-success" href="<?php echo $this->url(array(), 'manage-phototype-create') ?>">新建图片分类</a>
 </div>
 <div class="row">
     <?php foreach ($this->resource as $p): ?>
@@ -19,7 +19,7 @@ $model = $this->model;
             <div class="paddingbox20px relative">
                 <p><?php echo $p['name'] ?></p>
                 <div class="btn-group">
-                    <a type="button" href="#" class="btn btn-default btn-sm">编辑</a>
+                    <a type="button" href="<?php echo $this->url(array(id => $p["id"]), 'manage-phototype-save') ?>" class="btn btn-default btn-sm">编辑</a>
                     <button type="button" class="btn btn-default btn-sm remove-phototype">删除</button>
                 </div>
                 <input type="hidden" class="tmp" value="<?php echo $p['id'] ?>"/>
