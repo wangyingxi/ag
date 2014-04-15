@@ -27,13 +27,13 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
         }
         return $result;
     }
-    public function savePhoto($id, $name, $description, $phototype) {
+    public function savePhoto($id, $title, $description, $phototype) {
         $photo = $this->getById($id);
         if (!$photo) {
             throw new Angel_Exception_Photo(Angel_Exception_Photo::PHOTO_NOT_FOUND);
         }
         $result = false;
-        $photo->name = $name;
+        $photo->title = $title;
         $photo->description = $description;
         $photo->phototype = $phototype;
         $this->_dm->persist($photo);
@@ -54,7 +54,7 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
         return $result;
     }
 
-    public function addPhoto($photo, $owner) {
+    public function addPhoto($photo, $title, $description, $phototype, $owner) {
         $result = false;
         $imageService = $this->_container->get('image');
         if (!$imageService->isAcceptedImage($photo)) {
@@ -69,6 +69,9 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
                     $newPhoto = new $this->_document_class();
                     $newPhoto->name = basename($filename, $extension);
                     $newPhoto->type = $extension;
+                    $newPhoto->title = $title;
+                    $newPhoto->description = $description;
+                    $newPhoto->phototype = $phototype;
                     $newPhoto->owner = $owner;
 
                     $this->_dm->persist($newPhoto);
