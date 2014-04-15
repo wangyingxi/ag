@@ -27,7 +27,20 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
         }
         return $result;
     }
-
+    public function savePhoto($id, $name, $description, $phototype) {
+        $photo = $this->getById($id);
+        if (!$photo) {
+            throw new Angel_Exception_Photo(Angel_Exception_Photo::PHOTO_NOT_FOUND);
+        }
+        $result = false;
+        $photo->name = $name;
+        $photo->description = $description;
+        $photo->phototype = $phototype;
+        $this->_dm->persist($photo);
+        $this->_dm->flush();
+        $result = true;
+        return $result;
+    }
     public function getPhotoByPhototype($phototype_id, $return_as_paginator = true) {
         $query = $this->_dm->createQueryBuilder($this->_document_class)
                 ->field('phototype.$id')->equals(new MongoId($phototype_id))

@@ -512,6 +512,55 @@ class Angel_ManageController extends Angel_Controller_Action {
         }
     }
 
+    public function photoSaveAction() {
+        $notFoundMsg = '未找到目标图片';
+        $photoModel = $this->getModel('photo');
+        $phototypeModel = $this->getModel('phototype');
+        $id = $this->request->getParam('id');
+
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $name = $this->request->getParam('name');
+            $description = $this->request->getParam('description');
+            $phototypeId = $this->request->getParam('phototypeId');
+            $phototype = false;
+            if ($phototypeId) {
+                $phototype = $phototypeModel->getById($phototypeId);
+                if (!$phototype) {
+                    $this->_redirect($this->view->url(array(), 'manage-result'));
+                }
+            }
+            try {
+                $result = $photoModel->savePhoto($id, $name, $description, $phototype);
+            } catch (Angel_Exception_Photo $e) {
+                $error = $e->getDetail();
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+            if ($result) {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-photo-list-home'));
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
+            }
+        } else {
+            // GET METHOD
+            $this->view->title = "编辑图片";
+
+            if ($id) {
+                $target = $photoModel->getById($id);
+                $phototype = $phototypeModel->getAll();
+                if (!$target) {
+                    $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
+                }
+                $this->view->model = $target;
+                $this->view->phototype = $phototype;
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
+            }
+        }
+    }
+
     public function photoRemoveAction() {
         if ($this->request->isPost()) {
             $result = 0;

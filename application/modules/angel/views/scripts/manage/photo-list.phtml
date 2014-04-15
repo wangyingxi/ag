@@ -63,7 +63,8 @@ $model = $this->model;
                     <a href="<?php echo $p['path']['main'] ?>" target="_blank" class="btn btn-default btn-sm">中</a>
                     <a href="<?php echo $p['path']['large'] ?>" target="_blank" class="btn btn-default btn-sm">大</a>
                     <a href="<?php echo $p['path']['xlarge'] ?>" target="_blank" class="btn btn-default btn-sm">超</a>
-                    <a href="<?php echo $p['path']['orig'] ?>" target="_blank" class="btn btn-success btn-sm">原</a>
+                    <a href="<?php echo $p['path']['orig'] ?>" target="_blank" class="btn btn-default btn-sm">原</a>
+                    <a href="<?php echo $this->url(array(id => $p['id']), 'manage-photo-save') ?>" class="btn btn-info btn-sm">编辑</a>
                 </div>
             </div>
         </div>

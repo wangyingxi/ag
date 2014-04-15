@@ -19,8 +19,8 @@ $model = $this->model;
             <div class="paddingbox20px relative">
                 <p><?php echo $p['name'] ?></p>
                 <div class="btn-group">
-                    <a type="button" href="<?php echo $this->url(array(id => $p["id"]), 'manage-phototype-save') ?>" class="btn btn-default btn-sm">编辑</a>
-                    <button type="button" class="btn btn-default btn-sm remove-phototype">删除</button>
+                    <a type="button" href="<?php echo $this->url(array(id => $p["id"]), 'manage-phototype-save') ?>" class="btn btn-info btn-sm">编辑</a>
+                    <button type="button" class="btn btn-danger btn-sm remove-phototype">删除</button>
                 </div>
                 <input type="hidden" class="tmp" value="<?php echo $p['id'] ?>"/>
             </div>

@@ -129,7 +129,7 @@
             style += ".gallery .label-success {display:none;position:absolute;left:0;top:0;}";
             style += ".gallery.choosen {opacity:0.5}";
             style += ".gallery.choosen .label-success {display:block;}";
-            style += ".modal-menu .nav {margin-top:10px; padding: 0 20px;}";
+            style += ".modal-menu .nav {background:#F8F8F8; padding: 10px 20px 0 20px;}";
             style += "</style>";
             return style;
         },
@@ -236,7 +236,12 @@
                         selfBtn.addClass(ACTIVECLS);
                         // 刷新图片
                         var page = selfBtn.attr('page');
-                        $this.photoSelector('request', {page: page});
+                        var data = {page: page};
+                        // 请求对应的phototype id
+                        var phototype = $modal.find('.modal-menu .active').attr('phototype-id');
+                        if (phototype)
+                            data.phototype = phototype;
+                        $this.photoSelector('request', data);
                     }
                 });
                 pagebar.append(pageBtn);
