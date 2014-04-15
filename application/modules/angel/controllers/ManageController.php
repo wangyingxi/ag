@@ -523,12 +523,12 @@ class Angel_ManageController extends Angel_Controller_Action {
             // POST METHOD
             $name = $this->request->getParam('name');
             $description = $this->request->getParam('description');
-            $phototypeId = $this->request->getParam('phototypeId');
-            $phototype = false;
+            $phototypeId = $this->request->getParam('phototype');
+            $phototype = null;
             if ($phototypeId) {
                 $phototype = $phototypeModel->getById($phototypeId);
                 if (!$phototype) {
-                    $this->_redirect($this->view->url(array(), 'manage-result'));
+                    $phototype = null;
                 }
             }
             try {
