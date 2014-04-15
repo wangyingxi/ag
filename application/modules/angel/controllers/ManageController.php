@@ -595,6 +595,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $page = 1;
         }
         $phototypeModel = $this->getModel('phototype');
+        $photoModel = $this->getModel('photo');
         $paginator = $phototypeModel->getAll();
         $paginator->setItemCountPerPage($this->bootstrap_options['default_page_size']);
         $paginator->setCurrentPageNumber($page);
@@ -615,6 +616,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $this->view->paginator = $paginator;
             $this->view->resource = $resource;
             $this->view->title = "图片分类列表";
+            $this->view->photoModel = $photoModel;
         }
     }
 

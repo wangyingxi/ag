@@ -5,6 +5,11 @@
     .itm:hover {
         background:#F0F0F0;
     }
+    label.xs {
+        color:#aaa;
+        font-size:smaller;
+        margin-left:5px;
+    }
 </style>
 <?php
 $model = $this->model;
@@ -20,7 +25,12 @@ $model = $this->model;
                 <p><?php echo $p['name'] ?></p>
                 <div class="btn-group">
                     <a type="button" href="<?php echo $this->url(array(id => $p["id"]), 'manage-phototype-save') ?>" class="btn btn-info btn-sm">编辑</a>
-                    <button type="button" class="btn btn-danger btn-sm remove-phototype">删除</button>
+
+                    <?php if (count($this->photoModel->getPhotoByPhototype($p["id"])) == 0): ?>
+                        <button type="button" class="btn btn-danger btn-sm remove-phototype">删除</button>
+                    <?php else: ?>
+                        <label class="xs">不为空</label>
+                    <?php endif; ?>
                 </div>
                 <input type="hidden" class="tmp" value="<?php echo $p['id'] ?>"/>
             </div>
