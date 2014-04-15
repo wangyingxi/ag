@@ -153,24 +153,32 @@
                     if (!$this.hasClass(cls)) {
                         $this.siblings('li').removeClass(cls);
                         $this.addClass(cls);
+
+                        // request
+                        var pid = $this.attr('phototype-id');
+                        if (pid) {
+                            // request by pid
+                        } else {
+                            // request all
+                            console.log($(this).html());
+                        }
                     }
                 });
                 containerUl.append($li);
             };
 
             var $ul = $("<ul>").addClass("nav nav-tabs");
-            addLi($ul, "全部", null, null, 'active');
-            if (resource) {
-                $.each(resource, function() {
+            addLi($ul, "全部", null, null);
+            $.each(resource, function() {
 
-                    var item = $(this);
-                    var name = item[0].name;
-                    var description = item[0].description;
-                    var phototypeId = item[0].id;
-                    addLi($ul, name, phototypeId, description);
-                    modalMenu.append($ul);
-                });
-            }
+                var item = $(this);
+                var name = item[0].name;
+                var description = item[0].description;
+                var phototypeId = item[0].id;
+                addLi($ul, name, phototypeId, description);
+            });
+            modalMenu.append($ul);
+            $($ul.find('li').get(0)).click();
         },
         renderPhoto: function(resource) {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
