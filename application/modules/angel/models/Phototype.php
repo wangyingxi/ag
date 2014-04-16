@@ -5,7 +5,7 @@ class Angel_Model_Phototype extends Angel_Model_AbstractModel {
     protected $_document_class = '\Documents\Phototype';
 
     public function removePhototype($id) {
-                
+
         $result = false;
         $phototype = $this->getById($id);
         if (!$phototype) {
@@ -32,28 +32,14 @@ class Angel_Model_Phototype extends Angel_Model_AbstractModel {
     }
 
     public function addPhototype($name, $description, $owner) {
-        $result = false;
-        $phototype = new $this->_document_class();
-        $phototype->name = $name;
-        $phototype->description = $description;
-        $phototype->owner = $owner;
-        $this->_dm->persist($phototype);
-        $this->_dm->flush();
-        $result = true;
+        $data = array("name" => $name, "description" => $description, "owner" => $owner);
+        $result = $this->add($data);
         return $result;
     }
 
     public function savePhototype($id, $name, $description) {
-        $phototype = $this->getById($id);
-        if (!$phototype) {
-            throw new Angel_Exception_Phototype(Angel_Exception_Phototype::PHOTOTYPE_NOT_FOUND);
-        }
-        $result = false;
-        $phototype->name = $name;
-        $phototype->description = $description;
-        $this->_dm->persist($phototype);
-        $this->_dm->flush();
-        $result = true;
+        $data = array("name" => $name, "description" => $description);
+        $result = $this->save($id, $data, Angel_Exception_Phototype, Angel_Exception_Phototype::PHOTOTYPE_NOT_FOUND);
         return $result;
     }
 

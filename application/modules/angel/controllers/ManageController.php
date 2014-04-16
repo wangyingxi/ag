@@ -630,8 +630,6 @@ class Angel_ManageController extends Angel_Controller_Action {
             $phototypeModel = $this->getModel('phototype');
             try {
                 $result = $phototypeModel->addPhototype($name, $description, $owner);
-            } catch (Angel_Exception_Phototype $e) {
-                $error = $e->getDetail();
             } catch (Exception $e) {
                 $error = $e->getMessage();
             }

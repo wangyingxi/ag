@@ -35,6 +35,38 @@ abstract class Angel_Model_AbstractModel {
         return $result;
     }
 
+    public function add($data) {
+        $result = false;
+        if ($data) {
+            $object = new $this->_document_class();
+            foreach ($data as $key => $val) {
+                $object->$key = $val;
+            }
+            $this->_dm->persist($object);
+            $this->_dm->flush();
+            $result = true;
+        }
+        return $result;
+    }
+
+    public function save($id, $data, $notFoundException = Exception, $exceptionMessage = "") {
+        $result = false;
+        if ($data) {
+            $target = $this->getById($id);
+            if (!$target) {
+                throw new $notFoundException($exceptionMessage);
+            }
+
+            foreach ($data as $key => $val) {
+                $target->$key = $val;
+            }
+            $this->_dm->persist($target);
+            $this->_dm->flush();
+            $result = true;
+        }
+        return $result;
+    }
+
     public function getByUser($user_id, $return_as_paginator = true, $condition = false) {
         $query = $this->_dm->createQueryBuilder($this->_document_class)
                         ->field('owner.$id')->equals(new MongoId($user_id));

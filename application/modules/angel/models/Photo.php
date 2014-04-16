@@ -27,20 +27,13 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
         }
         return $result;
     }
+
     public function savePhoto($id, $title, $description, $phototype) {
-        $photo = $this->getById($id);
-        if (!$photo) {
-            throw new Angel_Exception_Photo(Angel_Exception_Photo::PHOTO_NOT_FOUND);
-        }
-        $result = false;
-        $photo->title = $title;
-        $photo->description = $description;
-        $photo->phototype = $phototype;
-        $this->_dm->persist($photo);
-        $this->_dm->flush();
-        $result = true;
+        $data = array("title" => $title, "description" => $description, "phototype" => $phototype);
+        $result = $this->save($id, $data, Angel_Exception_Photo, Angel_Exception_Photo::PHOTO_NOT_FOUND);
         return $result;
     }
+
     public function getPhotoByPhototype($phototype_id, $return_as_paginator = true) {
         $query = $this->_dm->createQueryBuilder($this->_document_class)
                 ->field('phototype.$id')->equals(new MongoId($phototype_id))
@@ -66,18 +59,13 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
             $destination = $this->getPhotoPath($filename);
             if (copy($photo, $destination)) {
                 if ($imageService->generateThumbnail($destination, $this->_bootstrap_options['size']['photo'])) {
-                    $newPhoto = new $this->_document_class();
-                    $newPhoto->name = basename($filename, $extension);
-                    $newPhoto->type = $extension;
-                    $newPhoto->title = $title;
-                    $newPhoto->description = $description;
-                    $newPhoto->phototype = $phototype;
-                    $newPhoto->owner = $owner;
-
-                    $this->_dm->persist($newPhoto);
-                    $this->_dm->flush();
-
-                    $result = true;
+                    $data = array("name" => basename($filename, $extension),
+                        "type" => $extension,
+                        "title" => $title,
+                        "description" => $description,
+                        "phototype" => $phototype,
+                        "owner" => $owner);
+                    $result = $this->add($data);
                 }
             }
         }
