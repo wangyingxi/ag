@@ -50,6 +50,15 @@
     .bwp select {
         margin-bottom:5px;
     }
+    .thumbnail {
+        display:inline-block;
+        float:left;
+        margin-right:5px !important;
+        width:auto;
+    }
+    .thumbnail-container label {
+        width:auto;
+    }
 </style>
 <h1 class="page-title"><?php echo $this->title ?></h1>
 <form role="form">
@@ -76,6 +85,10 @@
                                 <option value="<?php echo $val->id ?>"><?php echo $val->name ?></option>
                             <?php endforeach; ?>
                         </select>
+                        <div class="thumbnail-container">
+                            <input type="checkbox" class="thumbnail" id="thumbnail<?php echo $v['v'] ?>" name="thumbnail" checked="checked"/> <label for="thumbnail<?php echo $v['v'] ?>">生成缩略图</label>
+                            <div class="clear"></div>
+                        </div>
                         <button class="copy-btn" type="button">复制到全部</button>
                     </div>
                     <label></label>
@@ -122,7 +135,8 @@
             var title = obj.find('.title').val();
             var description = obj.find('.description').val();
             var phototype = obj.find('.phototype').val();
-            var data = {tmp: tmp, title: title, description: description, phototype: phototype};
+            var thumbnail = obj.find('.thumbnail').prop('checked') ? 1 : 0;
+            var data = {tmp: tmp, title: title, description: description, phototype: phototype, thumbnail: thumbnail};
             $.ajax({
                 url: '<?php echo $this->url(array(), 'manage-photo-create') ?>',
                 dataType: 'json',
@@ -142,7 +156,6 @@
         };
 
         $('#generate').click(function() {
-
             intervalId = setInterval(generate, 500);
             $(this).prop('disabled', true);
         });
@@ -153,9 +166,11 @@
             var title = container.find('.title').val();
             var phototype = container.find('.phototype').val();
             var description = container.find('.description').val();
+            var thumbnail = container.find('.thumbnail').prop('checked');
             $('.title').val(title);
             $('.description').val(description);
             $('.phototype').val(phototype);
+            $('.thumbnail').prop('checked', thumbnail);
         });
     })(jQuery);
 </script>

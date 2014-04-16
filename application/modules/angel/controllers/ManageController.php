@@ -403,6 +403,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $title = $this->getParam('title');
             $description = $this->getParam('description');
             $phototypeId = $this->getParam('phototype');
+            $thumbnail = $this->getParam('thumbnail') == "1" ? true : false;
 
             $phototype = null;
             if ($phototypeId) {
@@ -415,7 +416,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $photoModel = $this->getModel('photo');
             try {
                 $destination = $this->getTmpFile($tmp);
-                $result = $photoModel->addPhoto($destination, $title, $description, $phototype, $owner);
+                $result = $photoModel->addPhoto($destination, $title, $description, $phototype, $thumbnail, $owner);
                 if ($result) {
                     $result = 1;
                 }
@@ -511,6 +512,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                 'name' => $r->name,
                 'id' => $r->id,
                 'type' => $r->type,
+                'thumbnail' => $r->thumbnail,
                 'owner' => $r->owner);
         }
         // JSON FORMAT

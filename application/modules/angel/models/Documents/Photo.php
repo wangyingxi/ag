@@ -10,7 +10,6 @@ class Photo extends AbstractDocument {
     /** @ODM\String */
     protected $name;
 
-
     /** @ODM\String */
     protected $type = '.jpg';
 
@@ -23,6 +22,9 @@ class Photo extends AbstractDocument {
     /** @ODM\ReferenceOne(targetDocument="\Documents\Phototype") */
     protected $phototype;
 
+    /** @ODM\Boolean */
+    protected $thumbnail = true;
+    
     /** @ODM\ReferenceOne(targetDocument="\Documents\User") */
     protected $owner;
 

@@ -47,7 +47,7 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
         return $result;
     }
 
-    public function addPhoto($photo, $title, $description, $phototype, $owner) {
+    public function addPhoto($photo, $title, $description, $phototype, $thumbnail, $owner) {
         $result = false;
         $imageService = $this->_container->get('image');
         if (!$imageService->isAcceptedImage($photo)) {
@@ -58,12 +58,17 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
             $filename = $utilService->generateFilename($extension);
             $destination = $this->getPhotoPath($filename);
             if (copy($photo, $destination)) {
-                if ($imageService->generateThumbnail($destination, $this->_bootstrap_options['size']['photo'])) {
+                $generated = true;
+                if ($thumbnail) {
+                    $generated = $imageService->generateThumbnail($destination, $this->_bootstrap_options['size']['photo']);
+                }
+                if ($generated) {
                     $data = array("name" => basename($filename, $extension),
                         "type" => $extension,
                         "title" => $title,
                         "description" => $description,
                         "phototype" => $phototype,
+                        "thumbnail" => $thumbnail,
                         "owner" => $owner);
                     $result = $this->add($data);
                 }
