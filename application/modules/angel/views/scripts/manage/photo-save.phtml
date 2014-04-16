@@ -6,7 +6,7 @@
         <form role="form" method="post">
             <div class="form-group">
                 <label>图片标题：</label>
-                <input type="text" class="form-control" id="name" name="name" data-toggle="popover" value="<?php echo $this->model->name ?>">
+                <input type="text" class="form-control" id="title" name="title" data-toggle="popover" value="<?php echo $this->model->title ?>">
             </div>
             <div class="form-group">
                 <label>图片描述：</label>
@@ -14,8 +14,8 @@
             </div>
             <div class="form-group">
                 <label>图片分类：</label>
-                <select id="phototype" name="phototype" value="<?php echo $this->model->phototype ?>">
-                    <option selected="selected" value="nothing">未选中</option>
+                <select id="phototype" name="phototype" value="<?php echo $this->model->phototype->id ?>">
+                    <option value="">未选中</option>
                     <?php foreach ($this->phototype as $key => $val): ?>
                         <option value="<?php echo $val->id ?>"><?php echo $val->name ?></option>
                     <?php endforeach; ?>

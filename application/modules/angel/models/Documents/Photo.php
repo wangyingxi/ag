@@ -10,9 +10,13 @@ class Photo extends AbstractDocument {
     /** @ODM\String */
     protected $name;
 
+
     /** @ODM\String */
     protected $type = '.jpg';
 
+    /** @ODM\String */
+    protected $title;
+    
     /** @ODM\String */
     protected $description = 'nothing';
 

@@ -7,7 +7,7 @@
     }
     .wp {
         background:#F0F0F0;
-        height: 220px;
+        height: 350px;
         margin-bottom:30px;
         padding:15px;
     }
@@ -41,6 +41,15 @@
         background:#8c0000;
         opacity:0.5;
     }
+    .bwp * {
+        width:135px;
+    }
+    .bwp input, .bwp select {
+        margin:5px 0 0 0;
+    }
+    .bwp select {
+        margin-bottom:5px;
+    }
 </style>
 <h1 class="page-title"><?php echo $this->title ?></h1>
 <form role="form">
@@ -57,6 +66,17 @@
                     </p>
                     <div class="iwp">
                         <img width="100%" src="/tmp/<?php echo $v['v'] ?>"/>
+                    </div>
+                    <div class="bwp">
+                        <input class="title" type="text" placeholder="请输入图片标题"/>
+                        <input class="description" type="text" placeholder="请输入图片描述"/>
+                        <select class="phototype">
+                            <option value="">未选中</option>
+                            <?php foreach ($this->phototype as $key => $val): ?>
+                                <option value="<?php echo $val->id ?>"><?php echo $val->name ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button class="copy-btn" type="button">复制到全部</button>
                     </div>
                     <label></label>
                 </div>
@@ -99,11 +119,15 @@
             var lb = obj.find('label');
             lb.html('正在处理 ...');
             var tmp = obj.find('.tmp').val();
+            var title = obj.find('.title').val();
+            var description = obj.find('.description').val();
+            var phototype = obj.find('.phototype').val();
+            var data = {tmp: tmp, title: title, description: description, phototype: phototype};
             $.ajax({
                 url: '<?php echo $this->url(array(), 'manage-photo-create') ?>',
                 dataType: 'json',
                 type: 'POST',
-                data: {tmp: tmp},
+                data: data,
                 success: function(response) {
                     if (response === 1) {
                         obj.attr('status', 'sent');
@@ -121,6 +145,17 @@
 
             intervalId = setInterval(generate, 500);
             $(this).prop('disabled', true);
+        });
+
+        $('.copy-btn').click(function() {
+            var $this = $(this);
+            var container = $this.closest('.itm');
+            var title = container.find('.title').val();
+            var phototype = container.find('.phototype').val();
+            var description = container.find('.description').val();
+            $('.title').val(title);
+            $('.description').val(description);
+            $('.phototype').val(phototype);
         });
     })(jQuery);
 </script>

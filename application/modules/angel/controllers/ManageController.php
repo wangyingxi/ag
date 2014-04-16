@@ -394,16 +394,28 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function photoCreateAction() {
+        $phototypeModel = $this->getModel('phototype');
 
         if ($this->request->isPost()) {
             $result = 0;
             // POST METHOD
             $tmp = $this->getParam('tmp');
+            $title = $this->getParam('title');
+            $description = $this->getParam('description');
+            $phototypeId = $this->getParam('phototype');
+
+            $phototype = null;
+            if ($phototypeId) {
+                $phototype = $phototypeModel->getById($phototypeId);
+                if (!$phototype) {
+                    $this->_redirect($this->view->url(array(), 'manage-result') . '?error="notfound"');
+                }
+            }
             $owner = $this->me->getUser();
             $photoModel = $this->getModel('photo');
             try {
                 $destination = $this->getTmpFile($tmp);
-                $result = $photoModel->addPhoto($destination, $owner);
+                $result = $photoModel->addPhoto($destination, $title, $description, $phototype, $owner);
                 if ($result) {
                     $result = 1;
                 }
@@ -416,6 +428,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         } else {
             // GET METHOD
             $fs = $this->getParam('fs');
+
             if ($fs) {
                 $this->view->fileList = array();
                 $f = explode("|", $fs);
@@ -424,6 +437,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                 }
             }
             $this->view->title = "确认保存图片";
+            $this->view->phototype = $phototypeModel->getAll();
         }
     }
 
@@ -521,18 +535,18 @@ class Angel_ManageController extends Angel_Controller_Action {
         if ($this->request->isPost()) {
             $result = 0;
             // POST METHOD
-            $name = $this->request->getParam('name');
+            $title = $this->request->getParam('title');
             $description = $this->request->getParam('description');
             $phototypeId = $this->request->getParam('phototype');
             $phototype = null;
             if ($phototypeId) {
                 $phototype = $phototypeModel->getById($phototypeId);
                 if (!$phototype) {
-                    $phototype = null;
+                    $this->_redirect($this->view->url(array(), 'manage-result') . '?error="notfound"');
                 }
             }
             try {
-                $result = $photoModel->savePhoto($id, $name, $description, $phototype);
+                $result = $photoModel->savePhoto($id, $title, $description, $phototype);
             } catch (Angel_Exception_Photo $e) {
                 $error = $e->getDetail();
             } catch (Exception $e) {
@@ -581,6 +595,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $page = 1;
         }
         $phototypeModel = $this->getModel('phototype');
+        $photoModel = $this->getModel('photo');
         $paginator = $phototypeModel->getAll();
         $paginator->setItemCountPerPage($this->bootstrap_options['default_page_size']);
         $paginator->setCurrentPageNumber($page);
@@ -601,6 +616,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $this->view->paginator = $paginator;
             $this->view->resource = $resource;
             $this->view->title = "图片分类列表";
+            $this->view->photoModel = $photoModel;
         }
     }
 

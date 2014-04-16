@@ -113,6 +113,7 @@
         style: function() {
             // write css
             var style = "<style>";
+            style += ".modal-dialog {width:85%;}";
             style += ".modal-page {margin:15px; text-align:center;}";
             style += ".gallery {display:inline-block; margin:5px; padding:5px;position:relative;}";
             style += ".gallery:hover {background-color:skyblue;cursor:pointer;}";
@@ -130,6 +131,7 @@
             style += ".gallery.choosen {opacity:0.5}";
             style += ".gallery.choosen .label-success {display:block;}";
             style += ".modal-menu .nav {background:#F8F8F8; padding: 10px 20px 0 20px;}";
+            style += ".modal-menu .nav * {font-size:smaller;}";
             style += "</style>";
             return style;
         },
