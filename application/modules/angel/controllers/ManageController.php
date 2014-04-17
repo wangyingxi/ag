@@ -349,8 +349,8 @@ class Angel_ManageController extends Angel_Controller_Action {
         }
     }
 
-    protected function decodePhoto() {
-        $paramPhoto = $this->request->getParam('photo');
+    protected function decodePhoto($paramName = 'photo') {
+        $paramPhoto = $this->request->getParam($paramName);
         if ($paramPhoto) {
             $paramPhoto = json_decode($paramPhoto);
             $photoModel = $this->getModel('photo');
@@ -710,5 +710,62 @@ class Angel_ManageController extends Angel_Controller_Action {
             exit;
         }
     }
+    
+    
+    public function brandListAction() {
+        $page = $this->request->getParam('page');
+        if (!$page) {
+            $page = 1;
+        }
+        $brandModel = $this->getModel('brand');
+        $productModel = $this->getModel('product');
+        $paginator = $brandModel->getAll();
+        $paginator->setItemCountPerPage($this->bootstrap_options['default_page_size']);
+        $paginator->setCurrentPageNumber($page);
+        $resource = array();
+        foreach ($paginator as $r) {
+            $resource[] = array('id' => $r->id,
+                'name' => $r->name,
+                'description' => $r->description,
+                'logo' => $r->logo,
+                'owner' => $r->owner);
+        }
+        // JSON FORMAT
+        if ($this->getParam('format') == 'json') {
+            $this->_helper->json(array('data' => $resource,
+                'code' => 200,
+                'page' => $paginator->getCurrentPageNumber(),
+                'count' => $paginator->count()));
+        } else {
+            $this->view->paginator = $paginator;
+            $this->view->resource = $resource;
+            $this->view->title = "品牌列表";
+            $this->view->productModel = $productModel;
+        }
+    }
 
+    public function brandCreateAction() {
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $name = $this->request->getParam('name');
+            $description = $this->request->getParam('description');
+            $logo = $this->decodePhoto('logo');
+            $owner = $this->me->getUser();
+            $brandModel = $this->getModel('brand');
+            try {
+                $result = $brandModel->addBrand($name, $description, $logo, $owner);
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+            if ($result) {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-brand-list-home'));
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
+            }
+        } else {
+            // GET METHOD
+            $this->view->title = "创建品牌分类";
+        }
+    }
 }
