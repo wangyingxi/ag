@@ -40,7 +40,8 @@
                 separator: ';',
                 multi: true,
                 url: '/manage/photo/list',
-                phototypeUrl: '/manage/phototype/list'
+                phototypeUrl: '/manage/phototype/list',
+                thumbnailOnly: true
             };
 
             // 生成modal框
@@ -209,6 +210,11 @@
                     gallery.append(img);
                     gallery.append($("<span>").addClass('label label-success').html('已选择'));
                     gallery.click(function() {
+                        if(settings.thumbnailOnly && !$(this).attr('thumbnail')) {
+                            alert("抱歉，不能选择该图片（因为没有缩略图）");
+                            return false;
+                        }
+                        
                         if (!gallery.hasClass('choosen')) {
                             if (!settings.multi) {
                                 $(this).closest('.modal-body')
