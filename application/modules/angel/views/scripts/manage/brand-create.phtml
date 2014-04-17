@@ -16,8 +16,6 @@
                 <label>品牌Logo：</label>
                 <div class='panel panel-info'>
                     <div id="gy-logo" class='panel-body gy-logo'>
-                        <div class="gy-logo-selected">
-                        </div>
                     </div>
                 </div>
                 <input type="hidden" name="logo" id="logo"/>
@@ -31,5 +29,14 @@
 <script type="text/javascript">
     (function($) {
         $('.gy-logo').photoSelector({multi: false, thumbnailOnly: false});
+
+        $('#save-btn').click(function() {
+            var save = $('#gy-logo').attr('save');
+            if (!save || save === '{}') {
+                $('#logo').val('');
+            } else {
+                $('#logo').val(save);
+            }
+        });
     })(jQuery);
 </script>

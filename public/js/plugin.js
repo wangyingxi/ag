@@ -85,6 +85,7 @@
             settings.modalId = generateModal($this);
             $.extend(settings, options);
             $this.data('settings', settings);
+            $this.append('<div class="gy-photo-selected"></div>');
 
             // “选择图片”按钮
             var launchBtn = $("<input>")
@@ -210,11 +211,11 @@
                     gallery.append(img);
                     gallery.append($("<span>").addClass('label label-success').html('已选择'));
                     gallery.click(function() {
-                        if(settings.thumbnailOnly && !$(this).attr('thumbnail')) {
+                        if (settings.thumbnailOnly && !$(this).attr('thumbnail')) {
                             alert("抱歉，不能选择该图片（因为没有缩略图）");
                             return false;
                         }
-                        
+
                         if (!gallery.hasClass('choosen')) {
                             if (!settings.multi) {
                                 $(this).closest('.modal-body')
@@ -357,6 +358,9 @@
                     sn.push(name);
                 });
             } else {
+                se = {};
+            }
+            if (!settings.thumbnailOnly) {
                 se = {};
             }
             $.each(arr, function() {

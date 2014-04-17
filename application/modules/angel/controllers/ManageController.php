@@ -710,8 +710,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             exit;
         }
     }
-    
-    
+
     public function brandListAction() {
         $page = $this->request->getParam('page');
         if (!$page) {
@@ -751,6 +750,11 @@ class Angel_ManageController extends Angel_Controller_Action {
             $name = $this->request->getParam('name');
             $description = $this->request->getParam('description');
             $logo = $this->decodePhoto('logo');
+            if (is_array($logo) && count($logo) > 0) {
+                $logo = $logo[0];
+            } else {
+                $logo = null;
+            }
             $owner = $this->me->getUser();
             $brandModel = $this->getModel('brand');
             try {
@@ -768,4 +772,19 @@ class Angel_ManageController extends Angel_Controller_Action {
             $this->view->title = "创建品牌分类";
         }
     }
+
+    public function brandRemoveAction() {
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $id = $this->getParam('id');
+            if ($id) {
+                $brandModel = $this->getModel('brand');
+                $result = $brandModel->removeBrand($id);
+            }
+            echo $result;
+            exit;
+        }
+    }
+
 }
