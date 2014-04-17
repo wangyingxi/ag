@@ -132,6 +132,7 @@
             style += ".gallery.choosen .label-success {display:block;}";
             style += ".modal-menu .nav {background:#F8F8F8; padding: 10px 20px 0 20px;}";
             style += ".modal-menu .nav * {font-size:smaller;}";
+            style += ".gallery .label-warning {font-size:smaller; position:absolute; right:0; top:0}";
             style += "</style>";
             return style;
         },
@@ -191,13 +192,20 @@
                     var item = $(this);
                     var name = item[0].name;
                     var type = item[0].type;
+                    var thumbnail = item[0].thumbnail;
                     var img = $('<img>')
-                            .addClass('gallery-img')
-                            .attr('src', item[0].path.small);
+                            .addClass('gallery-img');
                     var gallery = $('<div>')
                             .addClass('gallery')
                             .attr('name', name)
                             .attr('type', type);
+                    if (!thumbnail) {
+                        img.attr('src', item[0].path.orig);
+                        gallery.append("<label class='label label-warning'>无缩略</label>");
+                    } else {
+                        img.attr('src', item[0].path.main);
+                        gallery.attr('thumbnail', true);
+                    }
                     gallery.append(img);
                     gallery.append($("<span>").addClass('label label-success').html('已选择'));
                     gallery.click(function() {
