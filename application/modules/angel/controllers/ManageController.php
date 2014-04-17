@@ -148,9 +148,15 @@ class Angel_ManageController extends Angel_Controller_Action {
         $paginator->setCurrentPageNumber($page);
         $resource = array();
         foreach ($paginator as $r) {
-            $path = 'default path';
+            $path = $this->bootstrap_options['image_broken_ico']['middle'];
             if (count($r->photo)) {
-                $path = $this->view->photoImage($r->photo[0]->name . $r->photo[0]->type, 'main');
+                try {
+                    if ($r->photo[0]->name) {
+                        $path = $this->view->photoImage($r->photo[0]->name . $r->photo[0]->type, 'main');
+                    }
+                } catch (Doctrine\ODM\MongoDB\DocumentNotFoundException $e) {
+                    // 图片被删除的情况
+                }
             }
 
             $resource[] = array('title' => $r->title,
@@ -311,7 +317,12 @@ class Angel_ManageController extends Angel_Controller_Action {
                 if ($photo) {
                     $saveObj = array();
                     foreach ($photo as $p) {
-                        $name = $p->name;
+                        try {
+                            $name = $p->name;
+                        } catch (Doctrine\ODM\MongoDB\DocumentNotFoundException $e) {
+                            $this->view->imageBroken = true;
+                            continue;
+                        }
                         $saveObj[$name] = $this->view->photoImage($p->name . $p->type, 'small');
                     }
                     if (!count($saveObj))
