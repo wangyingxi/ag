@@ -91,7 +91,7 @@
                         </div>
                         <button class="copy-btn" type="button">复制到全部</button>
                     </div>
-                    <label></label>
+                    <label class="resultlb"></label>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -129,7 +129,7 @@
 
         var generateItem = function(obj) {
             obj.attr('status', 'sending');
-            var lb = obj.find('label');
+            var lb = obj.find('.resultlb');
             lb.html('正在处理 ...');
             var tmp = obj.find('.tmp').val();
             var title = obj.find('.title').val();
