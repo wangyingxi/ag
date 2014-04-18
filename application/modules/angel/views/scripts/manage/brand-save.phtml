@@ -12,7 +12,17 @@
                 <label>品牌描述：</label>
                 <input type="text" class="form-control" id="description" name="description" data-toggle="popover" value="<?php echo $this->model->description ?>">
             </div>
-
+            <div class="form-group">
+                <label>品牌Logo：</label>
+                <?php if ($this->imageBroken): ?>
+                    <label class="label label-danger">LOGO图片已被删除，无法显示，请重新设置</label>
+                <?php endif; ?>
+                <div class='panel panel-info'>
+                    <div id="gy-logo" class='panel-body gy-logo'>
+                    </div>
+                </div>
+                <input type="hidden" name="logo" id="logo"/>
+            </div>
             <button type="submit" id="save-btn" class="btn btn-default">确认提交</button>
 
         </form>
@@ -20,6 +30,15 @@
 </div>
 <script type="text/javascript">
     (function($) {
-
+        $('.gy-logo').photoSelector({multi: false, thumbnailOnly: false}, <?php echo json_encode($this->logo) ?>);
+        
+        $('#save-btn').click(function() {
+            var save = $('#gy-logo').attr('save');
+            if (!save || save === '{}') {
+                $('#logo').val('');
+            } else {
+                $('#logo').val(save);
+            }
+        });
     })(jQuery);
 </script>

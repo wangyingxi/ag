@@ -324,6 +324,9 @@ class Angel_ManageController extends Angel_Controller_Action {
                             continue;
                         }
                         $saveObj[$name] = $this->view->photoImage($p->name . $p->type, 'small');
+                        if (!$p->thumbnail) {
+                            $saveObj[$name] = $this->view->photoImage($p->name . $p->type);
+                        }
                     }
                     if (!count($saveObj))
                         $saveObj = false;
@@ -784,6 +787,69 @@ class Angel_ManageController extends Angel_Controller_Action {
             }
             echo $result;
             exit;
+        }
+    }
+
+    public function brandSaveAction() {
+        $notFoundMsg = '未找到目标品牌';
+
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $id = $this->request->getParam('id');
+            $name = $this->request->getParam('name');
+            $description = $this->request->getParam('description');
+            $logo = $this->decodePhoto('logo');
+            if (is_array($logo) && count($logo) > 0) {
+                $logo = $logo[0];
+            } else {
+                $logo = null;
+            }
+            $brandModel = $this->getModel('brand');
+            try {
+                $result = $brandModel->saveBrand($id, $name, $description, $logo);
+            } catch (Angel_Exception_Brand $e) {
+                $error = $e->getDetail();
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+            if ($result) {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-brand-list-home'));
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
+            }
+        } else {
+            // GET METHOD
+            $this->view->title = "编辑品牌";
+
+            $id = $this->request->getParam("id");
+            if ($id) {
+                $brandModel = $this->getModel('brand');
+                $target = $brandModel->getById($id);
+                if (!$target) {
+                    $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
+                }
+                $this->view->model = $target;
+
+                $logo = $target->logo;
+                $saveObj = array();
+                if ($logo) {
+                    try {
+                        $name = $logo->name;
+                        $saveObj[$name] = $this->view->photoImage($logo->name . $logo->type, 'small');
+                        if (!$logo->thumbnail) {
+                            $saveObj[$name] = $this->view->photoImage($logo->name . $logo->type);
+                        }
+                        if (!count($saveObj))
+                            $saveObj = false;
+                    } catch (Doctrine\ODM\MongoDB\DocumentNotFoundException $e) {
+                        $this->view->imageBroken = true;
+                    }
+                }
+                $this->view->logo = $saveObj;
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
+            }
         }
     }
 
