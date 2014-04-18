@@ -50,9 +50,7 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
         $product->selling_price = $selling_price;
         $product->scale = $scale;
         $product->owner = $owner;
-        if ($brand) {
-            $product->brand = $brand;
-        }
+        $product->brand = $brand;
         try {
             $this->_dm->persist($product);
             $this->_dm->flush();
@@ -65,7 +63,7 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
 
         return $result;
     }
-    
+
     public function getProductByBrand($brand_id, $return_as_paginator = true) {
         $query = $this->_dm->createQueryBuilder($this->_document_class)
                 ->field('brand.$id')->equals(new MongoId($brand_id))
@@ -127,9 +125,7 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
         $product->selling_price = $selling_price;
         $product->scale = $scale;
         $product->owner = $owner;
-        if ($brand) {
-            $product->brand = $brand;
-        }
+        $product->brand = $brand;
         try {
             $this->_dm->persist($product);
             $this->_dm->flush();

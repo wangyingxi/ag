@@ -235,6 +235,12 @@
             </div>
             <div class="form-group">
                 <label>商品品牌：</label>
+                <select id="brand" name="brand" value="">
+                    <option value="">无品牌</option>
+                    <?php foreach ($this->brand as $b): ?>
+                        <option value="<?php echo $b->id ?>"><?php echo $b->name ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="form-group">
                 <label>商品分类：</label>
