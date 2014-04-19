@@ -31,3 +31,6 @@ form[role='form'] {
     padding:20px 0;
     text-align:right;
 }
+#save-btn {
+    margin-top:20px;
+}

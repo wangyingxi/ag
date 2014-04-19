@@ -67,6 +67,22 @@ abstract class Angel_Model_AbstractModel {
         return $result;
     }
 
+    public function remove($id) {
+        $result = false;
+        try {
+            // remove document
+            $result = $this->_dm->createQueryBuilder($this->_document_class)
+                    ->remove()
+                    ->field('id')
+                    ->equals($id)
+                    ->getQuery()
+                    ->execute();
+        } catch (Exception $e) {
+            $result = false;
+        }
+        return $result;
+    }
+    
     public function getByUser($user_id, $return_as_paginator = true, $condition = false) {
         $query = $this->_dm->createQueryBuilder($this->_document_class)
                         ->field('owner.$id')->equals(new MongoId($user_id));

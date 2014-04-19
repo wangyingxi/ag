@@ -91,12 +91,18 @@ function productSaveBtn(separator) {
     });
 }
 
-function removeObject($this, url) {
+function removeObject($this, url, containerSelector, valSelector) {
     if (!confirm('确认删除该对象？')) {
         return;
     }
-    var container = $this.closest('.itm');
-    var id = container.find('.tmp').val();
+    if(!containerSelector) {
+        containerSelector = '.itm';
+    }
+    if(!valSelector) {
+        valSelector = '.tmp';
+    }
+    var container = $this.closest(containerSelector);
+    var id = container.find(valSelector).val();
     var data = {id: id};
     $.ajax({
         url: url,

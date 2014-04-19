@@ -22,7 +22,15 @@
             <p><a class="btn btn-default" href="#" role="button">添加分类 »</a></p>
         </div>
     </div>
-    <div class="clearfix"></div>
+</div>
+<div class="row">    
+    <div class="col-md-4">
+        <div class="intlbd">
+            <h2>分类管理</h2>
+            <p class="marginbottom10px"><a class="btn btn-default" href="<?php echo $this->url(array(), 'manage-category-list-home') ?>" role="button">查看所有分类 »</a></p>
+            <p><a class="btn btn-default" href="<?php echo $this->url(array(), 'manage-category-create') ?>" role="button">添加分类 »</a></p>
+        </div>
+    </div>
     
     <div class="col-md-4">
         <div class="intlbd">
@@ -32,7 +40,11 @@
         </div>
     </div>
 </div>
-
+<style>
+    .row {
+        margin-bottom:30px;
+    }
+</style>
 <script type="text/javascript">
     (function($) {
 

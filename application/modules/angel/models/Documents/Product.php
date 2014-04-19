@@ -49,6 +49,9 @@ class Product extends AbstractDocument {
     /** @ODM\ReferenceOne(targetDocument="\Documents\Brand") */
     protected $brand;
     
+    /** @ODM\ReferenceOne(targetDocument="\Documents\Category") */
+    protected $category;
+    
     /** @ODM\Int */
     protected $view = 0;
 

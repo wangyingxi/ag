@@ -77,6 +77,19 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
         return $result;
     }
 
+    public function getProductByCategory($category_id, $return_as_paginator = true) {
+        $query = $this->_dm->createQueryBuilder($this->_document_class)
+                ->field('category.$id')->equals(new MongoId($category_id))
+                ->sort('created_at', -1);
+        $result = null;
+        if ($return_as_paginator) {
+            $result = $this->paginator($query);
+        } else {
+            $result = $query->getQuery()->execute();
+        }
+        return $result;
+    }
+
     /**
      * 编辑商品
      * @param string $id

@@ -1,0 +1,51 @@
+<style>
+</style>
+<h1 class="page-title"><?php echo $this->title ?></h1>
+<div class="row">
+    <div class="col-md-8">
+        <form role="form" method="post">
+            <div class="form-group">
+                <label>分类名称：</label>
+                <input type="text" class="form-control" id="name" name="name" data-toggle="popover" value="<?php echo $this->model->name ?>">
+            </div>
+            <div class="form-group">
+                <label>分类描述：</label>
+                <input type="text" class="form-control" id="description" name="description" data-toggle="popover" value="<?php echo $this->model->description ?>">
+            </div>
+            <div class="form-group">
+                <label>父类：</label>
+                <select id="parent" name="parent" value="<?php echo $this->model->parent->id ?>">
+                    <option value="">根类</option>
+                    <?php foreach ($this->categories as $category): ?>
+                        <?php
+                        if ($category->level > 0 || $category->id == $this->model->id) {
+                            continue;
+                        }
+                        ?>
+                        <option value="<?php echo $category->id ?>">
+                            <?php
+                            $prefix = "--";
+                            if ($category->level) {
+                                for ($i = 0; $i < $category->level; $i++) {
+                                    $prefix = $prefix . " -- ";
+                                }
+                            }
+                            echo $prefix;
+                            ?>
+                            <?php echo $category->name ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <button type="submit" id="save-btn" class="btn btn-default">确认提交</button>
+
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    (function($) {
+        $('#parent').setSelectValue();
+        $('#save-btn').click(function() {
+        });
+    })(jQuery);
+</script>

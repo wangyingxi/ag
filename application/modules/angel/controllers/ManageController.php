@@ -803,7 +803,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $id = $this->getParam('id');
             if ($id) {
                 $brandModel = $this->getModel('brand');
-                $result = $brandModel->removeBrand($id);
+                $result = $brandModel->remove($id);
             }
             echo $result;
             exit;
@@ -867,6 +867,111 @@ class Angel_ManageController extends Angel_Controller_Action {
                     }
                 }
                 $this->view->logo = $saveObj;
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
+            }
+        }
+    }
+
+    public function categoryCreateAction() {
+
+        $categoryModel = $this->getModel('category');
+
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $name = $this->request->getParam('name');
+            $description = $this->request->getParam('description');
+            $parentId = $this->request->getParam('parent');
+            try {
+                $result = $categoryModel->addCategory($name, $description, $parentId, $level);
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+            if ($result) {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-category-list-home'));
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
+            }
+        } else {
+            // GET METHOD
+            $this->view->title = "创建分类";
+            $this->view->categories = $categoryModel->getAll();
+        }
+    }
+
+    public function categoryListAction() {
+        $categoryModel = $this->getModel('category');
+        $productModel = $this->getModel('product');
+        $root = $categoryModel->getRoot();
+        $this->view->title = "分类列表";
+        $this->view->categoryModel = $categoryModel;
+        $this->view->productModel = $productModel;
+        if (count($root)) {
+            $resource = array();
+            foreach ($root as $r) {
+                $resource[] = array('root' => $r, 'children' => $categoryModel->getByParent($r->id));
+            }
+            // JSON FORMAT
+            if ($this->getParam('format') == 'json') {
+                $this->_helper->json(array('data' => $resource,
+                    'code' => 200));
+            } else {
+                $this->view->resource = $resource;
+            }
+        }
+    }
+
+    public function categoryRemoveAction() {
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $id = $this->getParam('id');
+            if ($id) {
+                $categoryModel = $this->getModel('category');
+                $result = $categoryModel->remove($id);
+            }
+            echo $result;
+            exit;
+        }
+    }
+
+    public function categorySaveAction() {
+        $notFoundMsg = '未找到目标分类';
+        $categoryModel = $this->getModel('category');
+
+        if ($this->request->isPost()) {
+            $result = 0;
+            // POST METHOD
+            $id = $this->request->getParam('id');
+            $name = $this->request->getParam('name');
+            $description = $this->request->getParam('description');
+            $parentId = $this->request->getParam('parent');
+            try {
+                $result = $categoryModel->saveCategory($id, $name, $description, $parentId);
+            } catch (Angel_Exception_Category $e) {
+                $error = $e->getDetail();
+            } catch (Exception $e) {
+                $error = $e->getMessage();
+            }
+            if ($result) {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?redirectUrl=' . $this->view->url(array(), 'manage-category-list-home'));
+            } else {
+                $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $error);
+            }
+        } else {
+            // GET METHOD
+            $this->view->title = "编辑分类";
+            $this->view->categories = $categoryModel->getAll();
+
+            $id = $this->request->getParam("id");
+            if ($id) {
+                $categoryModel = $this->getModel('category');
+                $target = $categoryModel->getById($id);
+                if (!$target) {
+                    $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
+                }
+                $this->view->model = $target;
             } else {
                 $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
             }
