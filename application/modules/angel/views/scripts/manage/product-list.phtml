@@ -49,6 +49,9 @@
 $model = $this->model;
 ?>
 <h1 class="page-title"><?php echo $this->title ?></h1>
+<div class="btb">
+    <a id="clear-cache" class="btn btn-success" href="<?php echo $this->url(array(), 'manage-product-create') ?>">新建商品</a>
+</div>
 <div class="row">
     <?php foreach ($this->resource as $p): ?>
         <div class="col-md-3 itm">

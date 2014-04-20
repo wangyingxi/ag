@@ -182,6 +182,7 @@ class Angel_ManageController extends Angel_Controller_Action {
 
     public function productCreateAction() {
         $brandModel = $this->getModel('brand');
+        $categoryModel = $this->getModel('category');
         if ($this->request->isPost()) {
             // POST METHOD
             $title = $this->request->getParam('title');
@@ -193,9 +194,10 @@ class Angel_ManageController extends Angel_Controller_Action {
             $photo = $this->decodePhoto();
             $location = $this->getLocation();
             $base_price = floatval($this->request->getParam('base_price'));
-            $brandId = $this->request->getParam('brand');
             $selling_price = $this->getSellingPrice();
             $scale = $this->getScale();
+            $brandId = $this->request->getParam('brand');
+            $categoryId = $this->request->getParam('category');
 
             $result = false;
             $error = "";
@@ -214,10 +216,17 @@ class Angel_ManageController extends Angel_Controller_Action {
                     if ($brandId) {
                         $brand = $brandModel->getById($brandId);
                         if (!$brand) {
-                            $this->_redirect($this->view->url(array(), 'manage-result') . '?error="notfound"');
+                            $this->_redirect($this->view->url(array(), 'manage-result') . '?error="notfound brand"');
                         }
                     }
-                    $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand);
+                    $category = null;
+                    if ($categoryId) {
+                        $category = $categoryModel->getById($categoryId);
+                        if (!$category) {
+                            $this->_redirect($this->view->url(array(), 'manage-result') . '?error="notfound category"');
+                        }
+                    }
+                    $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand, $category);
                 }
             } catch (Angel_Exception_Product $e) {
                 $error = $e->getDetail();
@@ -236,6 +245,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $this->view->separator = $this->SEPARATOR;
             $this->view->location = $this->bootstrap_options['stock_location'];
             $this->view->brand = $brandModel->getAll();
+            $this->view->category = $categoryModel->getAll();
         }
     }
 
@@ -243,6 +253,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         $id = $this->request->getParam('id');
         $copy = $this->request->getParam('copy');
         $brandModel = $this->getModel('brand');
+        $categoryModel = $this->getModel('category');
 
         if ($this->request->isPost()) {
             // POST METHOD
@@ -258,6 +269,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $selling_price = $this->getSellingPrice();
             $scale = $this->getScale();
             $brandId = $this->request->getParam('brand');
+            $categoryId = $this->request->getParam('category');
 
             $result = false;
             $error = "";
@@ -273,6 +285,13 @@ class Angel_ManageController extends Angel_Controller_Action {
                         $this->_redirect($this->view->url(array(), 'manage-result') . '?error="notfound"');
                     }
                 }
+                $category = null;
+                if ($categoryId) {
+                    $category = $categoryModel->getById($categoryId);
+                    if (!$category) {
+                        $this->_redirect($this->view->url(array(), 'manage-result') . '?error="notfound"');
+                    }
+                }
                 if ($copy) {
                     // COPY NEW
                     // Checking Sku Available
@@ -283,7 +302,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                     if ($isSkuExist) {
                         $error = "该SKU已经存在，不能重复使用";
                     } else {
-                        $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand);
+                        $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand, $category);
                     }
                 } else {
                     // EDIT
@@ -296,7 +315,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                     if ($isSkuExist) {
                         $error = "该SKU已经存在，不能重复使用";
                     } else {
-                        $result = $productModel->saveProduct($id, $title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand);
+                        $result = $productModel->saveProduct($id, $title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand, $category);
                     }
                 }
             } catch (Angel_Exception_Product $e) {
@@ -326,6 +345,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                     $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
                 }
                 $this->view->brand = $brandModel->getAll();
+                $this->view->category = $categoryModel->getAll();
                 if ($copy) {
                     // 复制一个商品
                     $this->view->title = "复制并创建商品";

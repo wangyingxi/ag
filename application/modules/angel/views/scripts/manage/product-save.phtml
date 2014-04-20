@@ -255,7 +255,24 @@ $model = $this->model;
                 </select>
             </div>
             <div class="form-group">
-                <label>商品分类：</label>
+                <label>商品分类：</label>                
+                <select id="category" name="category" value="<?php echo $this->model->category->id ?>">
+                    <option value="">无分类</option>
+                    <?php foreach ($this->category as $c): ?>
+                        <option value="<?php echo $c->id ?>">
+                            <?php
+                            $prefix = "--";
+                            if ($c->level) {
+                                for ($i = 0; $i < $c->level; $i++) {
+                                    $prefix = $prefix . " -- ";
+                                }
+                            }
+                            echo $prefix;
+                            ?>
+                            <?php echo $c->name ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <button type="submit" id="save-btn" class="btn btn-default">确认提交</button>
@@ -276,5 +293,6 @@ $model = $this->model;
         $('.gy-photo').photoSelector(false, <?php echo json_encode($this->photo) ?>);
         $('#status').setSelectValue();
         $('#brand').setSelectValue();
+        $('#category').setSelectValue();
     })(jQuery);
 </script>

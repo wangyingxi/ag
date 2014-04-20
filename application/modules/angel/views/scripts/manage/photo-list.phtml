@@ -53,7 +53,8 @@ $model = $this->model;
 ?>
 <h1 class="page-title"><?php echo $this->title ?></h1>
 <div class="btb">
-    <input type="button" id="clear-cache" class="btn btn-success" value="清除缓存图片" />
+    <input type="button" id="clear-cache" class="btn btn-default" value="清除缓存图片" /> 
+    <a type="button" href="<?php echo $this->url(array(), 'manage-photo-upload') ?>" id="clear-cache" class="btn btn-success">上传图片</a>
 </div>
 <div class="row">
     <?php foreach ($this->resource as $p): ?>
