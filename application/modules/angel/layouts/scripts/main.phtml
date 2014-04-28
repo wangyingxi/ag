@@ -1,120 +1,97 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>天使圈(中国)</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <head>
+        <title>VERYCART | WHERE TO BUY AMAZING</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("reset.css"); ?>" />
-<link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("text.css"); ?>" />
-<link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("960_24_col.css"); ?>" />
-<link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("global.css"); ?>" />
-<link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("sub.css"); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("reset.css"); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("text.css"); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("960gs.css"); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("global.css"); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("global.mall.css"); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("sub.css"); ?>" />
+        <link rel="icon" href="/favicon.ico" mce_href="/favicon.ico" type="image/x-icon" />
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="<?php echo $this->jsPath('plugin.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->jsPath('global.js'); ?>"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-            init();
-    });
-</script>
-</head>
+        <script type="text/javascript" src="<?php echo $this->jsPath('jquery-1.11.0.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->jsPath('global.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo $this->jsPath('plugin.js'); ?>"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
 
-<body class="relative">
-    <div class="top">
-        <div class="container_24">
-            <div class="grid_4 relative logowrapper">
-                <a href="<?php echo $this->url(array(), 'company-list')?>" class="logo">欢迎来到 Angelhere</a>
-            </div>
-            <div class="grid_20">
-                <ul class="nav">
-                    <li>
-                        <a href="#" class="searchbt"><span></span>搜索</a>
-                    </li>
-                    <li>
-                        <a href="#">创业项目</a>
-                    </li>
-                    <li>
-                        <a href="#">金牌投资人</a>
-                    </li>
-                    <li>
-                        <a href="#">服务介绍</a>
-                    </li>
-                    <li>
-                        <a href="#">关于我们</a>
-                    </li>
-                </ul>
-                
-                <?php
-                    if(isset($this->me)){
-                        ?>
-                <div class="userboard">
-                    你好，
-                    <a href="<?php echo $this->url(array(), 'profile')?>"><?php echo($this->me->getUser()->username); ?></a> - 
-                    <a href="<?php echo $this->url(array(), 'logout') ?>">安全退出</a>
+            });
+        </script>
+    </head>
+
+    <body>
+        <!-- Top Start -->
+        <div class="wp top clearfix">
+            <div class="container_24">
+                <div class="grid_6">
+                    <a href="#" class="logo l-ft"><img src="/img/logo.png" alt="welcome to sitename"/></a>
                 </div>
-                <?php
-                        
-                    } else {
-                        ?>
-                <a href="<?php echo $this->url(array(), 'register')?>" class="register">注册</a>
-                <span class="orsplit">or</span>
-                <a href="<?php echo $this->url(array(), 'login')?>" class="login">登录</a>
-                
-                <?php    
-                    }
-                ?>
-                
-                <a href="#" class="contactus">联系我们</a>
+                <div class="grid_10">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search keywords or model #" />
+                    </div>
+                </div>
+                <div class="grid_8">
+                    <div class="info-bar">
+                        <div class="l-ft">
+                            <a href="#">Login</a>
+                        </div>
+                        <span class="vsplr l-ft"></span>
+                        <div class="cart-bar l-ft">
+                            Cart
+                            <a href="#"> 0 </a>
+                        </div>
+                        <span class="vsplr l-ft"></span>
+                        <div class="currency-bar l-ft">
+                            <a href="#"> $ usd </a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="grid_24 hot-tags">
+                    <a href="#"> Just Shopping </a>
+                    <span class="vsplr"></span>
+                    <a href="#"> All Categories </a>
+                    <span class="vsplr"></span>
+                    <a href="#"> New Arrivals </a>
+                    <span class="vsplr"></span>
+                    <a href="#" class="red"> Apple Accessory </a>
+                    <span class="vsplr"></span>
+                    <a href="#"> Samsung Accessory </a>
+                    <span class="vsplr"></span>
+                    <a href="#"> Kids Gift </a>
+
+                    <div class="addthis-block">
+                        <!-- AddThis Button BEGIN -->
+                        <div class="addthis_toolbox addthis_default_style ">
+                            <a class="addthis_button_preferred_1"></a>
+                            <a class="addthis_button_preferred_2"></a>
+                            <a class="addthis_button_preferred_3"></a>
+                            <a class="addthis_button_preferred_4"></a>
+                            <a class="addthis_button_compact"></a>
+                            <a class="addthis_counter addthis_bubble_style"></a>
+                        </div>
+                        <script type="text/javascript">
+                            var addthis_config = {
+                                "data_track_addressbar": true
+                            };
+                        </script>
+                        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f4a185e7d9e1842"></script>
+                        <!-- AddThis Button END -->
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <?php echo $this->layout()->content; ?>
-
-    <div class="bottom fullwrapper">
-        <div class="container_24 ">
-            <div class="grid_12 left">
-                <div class="relative">
-                    <a href="#" class="logo"></a>
-                    <span class="x01">已为创业团队募集资金总额</span>
-                </div>
-                <div class="x02">
-                    <ul class="counter">
-                        <li>￥</li>
-                        <li>1</li>
-                        <li>,</li>
-                        <li>2</li>
-                        <li>2</li>
-                        <li>2</li>
-                        <li>,</li>
-                        <li>0</li>
-                        <li>0</li>
-                        <li>0</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="grid_12 right">
-                <ul>
-                    <li class="title">关于我们</li>
-                    <li><a href="#">联系我们</a></li>
-                    <li><a href="#">加入我们</a></li>
-                    <li></li>
-                </ul>
-                <ul>
-                    <li class="title">合作伙伴</li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-                <ul>
-                    <li class="title">地区 / Location</li>
-                    <li><a href="#">中国</a></li>
-                    <li><a href="#">U.S.A</a></li>
-                    <li></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</body>
+        <!-- Top End -->
+        <!-- Content Start -->
+        <?php echo $this->layout()->content; ?>
+        <!-- Content End -->
+        
+        
+        
+    </body>
 </html>
