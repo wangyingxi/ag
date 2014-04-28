@@ -1,0 +1,119 @@
+<style>
+
+</style>
+<?php
+$model = $this->model;
+?>
+
+<div class="content">
+    <div class="container_24">
+
+        <div id="product-pg" class="grid_14">
+            <button class="lt-arr-btn"></button>
+            <button class="rt-arr-btn"></button>
+            <a href="#" id="big-photo-link" class="clearfix"><img class="big-photo" src="/img/big-image-1.jpg"/></a>
+
+            <div class="clear"></div>
+
+        </div>
+
+        <div class="grid_10">
+            <div class="lpad-30">
+                <ul id="breadcrumb" class="clearfix">
+                    <li>
+                        <a href="#">HOME</a>
+                    </li>
+                    <li>
+                        <i class="ico"></i>
+                        <a href="#">HEADPHONE &amp; HEADSET</a>
+                    </li>
+                </ul>
+
+                <h1 id="product-title"><?php echo $model->title ?></h1>
+                <h2 id="product-brand" class="clearfix"><span>by</span><a href="#" class="bold">Quirk</a><img src="/img/rockpapa.png" id="product-brand-logo"/></h2>
+                <div id="product-purc" class="clearfix">
+                    <div class="price-area">
+                        <span class="symbol">$</span>
+                        <span class="price-int">39</span>
+                        <span class="price-dec">.95</span>
+                        <span class="price-currency">usd</span>
+                    </div>
+                </div>
+                <div id="product-buy" class="clearfix">
+                    <div id="set-qty">
+                        <button id="sub-btn"></button>
+                        <input type="text" id="qty" maxlength="2" value="1"/>
+                        <button id="add-btn"></button>
+                    </div>
+
+                    <button id="add-to-cart">
+                        <i class="ico"></i>Add To Cart
+                    </button>
+                </div>
+
+                <div class="clearfix" id="free-shipping-badge">
+                    <div class="ico"></div>
+                    <div class="s1">
+                        <div>
+                            <strong> 3-Days </strong>
+                        </div>
+                        <div>
+                            Free Shipping
+                        </div>
+                    </div>
+                    <div class="s2">
+                        <div>
+                            <strong> 30-Days </strong>
+                        </div>
+                        <div>
+                            Free Return
+                        </div>
+                    </div>
+                </div>
+
+                <div id="product-sg">
+                    <img class="s-img selected" src="/img/big-image-1.jpg"/>
+                    <img class="s-img" src="http://dnok91peocsw3.cloudfront.net/product/426197-70x70-1372097827-s1.png"/>
+                    <img class="s-img" src="http://dnok91peocsw3.cloudfront.net/product/426197-70x70-1372097842-s2.png"/>
+                    <img class="s-img" src="http://dnok91peocsw3.cloudfront.net/product/426197-70x70-1372097851-s3.png"/>
+                    <img class="s-img" src="http://dnok91peocsw3.cloudfront.net/product/388157-610x610-1367933346-primary.png"/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="height:1000px;">
+
+</div>
+<script type="text/javascript">
+    (function($) {
+        $('.big-photo').xCenter();
+        var qty = $('#qty');
+        qty.integerInput();
+        var minus = $('#sub-btn');
+        minus.bind('click', function() {
+            var val = parseInt(qty.val());
+            if (typeof val === 'number' && !isNaN(val)) {
+                val = val - 1;
+                if (val == 0) {
+                    val = 1;
+                }
+                qty.val(val);
+            } else {
+                qty.val(1);
+            }
+        });
+        var plus = $('#add-btn');
+        plus.bind('click', function() {
+            var val = parseInt(qty.val());
+            if (typeof val === 'number' && !isNaN(val)) {
+                val = val + 1;
+                qty.val(val);
+            } else {
+                qty.val(1);
+            }
+        });
+    })(jQuery);
+</script>
