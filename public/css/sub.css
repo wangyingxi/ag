@@ -1,0 +1,223 @@
+.m-show {
+	background: url(../img/plan_7_54_c89a30a5d2bec639489c454ec1f03a75_gb.jpg) center center no-repeat;
+	height: 45px;
+}
+#product-pg {
+	overflow: hidden;
+	position: relative;
+}
+#big-photo-link {
+	cursor: url("../img/zoom-icon.png"), default;
+	display: block;
+	height: 470px;
+	width: 100%;
+}
+.big-photo {
+	top:0;
+	width: 470px;
+}
+#breadcrumb {
+	border-bottom: 1px solid rgba(0,0,0,0.08);
+	display: block;
+	margin: 0;
+	padding: 0 0 20px 0;
+}
+#breadcrumb li {
+	display: block;
+	float: left;
+	margin-right: 20px;
+	padding: 0;
+}
+#breadcrumb li * {
+	float: left;
+	font-size: 12px;
+}
+#breadcrumb li .ico {
+	background-position: -40px -5px;
+	display: inline-block;
+	height: 16px;
+	margin: 0 10px 0 0;
+	padding: 0;
+	width: 16px;
+}
+
+#product-title {
+	font-size: 20px;
+	margin: 15px 0 12px 0;
+}
+#product-brand {
+	color: #aaa;
+	font-size: 15px;
+	font-weight: normal;
+	margin: 0 0 15px 0;
+}
+#product-brand * {
+	display: block;
+	float: left;
+	margin-right: 8px;
+}
+#product-brand-logo {
+
+}
+#product-sg {
+}
+#product-sg .s-img {
+	border: 4px solid transparent;
+	cursor: pointer;
+	display:inline-block;
+	float:left;
+	height: 62px;
+	opacity:0.5;
+	width: 62px;
+}
+#product-sg .s-img.selected {
+	border-color: #ffde26 !important;
+	opacity:1 !important;
+}
+#product-sg .s-img:hover {
+	opacity:0.8;
+}
+#product-purc {
+	border-bottom: 1px solid rgba(0,0,0,0.08);
+	font-size: 18px;
+	padding-bottom: 15px;
+}
+#product-purc * {
+	color: #ef3546;
+	float: left;
+	margin-right: 4px;
+}
+#product-purc .symbol {
+
+}
+#product-purc .price-int {
+	font-size: 40px;
+	height: 40px;
+	line-height: 40px;
+}
+#product-purc .price-dec {
+
+}
+#product-purc .currency {
+
+}
+#product-buy {
+	padding: 20px 0;
+}
+#product-buy #add-to-cart {
+	background: #ef3546;
+	color: #FFF;
+	display: block;
+	height: 42px;
+	line-height: 32px;
+	margin: 0;
+	padding: 5px 26px 5px 24px;
+}
+#product-buy #add-to-cart, #product-buy #set-qty {
+	border-radius: 3px;
+}
+#product-buy #add-to-cart * {
+	float: left;
+}
+#product-buy #add-to-cart .ico {
+	background-position: -62px 1px;
+	display: inline-block;
+	height: 30px;
+	width: 30px;
+}
+#product-buy #set-qty {
+	background: #E0E0E0;
+	float: left;
+	height: 42px;
+	line-height: 42px;
+	margin-right: 20px;
+	position: relative;
+	width: 120px;
+}
+#product-buy #set-qty #qty {
+	background: none;
+	border: none;
+	font-size: 16px;
+	height: 22px;
+	line-height: 22px;
+	margin: 0;
+	padding: 10px 0;
+	text-align: center;
+	width: 100%;
+}
+#product-buy #set-qty #add-btn, #product-buy #set-qty #sub-btn {
+	background-image: url(../img/ico.png);
+	background-repeat: no-repeat;
+	background-position: -64px -34px;
+	background-color: #F0F0F0;
+	border-radius: 2px;
+	box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+	display: block;
+	height: 22px;
+	right: 10px;
+	padding: 0;
+	position: absolute;
+	top: 10px;
+	width: 22px !important;
+	z-index: 5;
+}
+#product-buy #set-qty #sub-btn {
+	background-position: -34px -34px;
+	left: 10px;
+	right: auto;
+}
+#free-shipping-badge {
+	background-color: #ffde26;
+	height: 40px;
+	margin-bottom: 20px;
+	padding: 10px;
+}
+#free-shipping-badge * {
+	color: #FFF;
+}
+#free-shipping-badge .ico {
+	background-position: -268px 8px;
+	float: left;
+	height: 36px;
+	margin-left: 10px;
+	margin-right: 10px;
+	width: 40px;
+}
+#free-shipping-badge .s1, #free-shipping-badge .s2 {
+	border-left: 1px solid #FFF;
+	float: left;
+	padding-left: 20px;
+}
+#free-shipping-badge .s2 {
+	margin-left: 20px;
+}
+
+.lt-arr-btn, .rt-arr-btn {
+	background-color: transparent;
+	background-image: url(../img/ltrt.png);
+	background-position: center top;
+	background-repeat: no-repeat;
+	border: none;
+	height: 40px;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 210px;
+	width: 40px;
+	z-index: 2;
+}
+.rt-arr-btn {
+	background-position: center -40px;
+	left: auto;
+	right: 0;
+}
+.lt-arr-btn:hover, .rt-arr-btn:hover {
+	background-color: rgba(0,0,0,0.04);
+	background-image: url(../img/ltrt.png);
+	background-position: center -80px;
+	box-shadow: none;
+}
+.rt-arr-btn:hover {
+	background-position: center -120px;
+}

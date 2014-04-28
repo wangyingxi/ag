@@ -480,6 +480,34 @@
             return this.data[key];
         }
     };
+
+
+
+
+    $.fn.integerInput = function() {
+        var $this = $(this);
+        $this.bind("keydown", function(event) {
+            if (event.keyCode > 57 || event.keyCode < 48) {
+                if (event.keyCode != 8) {
+                    return false;
+                }
+            }
+        });
+        $this.bind('contextmenu', function(e) {
+            return false;
+        });
+    }
+    $.fn.xCenter = function() {
+        var $this = $(this);
+        var parent = $this.parent();
+        var pw = parent.width();
+        if ($this.css('position') != 'absolute' || $this.css('position') != 'fixed') {
+            $this.css('position', 'absolute');
+        }
+        $this.css('left', (pw - $this.width()) / 2);
+    }
+
+
 })(jQuery);
 
 /*!
