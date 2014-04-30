@@ -81,7 +81,9 @@ $model = $this->model;
                             <?php
                             $path = $this->photoImage($p->name . $p->type, 'small');
                             ?>
-                            <img class="s-img" src="<?php echo $path ?>"/>
+                            <div class='s-img-wp'>
+                                <img class="s-img" src="<?php echo $path ?>"/>
+                            </div>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
@@ -121,5 +123,13 @@ $model = $this->model;
                 qty.val(1);
             }
         });
+
+        // set gallary selected
+        var s_img = $('.s-img-wp');
+        if (s_img.length > 0) {
+            $(s_img[0]).addClass('selected')
+        }
+
+
     })(jQuery);
 </script>
