@@ -27,17 +27,34 @@ $model = $this->model;
             <div class="lpad-30">
                 <ul id="breadcrumb" class="clearfix">
                     <li>
-                        <a href="#">HOME</a>
+                        <a href="/">HOME</a>
                     </li>
-                    <li>
-                        <i class="ico"></i>
-                        <a href="#">HEADPHONE &amp; HEADSET</a>
-                    </li>
+                    <?php if ($model->category) : ?>
+                        <?php if ($model->category->parent): ?>
+                            <li>
+                                <i class="ico"></i>
+                                <a href="#"><?php echo strtoupper($model->category->parent->name); ?></a>
+                            </li>
+                        <?php endif; ?>
+                        <li>
+                            <i class="ico"></i>
+                            <a href="#"><?php echo strtoupper($model->category->name); ?></a>
+                        </li>
+                    <?php endif; ?>
+
                 </ul>
 
                 <h1 id="product-title"><?php echo $model->title ?></h1>
-                <h2 id="product-brand" class="clearfix"><span>by</span><a href="#" class="bold">Quirk</a><img src="/img/rockpapa.png" id="product-brand-logo"/></h2>
-                <p style="margin-bottom:20px"><?php echo $model->sub_title ?></p>
+                <?php if ($model->brand): ?>
+                    <h2 id="product-brand" class="clearfix"><span>by</span><a href="#" class="bold"><?php echo strtoupper($model->brand->name) ?></a><img src="/img/rockpapa.png" id="product-brand-logo"/></h2>
+                <?php endif; ?>
+                <p style="margin-bottom:20px">
+                    <?php
+                    if ($model->sub_title) {
+                        echo $model->sub_title;
+                    }
+                    ?>
+                </p>
                 <div id="product-purc" class="clearfix">
                     <div>
                         <span class="symbol">$</span>
