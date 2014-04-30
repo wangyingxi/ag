@@ -11,8 +11,14 @@ $model = $this->model;
         <div id="product-pg" class="grid_14">
             <button class="lt-arr-btn"></button>
             <button class="rt-arr-btn"></button>
-            <a href="#" id="big-photo-link" class="clearfix"><img class="big-photo" src="/img/big-image-1.jpg"/></a>
-
+            <?php if (count($model->photo)): ?>
+                <?php
+                $path = $this->photoImage($model->photo[0]->name . $model->photo[0]->type, 'large');
+                ?>
+                <a href="javascript:void(0)" id="big-photo-link" class="clearfix">
+                    <img class="big-photo" src="<?php echo $path ?>"/>
+                </a>
+            <?php endif; ?>
             <div class="clear"></div>
 
         </div>
@@ -52,15 +58,16 @@ $model = $this->model;
                         <i class="ico"></i>Add To Cart
                     </button>
                 </div>
-
-                <div id="product-sg">
-                    <img class="s-img selected" src="/img/big-image-1.jpg"/>
-                    <img class="s-img" src="http://dnok91peocsw3.cloudfront.net/product/426197-70x70-1372097827-s1.png"/>
-                    <img class="s-img" src="http://dnok91peocsw3.cloudfront.net/product/426197-70x70-1372097842-s2.png"/>
-                    <img class="s-img" src="http://dnok91peocsw3.cloudfront.net/product/426197-70x70-1372097851-s3.png"/>
-                    <img class="s-img" src="http://dnok91peocsw3.cloudfront.net/product/388157-610x610-1367933346-primary.png"/>
-                </div>
-
+                <?php if (count($model->photo)): ?>
+                    <div id="product-sg">
+                        <?php foreach ($model->photo as $p): ?>
+                            <?php
+                            $path = $this->photoImage($p->name . $p->type, 'small');
+                            ?>
+                            <img class="s-img" src="<?php echo $path ?>"/>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
