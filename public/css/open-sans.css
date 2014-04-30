@@ -62,5 +62,5 @@
 
 
 body, .mfont, input[type='text'], input[type='button'], input[type='search'], input[type='submit'], textarea, button {
-  font: 13px/1.5 'Open Sans', 'Century Gothic', 'Helvetica', 'Microsoft Yahei UI', 'Microsoft Yahei', Arial, 'Liberation Sans', FreeSans, sans-serif;
+  font: 13px/1.5 'Century Gothic', 'Open Sans', 'Helvetica', 'Microsoft Yahei UI', 'Microsoft Yahei', Arial, 'Liberation Sans', FreeSans, sans-serif;
 }
