@@ -274,7 +274,31 @@ $model = $this->model;
                     <?php endforeach; ?>
                 </select>
             </div>
-
+            <div class="form-group">
+                <label>商品样式：</label>
+                <ul class='scale-ul clearfix'>
+                    <li>
+                        <label>背景颜色</label>
+                        <input type="text" placeholder="#FFFFFF" class="form-control short-txt" id="css_backgroundcolor" name="css_backgroundcolor" value="<?php echo $model->css['backgroundcolor'] ?>">
+                    </li>
+                    <li>
+                        <label>标题文字颜色</label>
+                        <input type="text" placeholder="#444444" class="form-control short-txt" id="css_fontcolor" name="css_fontcolor" value="<?php echo $model->css['fontcolor'] ?>">
+                    </li>
+                    <li>
+                        <label>链接文字颜色</label>
+                        <input type="text" placeholder="#444444" class="form-control short-txt" id="css_linkcolor" name="css_linkcolor" value="<?php echo $model->css['linkcolor'] ?>">
+                    </li>
+                    <li>
+                        <label>价格文字颜色</label>
+                        <input type="text" placeholder="#EF3546" class="form-control short-txt" id="css_pricecolor" name="css_pricecolor" value="<?php echo $model->css['pricecolor'] ?>">
+                    </li>
+                    <li>
+                        <label>购买按钮背景颜色</label>
+                        <input type="text" placeholder="#EF3546" class="form-control short-txt" id="css_buttoncolor" name="css_buttoncolor" value="<?php echo $model->css['buttoncolor'] ?>">
+                    </li>
+                </ul>
+            </div>
             <button type="submit" id="save-btn" class="btn btn-default">确认提交</button>
 
         </form>

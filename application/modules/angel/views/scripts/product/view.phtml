@@ -1,16 +1,64 @@
-<style>
-
-</style>
 <?php
 $model = $this->model;
 ?>
+
+<style>
+<?php
+if ($model->css) {
+    if ($model->css['backgroundcolor']) {
+        ?>
+            .content {
+                background-color:<?php echo $model->css['backgroundcolor']; ?>;
+            }
+        <?php
+    }
+    if ($model->css['fontcolor']) {
+        ?>
+            #product-sub-title, #product-title, #product-brand span {
+                color:<?php echo $model->css['fontcolor']; ?>;
+            }
+        <?php
+    }
+    if ($model->css['linkcolor']) {
+        ?>
+            #breadcrumb li a, #product-brand a {
+                color:<?php echo $model->css['linkcolor']; ?> !important;
+            }
+        <?php
+    }
+    if ($model->css['pricecolor']) {
+        ?>
+            #product-purc span {
+                color:<?php echo $model->css['pricecolor']; ?> !important;
+            }
+        <?php
+    }
+    if ($model->css['buttoncolor']) {
+        ?>
+            #add-to-cart {
+                background-color:<?php echo $model->css['buttoncolor']; ?> !important;
+            }
+            #product-sg .s-img-wp.selected {
+                border-color:<?php echo $model->css['buttoncolor']; ?> !important;
+            }
+        <?php
+    }
+}
+?>
+</style>
+
 
 <div class="content">
     <div class="container_24">
 
         <div id="product-pg" class="grid_14">
-            <button class="lt-arr-btn"></button>
-            <button class="rt-arr-btn"></button>
+            <?php if (count($model->photo) > 1): ?>
+                <?php
+                $path = $this->photoImage($model->photo[0]->name . $model->photo[0]->type, 'large');
+                ?>
+                <button class="lt-arr-btn"></button>
+                <button class="rt-arr-btn"></button>
+            <?php endif; ?>
             <?php if (count($model->photo)): ?>
                 <?php
                 $path = $this->photoImage($model->photo[0]->name . $model->photo[0]->type, 'large');
@@ -48,13 +96,12 @@ $model = $this->model;
                 <?php if ($model->brand): ?>
                     <h2 id="product-brand" class="clearfix"><span>by</span><a href="#" class="bold"><?php echo strtoupper($model->brand->name) ?></a><img src="/img/rockpapa.png" id="product-brand-logo"/></h2>
                 <?php endif; ?>
-                <p style="margin-bottom:20px">
-                    <?php
-                    if ($model->sub_title) {
-                        echo $model->sub_title;
-                    }
-                    ?>
-                </p>
+                <?php if ($model->sub_title): ?>
+                    <p id="product-sub-title">
+                        <?php echo $model->sub_title; ?>
+                    </p>
+                <?php endif; ?>
+
                 <div id="product-purc" class="clearfix">
                     <div>
                         <span class="symbol">$</span>

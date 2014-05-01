@@ -45,6 +45,9 @@
     font-size: 20px;
     margin: 15px 0 12px 0;
 }
+#product-sub-title {
+    margin-bottom:20px;
+}
 #product-brand {
     color: #aaa;
     font-size: 15px;

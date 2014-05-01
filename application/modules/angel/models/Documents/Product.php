@@ -57,8 +57,10 @@ class Product extends AbstractDocument {
 
     /** @ODM\Int */
     protected $sold = 0;
-    
-    /**
+
+    /** @ODM\Hash */
+    protected $css;
+        /**
      * 添加图片
      */
     public function addPhoto(\Documents\Photo $p) {
