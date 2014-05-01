@@ -220,7 +220,7 @@
     right: 0;
 }
 .lt-arr-btn:hover, .rt-arr-btn:hover {
-    background-color: rgba(0,0,0,0.04);
+    background-color: transparent;
     background-image: url(../img/ltrt.png);
     background-position: center -80px;
     box-shadow: none;
