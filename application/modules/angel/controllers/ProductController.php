@@ -25,15 +25,17 @@ class Angel_ProductController extends Angel_Controller_Action {
             $this->view->model = $product;
 
             // 将DBRef数组转换为json数组字符串输出到页面
-            $photoJson = false;
-            if ($product->photo) {
-                $ps = array();
-                foreach ($product->photo as $p) {
-                    $ps[] = $p->toArray();
-                }
-                $photoJson = json_encode($ps);
-            }
-            $this->view->photoJson = $photoJson;
+//            $photoJson = false;
+//            if ($product->photo) {
+//                $ps = array();
+//                foreach ($product->photo as $p) {
+//                    $ps[] = $p->toArray(false);
+//                }
+//                $photoJson = json_encode($ps);
+//            }
+//            $this->view->photoJson = $photoJson;
+            
+            
         }
     }
 

@@ -209,7 +209,6 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
     border-bottom: 1px solid #e0e0e0;
 }
 .content {
-    padding-bottom:20px;
     padding-top:20px;
 }
 .content .container_24 {
