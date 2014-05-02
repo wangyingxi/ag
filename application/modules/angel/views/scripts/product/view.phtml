@@ -211,7 +211,7 @@ if ($model->css) {
             if (prev.length) {
                 prev.click();
             } else {
-                $(s.siblings(__cls2).get(s.length - 1)).click();
+                $(s.siblings(__cls2).get(s.siblings(__cls2).length - 1)).click();
             }
         });
 
