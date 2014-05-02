@@ -144,6 +144,7 @@ if ($model->css) {
 </div>
 <script type="text/javascript">
     (function($) {
+        var photoJson = <?php echo $this->photoJson ? $this->photoJson : '' ?>;
         $('.big-photo').xCenter();
         var qty = $('#qty');
         qty.integerInput();
@@ -172,11 +173,24 @@ if ($model->css) {
         });
 
         // set gallary selected
-        var s_img = $('.s-img-wp');
+        var __cls1 = 'selected';
+        var __cls2 = '.s-img-wp';
+        var s_img = $(__cls2);
         if (s_img.length > 0) {
-            $(s_img[0]).addClass('selected')
+            $(s_img[0]).addClass(__cls1);
         }
 
+        s_img.click(function() {
+            var $this = $(this).closest(__cls2);
+            if ($this.hasClass(__cls1)) {
+                return;
+            }
+            $this.siblings(__cls2).removeClass(__cls1);
+            $this.addClass(__cls1);
+        });
 
+        if (photoJson) {
+            
+        }
     })(jQuery);
 </script>
