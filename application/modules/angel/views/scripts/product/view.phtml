@@ -14,7 +14,7 @@ if ($model->css) {
             .content #product-main-block {
                 border:none;
             }
-                                                            
+                                                                    
             .wp.top {
                 border-bottom:0;
             }
@@ -194,9 +194,11 @@ if ($model->css) {
                         text-align:center;
                     }
                 </style>
-                <a target="_blank" href="#">
-                    <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
-                </a>
+                <?php if ($model->brand->logo): ?>
+                    <a target="_blank" href="#">
+                        <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
+                    </a>
+                <?php endif; ?>
                 <dl id="brand-statement">
                     <dt>
                     <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
