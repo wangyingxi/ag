@@ -141,7 +141,7 @@ if ($model->css) {
                             <?php
                             $path = $this->photoImage($p->name . $p->type, 'small');
                             ?>
-                            <div class='s-img-wp' xlarge="<?php echo $this->photoImage($p->name . $p->type, 'xlarge') ?>" large="<?php echo $this->photoImage($p->name . $p->type, 'large') ?>">
+                            <div class='s-img-wp' orig="<?php echo $this->photoImage($p->name . $p->type, '') ?>" large="<?php echo $this->photoImage($p->name . $p->type, 'large') ?>">
                                 <img class="s-img" src="<?php echo $path ?>"/>
                             </div>
                         <?php endforeach; ?>
@@ -167,6 +167,7 @@ if ($model->css) {
             <div class="ct">
                 <style>
                     #product-brand-logo-big {
+                        border-radius:200px;
                         display:block;
                         float:left;
                         height:80px;
