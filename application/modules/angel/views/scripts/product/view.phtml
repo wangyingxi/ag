@@ -161,11 +161,16 @@ if ($model->css) {
         </div>
 
         <?php if ($model->brand): ?>
-            <p class="tt margintop20px">
+            <p class="tt margintop20px bdsprl">
                 ABOUT <?php echo strtoupper($model->brand->name) ?>
             </p>
             <div class="ct">
                 <style>
+                    .bdsprl {
+                        border-top:1px solid #E0E0E0;
+                        margin-right:10px;
+                        padding-top:20px;
+                    }
                     #product-brand-logo-big {
                         border-radius:200px;
                         display:block;
