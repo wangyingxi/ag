@@ -77,7 +77,7 @@
     display:inline-block;
     float:left;
     height: 62px;
-    opacity:0.5;
+    opacity:0.75;
     width: 62px;
 }
 #product-sg .s-img-wp.selected {
@@ -99,7 +99,7 @@
     float: left;
     margin-right: 4px;
 }
-#product-purc .symbol {
+#product-purc .price-symbol {
 
 }
 #product-purc .price-int {
@@ -172,6 +172,44 @@
     top: 10px;
     width: 22px !important;
     z-index: 5;
+}
+#product-main-block {
+    border-bottom:1px solid #E0E0E0;
+    padding-bottom: 20px;
+}
+.product-blk {
+    font-size:15px;
+    line-height:28px;
+    margin-top:20px;
+}
+.product-blk .tt {
+    color:#aaa;
+    font-size:15px;
+    margin-bottom:18px;
+    margin-top:5px;
+}
+.product-blk p {
+    margin-bottom:15px;
+}
+.product-blk ul, .product-blk ul li {
+    margin-left:15px;
+}
+.product-blk ul {
+    margin-bottom:20px;
+}
+.product-blk .ct {
+    padding-right:20px;
+}
+.product-blk-unit {
+    position:relative;
+}
+.product-blk-unit .sprl {
+    background:#ddd;
+    height:100%;
+    position:absolute;
+    right:10px;
+    top:0;
+    width:1px;
 }
 #product-buy #set-qty #sub-btn {
     background-position: -34px -34px;

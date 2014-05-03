@@ -211,10 +211,7 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 .content {
     padding-top:20px;
 }
-.content .container_24 {
-    border-bottom:1px solid #E0E0E0;
-    padding-bottom: 20px;
-}
+
 .wp.top .container_24 {
     /*border-bottom:1px solid #F0F0F0;*/
     padding-bottom:20px;
