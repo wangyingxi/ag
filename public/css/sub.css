@@ -62,7 +62,8 @@
     margin-right: 8px;
 }
 #product-brand-logo {
-
+    height:20px;
+    width:20px;
 }
 #product-sg {
 }
@@ -185,7 +186,7 @@
 .product-blk .tt {
     color:#aaa;
     font-size:15px;
-    margin-bottom:18px;
+    margin-bottom:15px;
     margin-top:5px;
 }
 .product-blk p {
@@ -270,4 +271,23 @@
 }
 .rt-arr-btn:hover {
     background-position: center -120px;
+}
+#review-btn-empty {
+    background:#F0F0F0;
+    color:#bbb;
+    height:24px;
+    line-height:24px;
+    margin:0;
+    padding:20px;
+    text-align:center;
+    text-shadow:0 1px 0 rgba(255,255,255,0.6);
+    width:auto;
+}
+#review-btn-empty .txt {
+    background-image:url(https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/new-24-24.png);
+    background-repeat: no-repeat;
+    display:inline-block;
+    height:24px;
+    margin:0;
+    padding:0 0 0 36px;
 }

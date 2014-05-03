@@ -14,7 +14,7 @@ if ($model->css) {
             .content #product-main-block {
                 border:none;
             }
-                    
+                                                            
             .wp.top {
                 border-bottom:0;
             }
@@ -101,7 +101,13 @@ if ($model->css) {
 
                 <h1 id="product-title"><?php echo $model->title ?></h1>
                 <?php if ($model->brand): ?>
-                    <h2 id="product-brand" class="clearfix"><span>by</span><a href="#" class="bold"><?php echo strtoupper($model->brand->name) ?></a><img src="/img/rockpapa.png" id="product-brand-logo"/></h2>
+                    <h2 id="product-brand" class="clearfix">
+                        <span>by</span>
+                        <a href="#" class="bold"><?php echo strtoupper($model->brand->name) ?></a>
+                        <?php if ($model->brand->logo): ?>
+                            <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo"/>
+                        <?php endif; ?>
+                    </h2>
                 <?php endif; ?>
                 <?php if ($model->sub_title): ?>
                     <p id="product-sub-title">
@@ -153,6 +159,60 @@ if ($model->css) {
         <div class="ct">
             <?php echo $model->description ?>
         </div>
+
+        <?php if ($model->brand): ?>
+            <p class="tt margintop20px">
+                ABOUT <?php echo strtoupper($model->brand->name) ?>
+            </p>
+            <div class="ct">
+                <style>
+                    #product-brand-logo-big {
+                        display:block;
+                        float:left;
+                        height:80px;
+                        width:80px;
+                    }
+                    #brand-statement {
+                        float:left;
+                        width:430px
+                    }
+                    #brand-statement dt {
+                        font-weight:bold;
+                    }
+                    #brand-statement dt, #brand-statement dd {
+                        padding-left:20px;
+                    }
+                    #brand-statement dd {
+                        font-size:13px;
+                    }
+                    #brand-statement .btn {
+                        display:inline-block;
+                        color:#FFF !important;
+                        font-size:12px;
+                        margin-top:15px;
+                        padding:5px 20px;
+                        text-align:center;
+                    }
+                </style>
+                <a target="_blank" href="#">
+                    <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
+                </a>
+                <dl id="brand-statement">
+                    <dt>
+                    <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
+                    </dt>
+                    <dd>
+                        <?php echo $model->brand->description; ?>
+                    </dd>
+                    <dd>
+                        <a href="#" class="btn">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
+                    </dd>
+                </dl>
+                <div class="clear"></div>
+            </div>
+        <?php endif; ?>
+
+
         <div class="sprl"></div>
     </div>
     <div class="grid_10">
@@ -161,12 +221,14 @@ if ($model->css) {
         </p>
 
     </div>
-    <div class="clear-10"></div>
+    <div class="clear-30"></div>
     <div class="grid_24">
         <p class="tt">
-            CUSTOMER REVIEW
+            CUSTOMER REVIEWS
         </p>
-
+        <div id="review-btn-empty">
+            <a href="javascript:void(0)" class="txt">NO REVIEWS YET, WRITE NOW</a> 
+        </div>
     </div>
 </div>
 <script type="text/javascript">
