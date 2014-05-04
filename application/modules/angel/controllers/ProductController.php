@@ -23,7 +23,9 @@ class Angel_ProductController extends Angel_Controller_Action {
             $productModel = $this->getModel('product');
             $product = $productModel->getById($id);
             $this->view->model = $product;
-
+            $this->view->currency = $this->bootstrap_options['currency'];
+            $this->view->currency_symbol = $this->bootstrap_options['currency_symbol'];
+            
             // 将DBRef数组转换为json数组字符串输出到页面
 //            $photoJson = false;
 //            if ($product->photo) {

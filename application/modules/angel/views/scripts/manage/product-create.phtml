@@ -185,30 +185,15 @@
                     <div class='clear_20px'>
                     </div>
 
-                    <div class="input-group input-group">
-                        <span class="input-group-addon">$ USD</span>
-                        <input type="number" id='price_usd' step="0.01" name='price_usd' class="form-control price">
-                    </div>
+                    <?php foreach ($this->currency as $key => $val): ?>
 
-                    <div class="input-group input-group">
-                        <span class="input-group-addon">£ GBP</span>
-                        <input type="number" id='price_gbp' step="0.01" name='price_gbp' class="form-control price">
-                    </div>
+                        <div class="input-group input-group">
+                            <span class="input-group-addon"><?php echo $this->currency_symbol[$key] . ' ' . strtoupper($key) ?></span>
+                            <input type="number" id='price_<?php echo $key ?>' step="0.01" name='price_<?php echo $key ?>' class="form-control price">
+                        </div>
 
-                    <div class="input-group input-group">
-                        <span class="input-group-addon">€ EUR</span>
-                        <input type="number" id='price_eur' step="0.01" name='price_eur' class="form-control price">
-                    </div>
+                    <?php endforeach; ?>
 
-                    <div class="input-group input-group">
-                        <span class="input-group-addon">$ HKD</span>
-                        <input type="number" id='price_hkd' step="0.01" name='price_hkd' class="form-control price">
-                    </div>
-
-                    <div class="input-group input-group">
-                        <span class="input-group-addon">$ AUD</span>
-                        <input type="number" id='price_aud' step="0.01" name='price_aud' class="form-control price">
-                    </div>
                 </div>
 
             </div>

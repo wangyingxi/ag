@@ -10,11 +10,9 @@ if ($model->css) {
             .content {
                 background-color:<?php echo $model->css['backgroundcolor']; ?>;
             }
-
             .content #product-main-block {
                 border:none;
             }
-                                                                            
             .wp.top {
                 border-bottom:0;
             }
@@ -115,14 +113,28 @@ if ($model->css) {
                     </p>
                 <?php endif; ?>
 
-                <div id="product-purc" class="clearfix">
-                    <div class="price">
-                        <span class="price-symbol">$</span>
-                        <span class="price-int">39</span>
-                        <span class="price-dec">.95</span>
-                        <span class="price-currency">usd</span>
+                <?php if ($model->selling_price): ?>
+                    <div id="product-purc" class="clearfix">
+                        <?php foreach ($model->selling_price as $currency => $price): ?>
+                            <?php
+                            $dot = '.';
+                            $str = strval($price);
+
+
+                            $pos = strripos($str, $dot);
+                            $arr = explode($dot, $str);
+                            ?>
+                            <div class="price" price="<?php echo $price ?>" currency="<?php echo $currency ?>">
+                                <span class="price-symbol"><?php echo $this->currency_symbol[$currency] ?></span>
+                                <span class="price-int"><?php echo $arr[0] ?></span>
+                                <?php if ($pos): ?>
+                                    <span class="price-dec"><?php echo $dot . end($arr) ?></span>
+                                <?php endif; ?>
+                                <span class="price-currency"><?php echo $currency ?></span>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <div id="product-buy" class="clearfix">
                     <div id="set-qty">
@@ -192,11 +204,13 @@ if ($model->css) {
                         font-size:13px;
                     }
                     #brand-statement .btn {
+                        background: transparent;
+                        border: 1px solid #333;
                         display:inline-block;
-                        color:#FFF !important;
-                        font-size:12px;
+                        color:#333 !important;
+                        font-size:smaller;
                         margin-top:15px;
-                        padding:5px 20px;
+                        padding:0 20px;
                         text-align:center;
                     }
                 </style>

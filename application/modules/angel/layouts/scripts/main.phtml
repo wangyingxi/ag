@@ -19,7 +19,7 @@
         <script type="text/javascript" src="<?php echo $this->jsPath('plugin.js'); ?>"></script>
         <script type="text/javascript">
             $(document).ready(function() {
-
+                $.initCurrency('.price-option');
             });
         </script>
     </head>
@@ -47,8 +47,11 @@
                             <a href="#"> 0 </a>
                         </div>
                         <span class="vsplr l-ft"></span>
+
                         <div class="currency-bar l-ft">
-                            <a href="#"> $ usd </a>
+                            <?php foreach ($this->currency as $key => $val): ?>
+                                <a class="price-option" currency="<?php echo $key ?>" currency-symbol="<?php echo $this->currency_symbol[$key] ?>" href="javascript:void(0)"> <?php echo $this->currency_symbol[$key] . ' ' . $key ?> </a>
+                            <?php endforeach; ?>
                         </div>
 
                     </div>

@@ -277,3 +277,7 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 .addthis-block * {
     float:right;
 }
+
+.price, .price-option {
+    display:none;
+}

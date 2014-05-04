@@ -507,6 +507,61 @@
         $this.css('left', (pw - $this.width()) / 2);
     }
 
+    $.initCurrency = function(selector) {
+
+        // write css
+        var style = "<style>";
+        style += ".price-option {display:none}";
+        style += ".price-option:first-child {display:inline;}";
+        style += "#currency-ddl {background:#FFF;box-shadow:0 0 10px rgba(0,0,0,0.2);display:none;position:absolute;width:90px;z-index:1}";
+        style += "#currency-ddl .currency-ddl-itm {cursor:pointer;display:block;padding:5px 20px;text-align:center;border-bottom:1px solid #F2F2F2;}";
+        style += "#currency-ddl .currency-ddl-itm:hover {background:#F8F8F8;}";
+        style += "#currency-ddl .currency-ddl-itm.selected {background:#F8F8F8 !important}"
+        style += "</style>";
+        $('body').append(style);
+
+        var cookie_name = 'currency';
+        var price_option = $(selector);
+        var option = {expires: 365, path: '/'};
+        var ddl_id = 'currency-ddl';
+        var cookie_value = $.cookie(cookie_name);
+        var html = $("<div>").attr('id', ddl_id).addClass('auto-hide');
+        $.each(price_option, function() {
+            var item = $(this);
+            html.append($("<div>").addClass("currency-ddl-itm").html(item.attr('currency-symbol') + " " + item.attr('currency')).attr('currency', item.attr('currency')));
+            // item click
+            item.click(function() {
+                var $this = $(this);
+                var x = $this.offset().left;
+                var y = $this.offset().top + 24;
+                var ddl = $('#' + ddl_id);
+                ddl.css('left', x).css('top', y);
+                ddl.toggle();
+            });
+        });
+
+        var currency_ddl_itm = html.find('.currency-ddl-itm');
+        if (!cookie_value) {
+            // 将第一个置为选中状态
+            currency_ddl_itm.first().addClass('selected');
+        } else {
+            $('.currency-ddl-itm[currency=' + cookie_value + ']').addClass('select');
+            price_option.hide();
+            $(selector + "[currency=" + cookie_value + "]").show();
+        }
+        currency_ddl_itm.click(function(){
+            var $this = $(this);
+            var ddl = $('#' + ddl_id);
+            if($this.hasClass('selected')) {
+                ddl.hide();
+            } else {
+                $.cookie(cookie_name, $this.attr('currency'), option);
+                ddl.hide();
+            }
+        });
+        
+        $('body').append(html);
+    };
 
 })(jQuery);
 

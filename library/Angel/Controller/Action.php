@@ -37,6 +37,10 @@ class Angel_Controller_Action extends Zend_Controller_Action {
             $this->_helper->layout->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
         }
+
+        // some global variable
+        $this->view->currency = $this->bootstrap_options['currency'];
+        $this->view->currency_symbol = $this->bootstrap_options['currency_symbol'];
     }
 
     /**

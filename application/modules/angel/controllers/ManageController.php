@@ -241,7 +241,6 @@ class Angel_ManageController extends Angel_Controller_Action {
         } else {
             // GET METHOD
             $this->view->title = "创建商品";
-            $this->view->currency = $this->bootstrap_options['currency'];
             $this->view->separator = $this->SEPARATOR;
             $this->view->location = $this->bootstrap_options['stock_location'];
             $this->view->brand = $brandModel->getAll();
@@ -333,7 +332,6 @@ class Angel_ManageController extends Angel_Controller_Action {
             $notFoundMsg = '未找到目标商品';
 
             $this->view->title = "编辑商品";
-            $this->view->currency = $this->bootstrap_options['currency'];
             $this->view->separator = $this->SEPARATOR;
             $this->view->location = $this->bootstrap_options['stock_location'];
 
