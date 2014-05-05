@@ -481,9 +481,6 @@
         }
     };
 
-
-
-
     $.fn.integerInput = function() {
         var $this = $(this);
         $this.bind("keydown", function(event) {
@@ -564,25 +561,12 @@
         var currency_ddl_itm = html.find('.currency-ddl-itm');
         if (!cookie_value) {
             // 将第一个置为选中状态
-//            currency_ddl_itm.first().addClass('selected');
             currency_ddl_itm.first().click();
         } else {
             var target = $('.currency-ddl-itm[currency=' + cookie_value + ']');
             target.addClass('selected');
             target.click();
-//            price_option.hide();
-//            $(selector + "[currency=" + cookie_value + "]").show();
         }
-//        currency_ddl_itm.click(function(){
-//            var $this = $(this);
-//            var ddl = $('#' + ddl_id);
-//            if($this.hasClass('selected')) {
-//                ddl.hide();
-//            } else {
-//                $.cookie(cookie_name, $this.attr('currency'), option);
-//                ddl.hide();
-//            }
-//        });
     };
 
 })(jQuery);
