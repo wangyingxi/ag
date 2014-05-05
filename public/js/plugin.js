@@ -1,6 +1,5 @@
 (function($) {
     var DURATION = 100;
-
     $.fn.setSelectValue = function(options) {
         if (!options) {
             options = {};
@@ -10,7 +9,6 @@
             tagName: "select"
         };
         $.extend(settings, options);
-
         var $this = $(this);
         if ($this.get(0).tagName.toLowerCase() === settings.tagName) {
             var val = $this.attr('value');
@@ -27,7 +25,6 @@
             throw("dev exception : wrong tagname");
         }
     };
-
     var photoSelectorMethods = {
         init: function(options, save) {
             var $this = $(this);
@@ -43,14 +40,12 @@
                 phototypeUrl: '/manage/phototype/list',
                 thumbnailOnly: true
             };
-
             // 生成modal框
             var generateModal = function($this) {
                 var modalId = 'gy' + new Date().getTime();
                 // 避免重复id
                 if ($('#' + modalId).length > 0)
                     modalId += new Date().getTime();
-
                 var modalHtml = '<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">';
                 modalHtml += '<div class="modal-dialog">';
                 modalHtml += '<div class="modal-content">';
@@ -67,7 +62,6 @@
                 modalHtml += '</div>';
                 modalHtml += '</div>';
                 modalHtml += '</div>';
-
                 var modalPopup = $(modalHtml).attr('id', modalId);
                 var selectBtn = $("<button>")
                         .attr('type', 'button')
@@ -80,13 +74,11 @@
                 $('body').append(modalPopup);
                 return modalId;
             };
-
             // 合并settings
             settings.modalId = generateModal($this);
             $.extend(settings, options);
             $this.data('settings', settings);
             $this.append('<div class="gy-photo-selected"></div>');
-
             // “选择图片”按钮
             var launchBtn = $("<input>")
                     .attr('type', 'button')
@@ -97,10 +89,8 @@
             launchBtn.click(function() {
                 $this.photoSelector('start');
             });
-
             $this.append(launchBtn);
             $this.prop('disabled', false);
-
             // 设置save初始化图片
             if (typeof save === 'object') {
                 save = JSON.stringify(save);
@@ -142,7 +132,6 @@
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
             var modalMenu = $modal.find('.modal-menu');
             modalMenu.empty();
-
             var addLi = function(containerUl, name, phototypeId, description, liCls) {
                 var $li = $("<li>").attr('phototype-id', phototypeId);
                 if (liCls)
@@ -157,7 +146,6 @@
                     if (!obj.hasClass(cls)) {
                         obj.siblings('li').removeClass(cls);
                         obj.addClass(cls);
-
                         // request
                         var pid = obj.attr('phototype-id');
                         $modal.attr('loaded', null);
@@ -166,7 +154,6 @@
                 });
                 containerUl.append($li);
             };
-
             var $ul = $("<ul>").addClass("nav nav-tabs");
             addLi($ul, "全部", null, null);
             $.each(resource, function() {
@@ -235,7 +222,6 @@
         },
         renderPagebar: function(param) {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
-
             // 显示pagebar
             var pagebar = $modal.find('.modal-page');
             pagebar.empty();
@@ -288,12 +274,10 @@
                 param = {};
             if (!param.page)
                 param.page = 1;
-
             var url = settings.url;
             var data = {format: 'json', page: param.page};
             if (param.phototype)
                 data.phototype = param.phototype;
-
             $.ajax({
                 url: url,
                 dataType: 'json',
@@ -304,7 +288,6 @@
                         var resource = response.data;
                         // 显示图片
                         $this.photoSelector('renderPhoto', resource);
-
                         if (!$modal.attr('loaded')) {
                             // 显示pagebar
                             $this.photoSelector('renderPagebar', {page: param.page, count: count});
@@ -317,7 +300,6 @@
         },
         requestMenu: function() {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
-
             var phototypeUrl = settings.phototypeUrl;
             if (!phototypeUrl)
                 return;
@@ -339,7 +321,6 @@
         },
         start: function() {
             var $this = $(this), settings = $this.data('settings'), modalId = settings.modalId, $modal = $('#' + modalId);
-
             if (!$modal.attr('loaded')) {
                 $this.photoSelector('requestMenu');
             } else {
@@ -385,7 +366,6 @@
             gyPhotoSelected.empty();
             if (save) {
                 save = JSON.parse(save);
-
                 // 重组save值
                 var redisplay = function(trigger) {
                     var result = "";
@@ -401,7 +381,6 @@
                         result = JSON.stringify(result);
                     $this.attr('save', result);
                 };
-
                 $.each(save, function(name, path) {
                     var item = $('<div>').addClass('gy-sd')
                             .attr('name', name);
@@ -423,7 +402,6 @@
                             var gysdItemCopy = gysdItem.clone(true);
                             gysdItem.remove();
                             ltElem.before(gysdItemCopy);
-
                             redisplay($(this));
                         }
                     });
@@ -437,7 +415,6 @@
                             var gysdItemCopy = gysdItem.clone(true);
                             gysdItem.remove();
                             rtElem.after(gysdItemCopy);
-
                             redisplay($(this));
                         }
                     });
@@ -448,7 +425,6 @@
             }
         }
     };
-
     /*
      * 启动方法
      * @param {type} method     传递字符串，将被识别为方法名; 传递对象，将作为init方法的参数（一般是options）, 并调用init方法
@@ -463,7 +439,6 @@
             $.error('The method ' + method + ' does not exist in $.uploadify');
         }
     };
-
     $.queryString = {
         data: {},
         initial: function() {
@@ -480,7 +455,6 @@
             return this.data[key];
         }
     };
-
     $.fn.integerInput = function() {
         var $this = $(this);
         $this.bind("keydown", function(event) {
@@ -506,7 +480,7 @@
 
     $.initCurrency = function(selector) {
 
-        // write css
+// write css
         var style = "<style>";
         style += ".price-option {display:none}";
         style += ".price-option:first-child {display:inline;}";
@@ -516,7 +490,6 @@
         style += "#currency-ddl .currency-ddl-itm.selected {background:#F8F8F8 !important}"
         style += "</style>";
         $('body').append(style);
-
         var cookie_name = 'currency';
         var price_option = $(selector);
         var option = {expires: 365, path: '/'};
@@ -542,7 +515,6 @@
                 price_option.hide();
                 $(selector + "[currency=" + currency + "]").show();
             });
-
             html.append(ddl_item);
             // item click
             item.click(function() {
@@ -555,12 +527,10 @@
                 ddl.toggle();
             });
         });
-
         $('body').append(html);
-
         var currency_ddl_itm = html.find('.currency-ddl-itm');
         if (!cookie_value) {
-            // 将第一个置为选中状态
+// 将第一个置为选中状态
             currency_ddl_itm.first().click();
         } else {
             var target = $('.currency-ddl-itm[currency=' + cookie_value + ']');
@@ -568,9 +538,88 @@
             target.click();
         }
     };
-
+    $.cart = {
+        option: {
+            cart_name: 'cart',
+            cart_option: {
+                expires: 365,
+                path: '/'
+            }
+        },
+        parse: function() {
+            var c = $.cookie(this.option.cart_name);
+            if (!c)
+                c = "";
+            try {
+                c = JSON.parse(c);
+            } catch (e) {
+                c = {};
+            }
+            return c;
+        },
+        query: function(id) {
+            var c = this.parse();
+            var val = c[id];
+            if (!val) {
+                return false;
+            } else {
+                return val;
+            }
+        },
+        set: function(id, qty) {
+            if (typeof qty === 'number') {
+                var c = this.parse();
+                c[id] = qty;
+                this.write(JSON.stringify(c));
+            } else {
+                return false;
+            }
+        },
+        add: function(id, qty) {
+            if (typeof qty === 'number') {
+                var c = this.parse();
+                var hasIt = false;
+                if (c) {
+                    // update it
+                    $.each(c, function(k, v) {
+                        if (k === id) {
+                            v = v + qty;
+                            if (v > 0) {
+                                c[k].qty = v;
+                            } else {
+                                delete c[k];
+                            }
+                            hasIt = true;
+                        }
+                    });
+                }
+                if (!hasIt) {
+                    // new one
+                    c[id] = qty;
+                }
+                this.write(JSON.stringify(c));
+            } else {
+                return false;
+            }
+        },
+        write: function(val) {
+            $.cookie(this.option.cart_name, val, this.option.cart_option);
+        },
+        empty: function() {
+            this.write(null);
+        },
+        total: function() {
+            var c = this.parse();
+            var sum = 0;
+            if (c) {
+                $.each(c, function(k, v) {
+                    sum++;
+                });
+            }
+            return sum;
+        }
+    };
 })(jQuery);
-
 /*!
  * jQuery Cookie Plugin v1.3.1
  * https://github.com/carhartl/jquery-cookie
@@ -589,7 +638,6 @@
 }(function($) {
 
     var pluses = /\+/g;
-
     function raw(s) {
         return s;
     }
@@ -614,14 +662,12 @@
         // write
         if (value !== undefined) {
             options = $.extend({}, config.defaults, options);
-
             if (typeof options.expires === 'number') {
                 var days = options.expires, t = options.expires = new Date();
                 t.setDate(t.getDate() + days);
             }
 
             value = config.json ? JSON.stringify(value) : String(value);
-
             return (document.cookie = [
                 config.raw ? key : encodeURIComponent(key),
                 '=',
@@ -641,7 +687,6 @@
             var parts = cookies[i].split('=');
             var name = decode(parts.shift());
             var cookie = decode(parts.join('='));
-
             if (key && key === name) {
                 result = converted(cookie);
                 break;
@@ -654,9 +699,7 @@
 
         return result;
     };
-
     config.defaults = {};
-
     $.removeCookie = function(key, options) {
         if ($.cookie(key) !== undefined) {
             // Must not alter options, thus extending a fresh object...
@@ -665,5 +708,4 @@
         }
         return false;
     };
-
 }));

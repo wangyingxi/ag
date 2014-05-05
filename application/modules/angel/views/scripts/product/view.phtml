@@ -53,7 +53,7 @@ if ($model->css) {
 ?>
 </style>
 
-
+<input type="hidden" id="product-id" value="<?php echo $model->id ?>"/>
 <div class="content">
     <div id="product-main-block" class="container_24">
         <div id="product-pg" class="grid_14">
@@ -321,6 +321,9 @@ if ($model->css) {
                 $(s.siblings(__cls2).get(s.siblings(__cls2).length - 1)).click();
             }
         });
-
+        $('#add-to-cart').click(function() {
+            $.cart.add($('#product-id').val(), parseInt($('#qty').val()));
+            $('#cart-total').val($.cart.total());
+        });
     })(jQuery);
 </script>
