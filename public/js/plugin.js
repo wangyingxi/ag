@@ -528,9 +528,28 @@
         var html = $("<div>").attr('id', ddl_id).addClass('auto-hide');
         $.each(price_option, function() {
             var item = $(this);
-            html.append($("<div>").addClass("currency-ddl-itm").html(item.attr('currency-symbol') + " " + item.attr('currency')).attr('currency', item.attr('currency')));
+            var ddl_item = $("<div>").addClass("currency-ddl-itm").html(item.attr('currency-symbol') + " " + item.attr('currency')).attr('currency', item.attr('currency'));
+            ddl_item.click(function() {
+                // select currency
+                var $this = $(this).closest('.currency-ddl-itm');
+                var currency = $this.attr('currency');
+                $('.price').hide();
+                $('.price[currency=' + currency + ']').show();
+                var ddl = $('#' + ddl_id);
+                if (!$this.hasClass('selected')) {
+                    $.cookie(cookie_name, currency, option);
+                    $this.siblings().removeClass('selected');
+                    $this.addClass('selected');
+                }
+                ddl.hide();
+                price_option.hide();
+                $(selector + "[currency=" + currency + "]").show();
+            });
+
+            html.append(ddl_item);
             // item click
             item.click(function() {
+                // toggle ddl board
                 var $this = $(this);
                 var x = $this.offset().left;
                 var y = $this.offset().top + 24;
@@ -540,27 +559,30 @@
             });
         });
 
+        $('body').append(html);
+
         var currency_ddl_itm = html.find('.currency-ddl-itm');
         if (!cookie_value) {
             // 将第一个置为选中状态
-            currency_ddl_itm.first().addClass('selected');
+//            currency_ddl_itm.first().addClass('selected');
+            currency_ddl_itm.first().click();
         } else {
-            $('.currency-ddl-itm[currency=' + cookie_value + ']').addClass('select');
-            price_option.hide();
-            $(selector + "[currency=" + cookie_value + "]").show();
+            var target = $('.currency-ddl-itm[currency=' + cookie_value + ']');
+            target.addClass('selected');
+            target.click();
+//            price_option.hide();
+//            $(selector + "[currency=" + cookie_value + "]").show();
         }
-        currency_ddl_itm.click(function(){
-            var $this = $(this);
-            var ddl = $('#' + ddl_id);
-            if($this.hasClass('selected')) {
-                ddl.hide();
-            } else {
-                $.cookie(cookie_name, $this.attr('currency'), option);
-                ddl.hide();
-            }
-        });
-        
-        $('body').append(html);
+//        currency_ddl_itm.click(function(){
+//            var $this = $(this);
+//            var ddl = $('#' + ddl_id);
+//            if($this.hasClass('selected')) {
+//                ddl.hide();
+//            } else {
+//                $.cookie(cookie_name, $this.attr('currency'), option);
+//                ddl.hide();
+//            }
+//        });
     };
 
 })(jQuery);
