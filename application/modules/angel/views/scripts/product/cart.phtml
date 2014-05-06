@@ -1,0 +1,33 @@
+
+
+<div class="content">
+    <div class="container_24">
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function($) {
+        var query = $.cart.query();
+        if (!query) {
+            // empty
+            return;
+        }
+        var data = new Array();
+        $.each(query, function(k, v) {
+            data.push(k);
+        });
+        data = data.join('|');
+        data.query = ""；
+        $.ajax({
+            url: '<?php echo $this->url(array(), 'cart') ?>',
+            dataType: 'json',
+            type: 'post',
+            data: data,
+            success: function(response) {
+                console.log(response);
+            }
+        });
+
+    })(jQuery);
+</script>

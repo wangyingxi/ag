@@ -146,6 +146,10 @@ if ($model->css) {
                     <button id="add-to-cart">
                         <i class="ico"></i>Add To Cart
                     </button>
+                    
+                    <button id="view-cart" onclick="location.href='/cart'">
+                        <i class="ico"></i>Added &amp; View Cart
+                    </button>
                 </div>
                 <?php if (count($model->photo)): ?>
                     <div id="product-sg">
@@ -322,8 +326,14 @@ if ($model->css) {
             }
         });
         $('#add-to-cart').click(function() {
+            var __DURATION = 100;
             $.cart.add($('#product-id').val(), parseInt($('#qty').val()));
-            $('#cart-total').val($.cart.total());
+            $('#cart-total').html($.cart.total());
+            $(this).fadeOut(__DURATION, function(){
+                $('#view-cart').fadeIn(__DURATION);
+            });
+            
         });
+        
     })(jQuery);
 </script>
