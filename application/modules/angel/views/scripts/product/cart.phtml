@@ -3,7 +3,7 @@
 <div class="content">
     <div class="container_24">
         <div class="grid_24">
-            <h1><?php echo $this->title ?></h1><span style="color:#888;">fast shipping service for you</span>
+            <h1><?php echo $this->title ?></h1><span class="subt">fast shipping service for you</span>
         </div>
         <div class="grid_24" id="cart-list">
             <table>
@@ -24,7 +24,6 @@
         </div>
     </div>
 </div>
-
 <div class="P_tmp">
     <table>
         <tr class="cart-list-itm">
@@ -33,10 +32,10 @@
             <td class="col3 cart-price"></td>
             <td class="col4 cart-qty"></td>
             <td class="col5 cart-subtotal"></td>
-            <td class="col6 cart-operation"></td>
+            <td class="col6 cart-operation"><button>delete</button></td>
         </tr>
     </table>
-    <div class="price" price="0" currency="usd">
+    <div class="price" price="0" currency="">
         <span class="price-str">0</span>
     </div>
 </div>
@@ -54,6 +53,7 @@
         });
         var s = data.join('|');
         data = {query: s};
+
         $.ajax({
             url: '<?php echo $this->url(array(), 'cart') ?>',
             dataType: 'json',
@@ -61,10 +61,12 @@
             data: data,
             success: function(response) {
                 if (response.code === 200) {
+                    var container = $('#cart-list table tbody');
+                    container.empty();
                     $.each(response.data, function() {
                         var $this = this;
                         var row = $('.P_tmp .cart-list-itm').clone(true);
-
+                        row.attr('id', $this.id);
                         var selling_price = $this.selling_price;
                         var qty = query[$this.id];
                         $.each(selling_price, function(k, v) {
@@ -76,7 +78,7 @@
                             row.find('.cart-price').append(price);
                             // set subtotal
                             var subtotal = $('.P_tmp .price').clone(true);
-                            
+
                             subtotal.attr('price', qty * v.amount);
                             subtotal.find('.price-str').html(v.symbol + qty * v.amount + k);
                             subtotal.attr('currency', k);
@@ -85,12 +87,17 @@
                         // set photo
                         row.find('.cart-photo').append($('<img>').attr('src', $this['photo']));
                         // set qty
-                        row.find('.cart-qty').append($('<input>').attr('type', 'number').val(qty));
+                        var input = $('<input>').attr('type', 'text').attr('maxlength', 2).val(qty);
+                        input.integerInput();
+                        row.find('.cart-qty').append(input);
                         row.find('.cart-title').append($('<a>').attr('target', '_blank').attr('href', $this.link).html($this.title));
-                        $('#cart-list tbody').append(row);
+                        container.append(row);
                     });
 
                 }
+            },
+            complete: function() {
+                $.currency.refresh();
             }
         });
     }
@@ -101,8 +108,44 @@
 </script>
 
 <style>
-    #cart-list thead tr th {
+    h1 {
+        margin-bottom:0;
+    }
+    .subt {
+        display:inline-block;
+        color:#888;
+        margin-bottom:20px;
+    }
+    #cart-list table {
+        width:100%;
+    }
+    #cart-list table th {
         background:#F0F0F0;
         color:#aaa;
+        padding:5px 0;
+        text-align:center;
+    }
+    #cart-list table td {
+        border-bottom:1px solid #eee;
+        padding:15px 0;
+        text-align:center;
+        width: 15%;
+    }
+    #cart-list table .col2 {
+        width:20%;
+    }
+
+    #cart-list table .col6 {
+        text-align:right;
+    }
+    #cart-list .cart-list-itm {
+        padding:20px;
+    }
+    #cart-list .cart-list-itm input[type=text] {
+        height:24px;
+        line-height:24px;
+        padding:0 5px;
+        text-align:center;
+        width:30px;
     }
 </style>

@@ -478,8 +478,86 @@
         $this.css('left', (pw - $this.width()) / 2);
     }
 
-    $.initCurrency = function(selector) {
 
+    $.currency = {
+        option: {
+            cookie_name: 'currency',
+            currency_option: {expires: 365, path: '/'},
+            ddl_id: 'currency-ddl',
+            ddl_itm_cls: 'currency-ddl-itm',
+            selector: '.price-option'
+        },
+        init: function(selector) {
+            if (!selector)
+                selector = this.option.selector;
+            // write css
+            var style = "<style>";
+            style += ".price-option {display:none}";
+            style += ".price-option:first-child {display:inline;}";
+            style += "#" + this.option.ddl_id + " {background:#FFF;box-shadow:0 0 10px rgba(0,0,0,0.2);display:none;position:absolute;width:90px;z-index:1}";
+            style += "#" + this.option.ddl_id + " ." + this.option.ddl_itm_cls + " {cursor:pointer;display:block;padding:5px 20px;text-align:center;border-bottom:1px solid #F2F2F2;}";
+            style += "#" + this.option.ddl_id + " ." + this.option.ddl_itm_cls + ":hover {background:#F8F8F8;}";
+            style += "#" + this.option.ddl_id + " ." + this.option.ddl_itm_cls + ".selected {background:#F8F8F8 !important}"
+            style += "</style>";
+            $('body').append(style);
+            var cookie_name = this.option.cookie_name;
+            var price_option = $(selector);
+            var option = this.option.currency_option;
+            var ddl_id = this.option.ddl_id;
+            var cookie_value = $.cookie(cookie_name);
+            var html = $("<div>").attr('id', ddl_id).addClass('auto-hide');
+            var base_cls = this.option.ddl_itm_cls;
+            $.each(price_option, function() {
+                var item = $(this);
+                var ddl_item = $("<div>").addClass(base_cls).html(item.attr('currency-symbol') + " " + item.attr(cookie_name)).attr(cookie_name, item.attr(cookie_name));
+                ddl_item.click(function() {
+                    // select currency
+                    var $this = $(this).closest('.' + base_cls);
+                    var currency = $this.attr(cookie_name);
+                    $('.price').hide();
+                    $('.price[currency=' + currency + ']').show();
+                    var ddl = $('#' + ddl_id);
+                    if (!$this.hasClass('selected')) {
+                        $.cookie(cookie_name, currency, option);
+                        $this.siblings().removeClass('selected');
+                        $this.addClass('selected');
+                    }
+                    ddl.hide();
+                    price_option.hide();
+                    $(selector + "[currency=" + currency + "]").show();
+                });
+                html.append(ddl_item);
+                // item click
+                item.click(function() {
+                    // toggle ddl board
+                    var $this = $(this);
+                    var x = $this.offset().left;
+                    var y = $this.offset().top + 24;
+                    var ddl = $('#' + ddl_id);
+                    ddl.css('left', x).css('top', y);
+                    ddl.toggle();
+                });
+            });
+            $('body').append(html);
+            this.refresh();
+        },
+        refresh: function() {
+            var cookie_name = this.option.cookie_name;
+            var cookie_value = $.cookie(cookie_name);
+            var currency_ddl_itm = $('#' + this.option.ddl_id + ' .' + this.option.ddl_itm_cls);
+            if (!cookie_value) {
+                // 将第一个置为选中状态
+                currency_ddl_itm.first().click();
+            } else {
+                var target = $('.' + this.option.ddl_itm_cls + '[currency=' + cookie_value + ']');
+                target.addClass('selected');
+                target.click();
+            }
+        }
+    };
+    $.initCurrency = function(selector) {
+        if (!selector)
+            selector = '.price-option';
 // write css
         var style = "<style>";
         style += ".price-option {display:none}";
