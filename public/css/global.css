@@ -28,3 +28,9 @@ Common css
 .relative {
     position:relative !important;
 }
+.hidden {
+    display:none;
+}
+.P_tmp {
+    display:none;
+}

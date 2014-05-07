@@ -498,11 +498,11 @@
         var html = $("<div>").attr('id', ddl_id).addClass('auto-hide');
         $.each(price_option, function() {
             var item = $(this);
-            var ddl_item = $("<div>").addClass("currency-ddl-itm").html(item.attr('currency-symbol') + " " + item.attr('currency')).attr('currency', item.attr('currency'));
+            var ddl_item = $("<div>").addClass("currency-ddl-itm").html(item.attr('currency-symbol') + " " + item.attr(cookie_name)).attr(cookie_name, item.attr(cookie_name));
             ddl_item.click(function() {
                 // select currency
                 var $this = $(this).closest('.currency-ddl-itm');
-                var currency = $this.attr('currency');
+                var currency = $this.attr(cookie_name);
                 $('.price').hide();
                 $('.price[currency=' + currency + ']').show();
                 var ddl = $('#' + ddl_id);
@@ -530,7 +530,7 @@
         $('body').append(html);
         var currency_ddl_itm = html.find('.currency-ddl-itm');
         if (!cookie_value) {
-// 将第一个置为选中状态
+            // 将第一个置为选中状态
             currency_ddl_itm.first().click();
         } else {
             var target = $('.currency-ddl-itm[currency=' + cookie_value + ']');
@@ -585,7 +585,7 @@
                         if (k === id) {
                             v = v + qty;
                             if (v > 0) {
-                                c[k].qty = v;
+                                c[k] = v;
                             } else {
                                 delete c[k];
                             }

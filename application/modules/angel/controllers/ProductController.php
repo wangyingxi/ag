@@ -45,11 +45,11 @@ class Angel_ProductController extends Angel_Controller_Action {
             if ($query) {
                 $productModel = $this->getModel('product');
                 $qs = explode("|", $query);
-                $result = array();
+                $resource = array();
                 foreach ($qs as $id) {
                     $product = $productModel->getById($id);
                     $pArr = array('id' => $id,
-                        'title' => $product->name,
+                        'title' => $product->title,
                         'location' => $product->location);
                     $new_selling_price = array();
                     foreach ($product->selling_price as $key => $val) {
@@ -60,10 +60,15 @@ class Angel_ProductController extends Angel_Controller_Action {
                         $p0 = $product->photo[0];
                         $pArr['photo'] = $this->view->photoImage($p0->name . $p0->type, 'small');
                     }
-                    $result[] = $pArr;
+                    $pArr['link'] = $this->view->url(array('id' => $id), 'product-view');
+                    $resource[] = $pArr;
                 }
-                var_dump($result);exit;
+
+                $this->_helper->json(array('data' => $resource,
+                    'code' => 200));
             }
+        } else {
+            $this->view->title = "My Cart";
         }
     }
 
