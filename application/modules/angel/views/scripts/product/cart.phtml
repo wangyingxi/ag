@@ -23,6 +23,18 @@
             </table>
         </div>
     </div>
+    <div class="container_24" id="payinfo">
+        <div class="grid_16">
+            &nbsp;
+        </div>
+        <div class="grid_4">
+            <p>total is</p>
+        </div>
+        <div class="grid_4">
+            <p id="total"></p>
+            <button id="checkout-btn">Checkout Now</button>
+        </div>
+    </div>
 </div>
 <div class="P_tmp">
     <table>
@@ -73,14 +85,16 @@
                             // set price
                             var price = $('.P_tmp .price').clone(true);
                             price.attr('price', v.amount);
+                            price.attr('symbol', v.symbol);
                             price.find('.price-str').html(v.symbol + v.amount + k);
                             price.attr('currency', k);
                             row.find('.cart-price').append(price);
                             // set subtotal
                             var subtotal = $('.P_tmp .price').clone(true);
-
-                            subtotal.attr('price', qty * v.amount);
-                            subtotal.find('.price-str').html(v.symbol + qty * v.amount + k);
+                            var a = (qty * v.amount).toFixed(2);
+                            subtotal.attr('price', a);
+                            subtotal.attr('symbol', v.symbol);
+                            subtotal.find('.price-str').html(v.symbol + a + k);
                             subtotal.attr('currency', k);
                             row.find('.cart-subtotal').append(subtotal);
                         });
@@ -93,7 +107,30 @@
                         row.find('.cart-title').append($('<a>').attr('target', '_blank').attr('href', $this.link).html($this.title));
                         container.append(row);
                     });
-
+                    // set payinfo
+                    var tmps = {};
+                    $.each($('#cart-list .cart-list-itm'), function() {
+                        var $this = $(this);
+                        var p = $this.find('.cart-subtotal .price');
+                        $.each($(p), function() {
+                            var $this = $(this);
+                            if (tmps[$this.attr('currency')]) {
+                                tmps[$this.attr('currency')].amount = (parseFloat(tmps[$this.attr('currency')].amount) + parseFloat($this.attr('price'))).toFixed(2);
+                            } else {
+                                tmps[$this.attr('currency')] = {amount: parseFloat($this.attr('price')), symbol: $this.attr('symbol')};
+                            }
+                        });
+                    });
+                    console.log(tmps);
+                    $('#payinfo #total').empty();
+                    $.each(tmps, function(k, v) {
+                        var row = $('.P_tmp .price').clone(true);
+                        row.attr('price', v.amount);
+                        row.attr('currency', k);
+                        row.find('.price-str').html(v.symbol + v.amount + k);
+                        $('#payinfo #total').append(row);
+                    });
+                    $('#payinfo').fadeIn(100);
                 }
             },
             complete: function() {
@@ -147,5 +184,22 @@
         padding:0 5px;
         text-align:center;
         width:30px;
+    }
+
+    #payinfo {
+        display:none;
+        font-size:15px;
+        padding:20px 0;
+    }
+    #payinfo .grid_4 {
+        text-align:right;
+    }
+    #payinfo #total * {
+        color:#EF3546;
+    }
+    #checkout-btn {
+        background:limegreen;
+        margin-top:20px;
+        padding:10px 20px;
     }
 </style>
