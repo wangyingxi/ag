@@ -24,47 +24,49 @@ $model = $this->model;
     <a id="clear-cache" class="btn btn-success" href="<?php echo $this->url(array(), 'manage-category-create') ?>">新建图片分类</a>
 </div>
 <div class="row">
-    <?php foreach ($this->resource as $p): ?>
-        <?php
-        $root = $p['root'];
-        $children = $p['children'];
-        ?>
-        <div class="col-md-2">
-            <div class="itm">
-                <div class="paddingbox10px relative">
-                    <p><?php echo $root->name ?></p>
-                    <div class="btn-group">
-                        <a type="button" href="<?php echo $this->url(array(id => $root->id), 'manage-category-save') ?>" class="btn btn-info btn-sm">编辑</a>
-
-                        <?php if (count($this->productModel->getProductByCategory($root->id)) == 0 && count($this->categoryModel->getByParent($root->id)) == 0): ?>
-                            <button type="button" class="btn btn-danger btn-sm remove-root-category">删除</button>
-                        <?php else: ?>
-                            <label class="xs">不为空</label>
-                        <?php endif; ?>
-
-                    </div>
-
-                    <input type="hidden" class="roothd" value="<?php echo $root->id ?>"/>
-                </div>
-                <?php foreach ($children as $c): ?>
-                    <div class="child-itm">
-                        <p><?php echo $c->name ?></p>
+    <?php if ($this->resource): ?>
+        <?php foreach ($this->resource as $p): ?>
+            <?php
+            $root = $p['root'];
+            $children = $p['children'];
+            ?>
+            <div class="col-md-2">
+                <div class="itm">
+                    <div class="paddingbox10px relative">
+                        <p><?php echo $root->name ?></p>
                         <div class="btn-group">
-                            <a type="button" href="<?php echo $this->url(array(id => $c->id), 'manage-category-save') ?>" class="btn btn-info btn-xs">编辑</a>
+                            <a type="button" href="<?php echo $this->url(array(id => $root->id), 'manage-category-save') ?>" class="btn btn-info btn-sm">编辑</a>
+
+                            <?php if (count($this->productModel->getProductByCategory($root->id)) == 0 && count($this->categoryModel->getByParent($root->id)) == 0): ?>
+                                <button type="button" class="btn btn-danger btn-sm remove-root-category">删除</button>
+                            <?php else: ?>
+                                <label class="xs">不为空</label>
+                            <?php endif; ?>
+
                         </div>
 
-                        <?php if (count($this->productModel->getProductByCategory($c->id)) == 0): ?>
-                            <button type="button" class="btn btn-danger btn-xs remove-child-category">删除</button>
-                        <?php else: ?>
-                            <label class="xs">不为空</label>
-                        <?php endif; ?>
-
-                        <input type="hidden" class="childhd" value="<?php echo $c->id ?>"/>
+                        <input type="hidden" class="roothd" value="<?php echo $root->id ?>"/>
                     </div>
-                <?php endforeach; ?>
+                    <?php foreach ($children as $c): ?>
+                        <div class="child-itm">
+                            <p><?php echo $c->name ?></p>
+                            <div class="btn-group">
+                                <a type="button" href="<?php echo $this->url(array(id => $c->id), 'manage-category-save') ?>" class="btn btn-info btn-xs">编辑</a>
+                            </div>
+
+                            <?php if (count($this->productModel->getProductByCategory($c->id)) == 0): ?>
+                                <button type="button" class="btn btn-danger btn-xs remove-child-category">删除</button>
+                            <?php else: ?>
+                                <label class="xs">不为空</label>
+                            <?php endif; ?>
+
+                            <input type="hidden" class="childhd" value="<?php echo $c->id ?>"/>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </div>
 <script type="text/javascript">
     (function($) {
