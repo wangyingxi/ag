@@ -37,7 +37,7 @@ class Angel_Service_Image {
                 $dest = imagecreatetruecolor($des_w, $des_h);
 
                 if (empty($coord)) {
-                    $coord = $this->getCropCoord($des_w, $des_h, $src_w, $src_h);
+                    $coord = $this->getCropCoord($des_w, $des_h, $src_w, $src_h, 'center');
                 }
 
                 if ($image_type == IMAGETYPE_PNG) {

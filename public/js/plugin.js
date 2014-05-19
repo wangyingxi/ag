@@ -192,7 +192,7 @@
                         img.attr('src', item[0].path.orig);
                         gallery.append("<label class='label label-warning'>无缩略</label>");
                     } else {
-                        img.attr('src', item[0].path.main);
+                        img.attr('src', item[0].path.small);
                         gallery.attr('thumbnail', true);
                     }
                     gallery.append(img);
