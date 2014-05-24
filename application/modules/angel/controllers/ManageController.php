@@ -821,7 +821,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             }
         } else {
             // GET METHOD
-            $this->view->title = "创建品牌分类";
+            $this->view->title = "创建品牌";
         }
     }
 
