@@ -393,32 +393,35 @@
                         $this.photoSelector('renderChoosen');
                     });
                     item.append(rm);
-                    var lt = $("<button>").attr('type', 'button').html('&lt;').addClass('lt');
-                    lt.click(function() {
-                        var gysdItem = $(this).closest('.gy-sd');
-                        var ltElem = gysdItem.prev();
-                        if (ltElem.length > 0) {
-                            // 左移
-                            var gysdItemCopy = gysdItem.clone(true);
-                            gysdItem.remove();
-                            ltElem.before(gysdItemCopy);
-                            redisplay($(this));
-                        }
-                    });
-                    item.append(lt);
-                    var rt = $("<button>").attr('type', 'button').html('&gt;').addClass('rt');
-                    rt.click(function() {
-                        var gysdItem = $(this).closest('.gy-sd');
-                        var rtElem = gysdItem.next();
-                        if (rtElem.length > 0) {
-                            // 右移
-                            var gysdItemCopy = gysdItem.clone(true);
-                            gysdItem.remove();
-                            rtElem.after(gysdItemCopy);
-                            redisplay($(this));
-                        }
-                    });
-                    item.append(rt);
+
+                    if (settings.multi) {
+                        var lt = $("<button>").attr('type', 'button').html('&lt;').addClass('lt');
+                        lt.click(function() {
+                            var gysdItem = $(this).closest('.gy-sd');
+                            var ltElem = gysdItem.prev();
+                            if (ltElem.length > 0) {
+                                // 左移
+                                var gysdItemCopy = gysdItem.clone(true);
+                                gysdItem.remove();
+                                ltElem.before(gysdItemCopy);
+                                redisplay($(this));
+                            }
+                        });
+                        item.append(lt);
+                        var rt = $("<button>").attr('type', 'button').html('&gt;').addClass('rt');
+                        rt.click(function() {
+                            var gysdItem = $(this).closest('.gy-sd');
+                            var rtElem = gysdItem.next();
+                            if (rtElem.length > 0) {
+                                // 右移
+                                var gysdItemCopy = gysdItem.clone(true);
+                                gysdItem.remove();
+                                rtElem.after(gysdItemCopy);
+                                redisplay($(this));
+                            }
+                        });
+                        item.append(rt);
+                    }
                     item.append($("<img>").attr('src', path));
                     gyPhotoSelected.append(item);
                 });
