@@ -383,7 +383,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $id = $this->getParam('id');
             if ($id) {
                 $productModel = $this->getModel('product');
-                $result = $productModel->removeProduct($id);
+                $result = $productModel->remove($id);
             }
             echo $result;
             exit;

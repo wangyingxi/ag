@@ -178,21 +178,4 @@ class Angel_Model_Product extends Angel_Model_AbstractModel {
         return $result;
     }
 
-    public function removeProduct($id) {
-        $result = false;
-        $product = $this->getById($id);
-        try {
-            // remove document
-            $result = $this->_dm->createQueryBuilder($this->_document_class)
-                    ->remove()
-                    ->field('id')
-                    ->equals($id)
-                    ->getQuery()
-                    ->execute();
-        } catch (Exception $e) {
-            $result = false;
-        }
-        return $result;
-    }
-
 }
