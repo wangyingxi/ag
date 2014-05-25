@@ -10,12 +10,7 @@ class Angel_Model_Photo extends Angel_Model_AbstractModel {
         $photo = $this->getById($id);
         try {
             // remove document
-            $result = $this->_dm->createQueryBuilder($this->_document_class)
-                    ->remove()
-                    ->field('id')
-                    ->equals($id)
-                    ->getQuery()
-                    ->execute();
+            $result = $this->remove($id);
 
             // delete files
             $imageService = $this->_container->get('image');
