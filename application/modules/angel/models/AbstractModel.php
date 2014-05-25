@@ -109,7 +109,7 @@ abstract class Angel_Model_AbstractModel {
         $query = $this->_dm->createQueryBuilder($this->_document_class);
         if (is_array($condition)) {
             foreach ($condition as $key => $val) {
-                $query = $query->field(key)->equals($val);
+                $query = $query->field($key)->equals($val);
             }
         }
         $query = $query->sort('created_at', -1);
