@@ -756,7 +756,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $id = $this->getParam('id');
             if ($id) {
                 $phototypeModel = $this->getModel('phototype');
-                $result = $phototypeModel->removePhototype($id);
+                $result = $phototypeModel->remove($id);
             }
             echo $result;
             exit;
