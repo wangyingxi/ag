@@ -47,38 +47,79 @@ class Angel_Controller_Action extends Zend_Controller_Action {
      * 对用户的各项状态进行检测 
      */
     public function preDispatch() {
+        
+        // 正常情况下的登录和注册地址
+        $registerRoute = "register";
+        $loginRoute = "login";
+        $requestManage = ($this->request->controller == 'manage');
+        if ($requestManage) {
+            // 后台管理系统的登录和注册地址
+            $registerRoute = "manage-register";
+            $loginRoute = "manage-login";
+        }
+        $registerPath = $this->view->url(array(), $registerRoute);
+        $loginPath = $this->view->url(array(), $loginRoute) . '?goto=' . $this->request->getRequestUri();
 
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
             $user = $this->getModel('user')->getUserById($auth->getIdentity());
             if (!$user) {
                 if (!in_array($this->request->getActionName(), $this->login_not_required)) {
-                    $this->_redirect($this->view->url(array(), 'manage-register'));
+                    $auth->clearIdentity();
+                    $this->_redirect($loginPath);
                 }
             } else {
                 $this->me = new Angel_Me($user);
                 $this->view->me = $this->me;
+                if ($requestManage && $user->user_type != 'admin') {
+                    $this->_redirect($this->view->url(array(), 'forbidden'));
+                }
             }
         } else {
             if ($this->checkRememberMe() === true) {
-                $this->me = new Angel_Me($this->getModel('user')->getUserById($auth->getIdentity()));
+                $user = $this->getModel('user')->getUserById($auth->getIdentity());
+                $this->me = new Angel_Me($user);
                 $this->view->me = $this->me;
+                if ($requestManage && $user->user_type != 'admin') {
+                    $this->_redirect($this->view->url(array(), 'forbidden'));
+                }
             } else {
                 if (!in_array($this->request->getActionName(), $this->login_not_required)) {
-                    $this->_redirect($this->view->url(array(), 'manage-login') . '?goto=' . $this->request->getRequestUri());
+                    $this->_redirect($loginPath);
                 }
             }
         }
-
-        // 如果用户还没被激活，跳转到激活页
-        if ($this->me) {
-            if (!$this->me->isActivated()) {
-                $router = Zend_Controller_Front::getInstance()->getRouter()->getCurrentRouteName();
-                if (!($router == 'wait-to-be-activated' || $router == 'email-validation')) {
-                    $this->_redirect($this->view->url(array(), 'wait-to-be-activated'));
-                }
-            }
-        }
+//        $auth = Zend_Auth::getInstance();
+//        if ($auth->hasIdentity()) {
+//            $user = $this->getModel('user')->getUserById($auth->getIdentity());
+//            if (!$user) {
+//                if (!in_array($this->request->getActionName(), $this->login_not_required)) {
+//                    $this->_redirect($this->view->url(array(), 'manage-register'));
+//                }
+//            } else {
+//                $this->me = new Angel_Me($user);
+//                $this->view->me = $this->me;
+//            }
+//        } else {
+//            if ($this->checkRememberMe() === true) {
+//                $this->me = new Angel_Me($this->getModel('user')->getUserById($auth->getIdentity()));
+//                $this->view->me = $this->me;
+//            } else {
+//                if (!in_array($this->request->getActionName(), $this->login_not_required)) {
+//                    $this->_redirect($this->view->url(array(), 'manage-login') . '?goto=' . $this->request->getRequestUri());
+//                }
+//            }
+//        }
+//
+//        // 如果用户还没被激活，跳转到激活页
+//        if ($this->me) {
+//            if (!$this->me->isActivated()) {
+//                $router = Zend_Controller_Front::getInstance()->getRouter()->getCurrentRouteName();
+//                if (!($router == 'wait-to-be-activated' || $router == 'email-validation')) {
+//                    $this->_redirect($this->view->url(array(), 'wait-to-be-activated'));
+//                }
+//            }
+//        }
     }
 
     protected function checkRememberMe() {
