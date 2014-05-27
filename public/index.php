@@ -23,7 +23,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
 require_once 'Zend/Application.php';
 require_once 'Zend/Config/Ini.php';
 
-$system_ini_path = '/var/angelhere.ini';
+$system_ini_path = 'angelhere.ini';
 if(file_exists($system_ini_path)){
     $system_ini = new \Zend_Config_Ini($system_ini_path);
 }
