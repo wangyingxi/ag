@@ -193,7 +193,12 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
     margin: 2px 20px 0 20px;
     width: 1px;
 }
-
+.green-btn {
+    background-color:#419641;
+}
+.green-btn:hover {
+    background-color:#20AA20;
+}
 /*
  * page layout
  *

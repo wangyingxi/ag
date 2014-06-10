@@ -119,7 +119,6 @@
     padding: 20px 0;
 }
 #product-buy #add-to-cart, #product-buy #view-cart {
-    background: #ef3546;
     color: #FFF;
     display: block;
     height: 42px;
@@ -127,8 +126,10 @@
     margin: 0;
     padding: 5px 26px 5px 24px;
 }
+#product-buy #add-to-cart {
+    background: #ef3546;
+}
 #product-buy #view-cart {
-    background-color: #419641;
     display:none;
 }
 #product-buy #add-to-cart, #product-buy #set-qty, #product-buy #view-cart {
