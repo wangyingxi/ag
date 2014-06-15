@@ -14,7 +14,7 @@ class Brand extends AbstractDocument {
     protected $description = 'nothing';
 
     /** @ODM\ReferenceOne(targetDocument="\Documents\Photo") */
-    protected $logo = array();
+    protected $logo;
 
     /** @ODM\Int */
     protected $view = 0;
