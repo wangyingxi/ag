@@ -42,10 +42,11 @@ class Angel_ProductController extends Angel_Controller_Action {
     public function cartAction() {
         if ($this->request->isPost()) {
             $query = $this->request->getParam('query');
+            $resource = array();
+            $code = 404;
             if ($query) {
                 $productModel = $this->getModel('product');
                 $qs = explode("|", $query);
-                $resource = array();
                 foreach ($qs as $id) {
                     $product = $productModel->getById($id);
                     $pArr = array('id' => $id,
@@ -63,10 +64,10 @@ class Angel_ProductController extends Angel_Controller_Action {
                     $pArr['link'] = $this->view->url(array('id' => $id), 'product-view');
                     $resource[] = $pArr;
                 }
-
-                $this->_helper->json(array('data' => $resource,
-                    'code' => 200));
+                $code = 200;
             }
+            $this->_helper->json(array('data' => $resource,
+                'code' => $code));
         } else {
             $this->view->title = "My Cart";
         }

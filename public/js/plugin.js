@@ -470,7 +470,7 @@
         $this.bind('contextmenu', function(e) {
             return false;
         });
-    }
+    };
     $.fn.xCenter = function() {
         var $this = $(this);
         var parent = $this.parent();
@@ -479,7 +479,7 @@
             $this.css('position', 'absolute');
         }
         $this.css('left', (pw - $this.width()) / 2);
-    }
+    };
 
 
     $.currency = {
@@ -650,7 +650,11 @@
         set: function(id, qty) {
             if (typeof qty === 'number') {
                 var c = this.parse();
-                c[id] = qty;
+                if (qty === 0) {
+                    delete c[id];
+                } else {
+                    c[id] = qty;
+                }
                 this.write(JSON.stringify(c));
             } else {
                 return false;

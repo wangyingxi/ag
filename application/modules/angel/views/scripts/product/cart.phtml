@@ -22,8 +22,12 @@
                 </tbody>
             </table>
         </div>
+        <div class="grid_24" id="cart-empty">
+            <p>Sorry your shopping cart is empty.</p>
+            <a href="/" class="btn">Continue shopping</a>
+        </div>
     </div>
-    <div class="container_24" id="payinfo">
+    <div class="container_24" id="pay-info">
         <div class="grid_16">
             &nbsp;
         </div>
@@ -44,7 +48,7 @@
             <td class="col3 cart-price"></td>
             <td class="col4 cart-qty"></td>
             <td class="col5 cart-subtotal"></td>
-            <td class="col6 cart-operation"><button>delete</button></td>
+            <td class="col6 cart-operation"><button class="cart-remove-btn">&times;</button></td>
         </tr>
     </table>
     <div class="price" price="0" currency="">
@@ -72,9 +76,9 @@
             type: 'post',
             data: data,
             success: function(response) {
+                var container = $('#cart-list table tbody');
+                container.empty();
                 if (response.code === 200) {
-                    var container = $('#cart-list table tbody');
-                    container.empty();
                     $.each(response.data, function() {
                         var $this = this;
                         var row = $('.P_tmp .cart-list-itm').clone(true);
@@ -103,11 +107,17 @@
                         // set qty
                         var input = $('<input>').attr('type', 'text').attr('maxlength', 2).val(qty);
                         input.integerInput();
+                        input.change(function() {
+                            var qty = $(this).val();
+                            var id = $(this).closest('tr').attr('id');
+                            $.cart.set(id, parseInt(qty));
+                            requestCart();
+                        });
                         row.find('.cart-qty').append(input);
                         row.find('.cart-title').append($('<a>').attr('target', '_blank').attr('href', $this.link).html($this.title));
                         container.append(row);
                     });
-                    // set payinfo
+                    // set pay-info
                     var tmps = {};
                     $.each($('#cart-list .cart-list-itm'), function() {
                         var $this = $(this);
@@ -121,17 +131,21 @@
                             }
                         });
                     });
-                    console.log(tmps);
-                    $('#payinfo #total').empty();
+                    $('#pay-info #total').empty();
                     $.each(tmps, function(k, v) {
                         var row = $('.P_tmp .price').clone(true);
                         row.attr('price', v.amount);
                         row.attr('currency', k);
                         row.find('.price-str').html(v.symbol + v.amount + k);
-                        $('#payinfo #total').append(row);
+                        $('#pay-info #total').append(row);
                     });
-                    $('#payinfo').fadeIn(100);
+                    $('#pay-info').fadeIn(100);
+                } else if (response.code === 404) {
+                    $('#cart-list').hide();
+                    $('#pay-info').hide();
+                    $('#cart-empty').show();
                 }
+                $('#cart-total').html($.cart.total());
             },
             complete: function() {
                 $.currency.refresh();
@@ -141,6 +155,11 @@
 
     (function($) {
         requestCart();
+        $('.cart-remove-btn').click(function() {
+            var tr = $(this).closest('tr');
+            $.cart.set(tr.attr('id'), 0);
+            requestCart();
+        });
     })(jQuery);
 </script>
 
@@ -185,20 +204,50 @@
         text-align:center;
         width:30px;
     }
+    #cart-empty {
+        border-bottom:1px solid #DDD;
+        border-top:1px solid #DDD;
+        display:none;
+        margin-bottom:50px;
+        padding:50px;
+        text-align:center;
+    }
+    #cart-empty p {
+        font-size:16px;
+        padding-bottom:20px;
+    }
+    #cart-empty a {
 
-    #payinfo {
+    }
+
+    #pay-info {
         display:none;
         font-size:15px;
         padding:20px 0;
     }
-    #payinfo .grid_4 {
+    #pay-info .grid_4 {
         text-align:right;
     }
-    #payinfo #total * {
+    #pay-info #total * {
         color:#EF3546;
     }
     #checkout-btn {
         margin-top:20px;
         padding:10px 20px;
     }
+    .cart-remove-btn {
+        background:transparent;
+        color:#999;
+        font-size:16px;
+        height:20px;
+        margin:0;
+        padding:0;
+        width:20px;
+    }
+    .cart-remove-btn:hover {
+        background:transparent;
+        box-shadow:none;
+        color:#333;
+    }
+
 </style>
