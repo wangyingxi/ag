@@ -412,11 +412,10 @@ class Angel_ManageController extends Angel_Controller_Action {
         if ($paramLocation) {
             $tmp = split($this->SEPARATOR, $paramLocation);
             if (count($tmp)) {
-                $paramLocation = $tmp;
-                return $paramLocation;
+                return $tmp;
             }
         }
-        return false;
+        return array();
     }
 
     protected function getSellingPrice() {
