@@ -403,7 +403,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             }
             return $photoArray;
         } else {
-            return false;
+            return null;
         }
     }
 
