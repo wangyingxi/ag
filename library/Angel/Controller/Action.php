@@ -186,7 +186,6 @@ class Angel_Controller_Action extends Zend_Controller_Action {
         if (!empty($angel)) {
             $this->getModel('token')->disableToken($angel);
         }
-
         $this->_redirect($this->view->url(array(), $defaultRedirectRoute));
     }
 
@@ -225,10 +224,8 @@ class Angel_Controller_Action extends Zend_Controller_Action {
             } else {
                 $this->view->error = $error;
             }
-        } else {
-            // GET METHOD
-            $this->view->title = $pageTitle;
         }
+        $this->view->title = $pageTitle;
     }
 
     protected function userLogin($defaultRedirectRoute, $pageTitle) {
@@ -275,8 +272,8 @@ class Angel_Controller_Action extends Zend_Controller_Action {
             if ($this->getParam('register') == 'success') {
                 $this->view->register = 'success';
             }
-            $this->view->title = $pageTitle;
         }
+        $this->view->title = $pageTitle;
     }
 
 }
