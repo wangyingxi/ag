@@ -34,11 +34,13 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
     }
 
     public function addManageUser($email, $password, $salt, $checkemail = true) {
-
         $usertype = "admin";
         return $this->registerUser($email, $password, $usertype, $salt, $checkemail);
     }
-
+    public function addUser($email, $password, $salt, $checkemail = true) {
+        $usertype = "user";
+        return $this->registerUser($email, $password, $usertype, $salt, $checkemail);
+    }
     protected function registerUser($email, $password, $usertype, $salt, $checkmail) {
         $result = false;
         if (empty($email)) {
@@ -83,67 +85,6 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
         if ($result && !$checkemail) {
             
         }
-        return $result;
-    }
-
-    /**
-     * 用户注册
-     * 
-     * @param string $user_type
-     * @param string $email
-     * @param string $username
-     * @param string $password
-     * @param string $salt
-     * @param boolean $checkemail   -   是否要发送email验证邮件
-     * @return mix - when user registration success, return the user id, otherwise, boolean false
-     * @throws Angel_Exception_User 
-     */
-    public function addUser($user_type, $email, $username, $password, $salt, $checkemail = true) {
-        $result = false;
-
-        if (empty($email)) {
-            throw new Angel_Exception_User(Angel_Exception_User::EMAIL_EMPTY);
-        } else {
-            $validation = new Zend_Validate_EmailAddress();
-            if (!$validation->isValid($email)) {
-                throw new Angel_Exception_User(Angel_Exception_User::EMAIL_INVALID);
-            } else {
-                if ($this->isEmailExist($email)) {
-                    throw new Angel_Exception_User(Angel_Exception_User::EMAIL_NOT_UNIQUE);
-                }
-            }
-        }
-
-        $user = new $this->_document_class();
-
-        if (!$user->isUsertypeValid($user_type)) {
-            throw new Angel_Exception_User(Angel_Exception_User::USERTYPE_INVALID);
-        }
-
-        $user->user_type = $user_type;
-        $user->email = $email;
-        $user->username = $username;
-        $user->salt = $salt;
-        $user->password = $password;
-        $user->active_bln = true;
-        $user->email_validated_bln = !$checkemail;
-        $user->validated_bln = false;
-
-        try {
-            $this->_dm->persist($user);
-            $this->_dm->flush();
-
-            $result = $user->id;
-        } catch (Exception $e) {
-            $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage() . "\n" . $e->getTraceAsString());
-            throw new Angel_Exception_User(Angel_Exception_User::ADD_USER_FAIL);
-        }
-
-        // send email to the new user to notice him to active his account
-        if ($result && $checkemail) {
-            $this->sendAccountValidationEmail($user);
-        }
-
         return $result;
     }
 
@@ -494,90 +435,6 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
     public function getProfileImage($image, $version) {
         $imageService = $this->_container->get('image');
         return $imageService->generateImageFilename($this->getProfileImagePath($image), $version, false);
-    }
-
-    /**
-     * 添加用户的一些文档，比如个人的信用文件，身份证的正反
-     * @param \Documents\User $user
-     * @param string $filetype - 对应的angelhere的文件类型
-     * @param string $filepath - 上传的文件地址
-     * @param string $filename - 上传的文件名
-     * @return mix, when the file is added success, return the \Documents\UserDoc document
-     */
-    public function addUserDoc(\Documents\User $user, $filetype, $filepath, $filename, $mimetype = '') {
-        $utilService = $this->_container->get('util');
-
-        $extension = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
-        if (empty($extension)) {
-            $fileService = $this->_container->get('file');
-            $extension = $fileService->getExtensionByMinetype($mimetype);
-        }
-        $angelname = $utilService->generateFilename($extension);
-
-        $destination = APPLICATION_PATH . '/../public' . $this->_bootstrap_options['file']['user_doc'] . DIRECTORY_SEPARATOR . $angelname;
-
-        $result = false;
-        if (copy($filepath, $destination)) {
-            switch ($filetype) {
-                case self::FILETYPE_IDENTITY_FRONT:
-                    $result = $user->addIdentityFrontDoc($filename, $angelname);
-                    break;
-                case self::FILETYPE_IDENTITY_BACK;
-                    $result = $user->addIdentityBackDoc($filename, $angelname);
-                    break;
-            }
-
-
-            $this->_dm->persist($user);
-            $this->_dm->flush();
-        }
-
-        return $result;
-    }
-
-    /**
-     * 根据文档的类型，返回用户的此文档
-     * @param string $user_id
-     * @param string $doctype
-     * @param string $doc_id － 此文档的ID
-     * @return instance of \documents\userdoc 
-     */
-    public function getUserDoc($user_id, $doctype, $doc_id = null) {
-        $user = $this->validateUserId($user_id);
-
-        $doc = null;
-
-        switch (strtolower($doctype)) {
-            case self::FILETYPE_IDENTITY_FRONT:
-                $doc = $user->identity_front_doc;
-                break;
-            case self::FILETYPE_IDENTITY_BACK:
-                $doc = $user->identity_back_doc;
-                break;
-        }
-
-        if ($doc && is_string($doc_id)) {
-            if (is_array($doc)) {
-                $target_doc = null;
-                foreach ($doc as &$temp) {
-                    if ($temp->id == $doc_id) {
-                        $target_doc = $temp;
-                        break;
-                    }
-                }
-                $doc = $target_doc;
-            } else {
-                if ($doc->id != $doc_id) {
-                    $doc = null;
-                }
-            }
-
-            if ($doc) {
-                $doc->path = APPLICATION_PATH . '/../public' . $this->_bootstrap_options['file']['user_doc'] . DIRECTORY_SEPARATOR . $doc->angelname;
-            }
-        }
-
-        return $doc;
     }
 
     /**
