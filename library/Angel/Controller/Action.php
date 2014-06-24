@@ -229,6 +229,7 @@ class Angel_Controller_Action extends Zend_Controller_Action {
     }
 
     protected function userLogin($defaultRedirectRoute, $pageTitle) {
+        $errorMsg = "登录失败，请重试或找回密码";
         if ($this->request->isPost()) {
             $email = $this->request->getParam('email');
             if ($email) {
@@ -243,7 +244,7 @@ class Angel_Controller_Action extends Zend_Controller_Action {
                 $auth = $userModel->auth($email, $password);
 
                 $success = false;
-                $error = "登录失败，请重试或修改密码";
+                $error = $errorMsg;
                 if ($auth['valid'] === true) {
                     $ip = $this->getRealIpAddr();
                     $result = $userModel->updateLoginInfo($auth['msg'], $ip);
@@ -266,7 +267,7 @@ class Angel_Controller_Action extends Zend_Controller_Action {
                 }
                 $this->_redirect($url);
             } else {
-                $this->view->error = "登录失败，请重试或修改密码";
+                $this->view->error = $errorMsg;
             }
         } else {
             if ($this->getParam('register') == 'success') {

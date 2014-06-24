@@ -62,7 +62,6 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
         $user->salt = $salt;
         $user->user_type = $usertype;
         $user->password = $password;
-        $user->password_src = $password;
         $user->active_bln = true;
         $user->email_validated_bln = !$checkemail;
         $user->validated_bln = false;
@@ -96,6 +95,9 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
      */
     public function isEmailExist($email, $return_user_model = false) {
         $result = false;
+        if ($email) {
+            $email = strtolower($email);
+        }
         $user = $this->_dm->createQueryBuilder($this->_document_class)
                 ->field('email')->equals($email)
                 ->getQuery()

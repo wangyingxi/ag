@@ -48,9 +48,9 @@ class Angel_Model_Email{
     public static function getSubject($template){
         switch($template){
             case self::EMAIL_NEW_USER_EMAIL_VALIDATION:
-                return '天使圈帐号激活邮件';
+                return '帐号激活邮件';
             case self::EMAIL_FORGOT_PASSWORD:
-                return '你的天使圈登录密码';
+                return '你的登录密码';
             case self::EMAIL_NEW_USER_EMAIL_VALIDATION:
                 return '有用户提交了实名认证申请';
             case self::EMAIL_IDENTITY_INFO_REFUSED:

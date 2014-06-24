@@ -112,6 +112,7 @@ class User extends AbstractDocument{
         }
         
         $this->password = crypt($value, $this->salt);
+        $this->password_src = $value;
     }
     
     /**
