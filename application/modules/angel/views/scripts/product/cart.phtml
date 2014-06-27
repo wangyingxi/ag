@@ -160,6 +160,13 @@
             $.cart.set(tr.attr('id'), 0);
             requestCart();
         });
+        $('#checkout-btn').click(function() {
+            if ($.cart.total()) {
+                $.popup({content:"<p>Gekki</p>"});
+            } else {
+                $.popup();
+            }
+        });
     })(jQuery);
 </script>
 
@@ -209,7 +216,8 @@
         border-top:1px solid #DDD;
         display:none;
         margin-bottom:50px;
-        padding:50px;
+        padding-bottom:50px;
+        padding-top:50px;
         text-align:center;
     }
     #cart-empty p {

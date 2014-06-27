@@ -704,6 +704,91 @@
             return sum;
         }
     };
+
+    $.extend({
+        POPUPID: "P_popup",
+        POPUPSETTINGS: {
+            id: "P_popup",
+            content: "hello",
+            modal: false,
+            closebtn: true,
+//            relocate: true,
+            msg: "hello",
+            height: 360,
+            width: 500
+        },
+        popup: function(options) {
+            $.extend($.POPUPSETTINGS, options);
+            var id = $.POPUPSETTINGS.id;
+            var w = $(window);
+            $('#' + id).remove();
+            var popupFrame = $('<div>').attr('id', id);
+            var w = $.POPUPSETTINGS.width;
+            var h = $.POPUPSETTINGS.height;
+            var content = $.POPUPSETTINGS.content;
+            content = (typeof (content) === 'string') ? $(content) : content;
+            content.addClass('P_bg')
+                    .css('margin-left', "-" + w / 2 + "px")
+                    .css('margin-top', "-" + h / 2 + "px")
+                    .css('width', w)
+                    .css('height', h);
+
+            popupFrame.show();
+            var clsbtn = $('<span>').addClass('P_closebtn').html("&times;");
+            $('body').append(popupFrame.append($(content).append(clsbtn)));
+
+            if (!$.POPUPSETTINGS.modal) {
+                popupFrame.children().click(function(e) {
+                    e.stopPropagation();
+                });
+                popupFrame.click(function(e) {
+                    clsbtn.click();
+                });
+            }
+
+            clsbtn.click(function() {
+                $(this).closest('#' + id).remove();
+            });
+
+            if ($.POPUPSETTINGS.closebtn) {
+                clsbtn.show();
+            }
+
+//            if ($.POPUPSETTINGS.relocate) {
+//                var cw = content.width();
+//                var ch = content.height();
+//                var left = (w.width() - cw) / 2;
+//                var top = (w.height() - ch) / 2;
+//
+//                content.css('left', left);
+//                content.css('top', top);
+//            }
+        },
+        alertbox: function(options) {
+            $.extend($.POPUPSETTINGS, options);
+            var id = "P_alertbox";
+            var msg = "";
+            if ($.POPUPSETTINGS.msg) {
+                msg = $.POPUPSETTINGS.msg;
+            }
+            var wp;
+            if (typeof (msg) === 'object')
+                wp = $('<div>').addClass('P_wp').append(msg);
+            else
+                wp = $('<div>').addClass('P_wp').html(msg);
+            var alertContent = $('<div>').attr('id', id).addClass('P_popupbg').append(wp);
+
+            $.POPUPSETTINGS.content = alertContent;
+            $.popup();
+        },
+        popupclose: function() {
+            var id = $.POPUPSETTINGS.id;
+            $('#' + id).fadeOut(150, function() {
+                $(this).remove();
+            });
+        }
+    });
+
 })(jQuery);
 /*!
  * jQuery Cookie Plugin v1.3.1
