@@ -199,6 +199,16 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 .green-btn:hover {
     background-color:#20AA20;
 }
+.black-btn {
+    background-color:#333;
+}
+.black-btn:hover {
+    background-color:#111;
+}
+.sm-btn {
+    font-size:12px;
+    padding:5px 12px;
+}
 /*
  * page layout
  *

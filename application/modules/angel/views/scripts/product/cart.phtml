@@ -162,9 +162,10 @@
         });
         $('#checkout-btn').click(function() {
             if ($.cart.total()) {
-                $.popup({content:"<p>Gekki</p>"});
+                location.href = '<?php echo $this->url(array(), 'checkout') ?>';
             } else {
-                $.popup();
+                var html = "<p class='marginbottom5px'>Sorry the cart is empty now.</p><button class='sm-btn black-btn'>Refresh Page</button>";
+                $.alertbox({msg: html});
             }
         });
     })(jQuery);

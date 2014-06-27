@@ -73,4 +73,12 @@ class Angel_ProductController extends Angel_Controller_Action {
         }
     }
 
+    public function checkoutAction() {
+        if ($this->request->isPost()) {
+            
+        } else {
+            $this->view->title = "Checkout Order";
+        }
+    }
+
 }

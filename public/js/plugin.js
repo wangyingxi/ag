@@ -715,7 +715,9 @@
 //            relocate: true,
             msg: "hello",
             height: 360,
-            width: 500
+            width: 500,
+            padding:25,
+            textAlign:'left'
         },
         popup: function(options) {
             $.extend($.POPUPSETTINGS, options);
@@ -728,10 +730,12 @@
             var content = $.POPUPSETTINGS.content;
             content = (typeof (content) === 'string') ? $(content) : content;
             content.addClass('P_bg')
+                    .css('padding', $.POPUPSETTINGS.padding)
                     .css('margin-left', "-" + w / 2 + "px")
                     .css('margin-top', "-" + h / 2 + "px")
                     .css('width', w)
-                    .css('height', h);
+                    .css('height', h)
+                    .css('text-align', $.POPUPSETTINGS.textAlign);
 
             popupFrame.show();
             var clsbtn = $('<span>').addClass('P_closebtn').html("&times;");
@@ -765,7 +769,14 @@
 //            }
         },
         alertbox: function(options) {
-            $.extend($.POPUPSETTINGS, options);
+            var _settings = {
+                width:280,
+                height:120,
+                textAlign:'center'
+            };
+            $.extend(_settings, options);
+            _settings.modal = true;
+            $.extend($.POPUPSETTINGS, _settings);
             var id = "P_alertbox";
             var msg = "";
             if ($.POPUPSETTINGS.msg) {
