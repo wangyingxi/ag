@@ -1,6 +1,9 @@
 /*
 Common css
 */
+.nomargin {
+    margin:0;
+}
 .marginbottom5px {
     margin-bottom:5px !important;
 }
@@ -9,6 +12,9 @@ Common css
 }
 .marginbottom20px {
     margin-bottom:20px !important;
+}
+.marginbottom30px {
+    margin-bottom:30px !important;
 }
 .marginbottom50px {
     margin-bottom:50px !important;
