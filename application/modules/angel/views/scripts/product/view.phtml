@@ -54,7 +54,7 @@ if ($model->css) {
 </style>
 
 <input type="hidden" id="product-id" value="<?php echo $model->id ?>"/>
-<div class="content">
+<div class="content wbg-wrapper">
     <div id="product-main-block" class="container_24">
         <div id="product-pg" class="grid_14">
             <?php if (count($model->photo) > 1): ?>
@@ -146,8 +146,8 @@ if ($model->css) {
                     <button id="add-to-cart">
                         <i class="ico"></i>Add To Cart
                     </button>
-                    
-                    <button id="view-cart" class="green-btn" onclick="location.href='/cart'">
+
+                    <button id="view-cart" class="green-btn" onclick="location.href = '/cart'">
                         <i class="ico"></i>Added &amp; View Cart
                     </button>
                 </div>
@@ -166,94 +166,95 @@ if ($model->css) {
             </div>
         </div>
     </div>
-</div>
-<div class="container_24 product-blk" id="product-overview">
-    <div class="grid_14 product-blk-unit">
-        <p class="tt">
-            OVERVIEW
-        </p>
-        <div class="ct">
-            <?php echo $model->description ?>
-        </div>
 
-        <?php if ($model->brand): ?>
-            <p class="tt margintop20px bdsprl">
-                ABOUT <?php echo strtoupper($model->brand->name) ?>
+    <div class="container_24 product-blk" id="product-overview">
+        <div class="grid_14 product-blk-unit">
+            <p class="tt">
+                OVERVIEW
             </p>
             <div class="ct">
-                <style>
-                    .bdsprl {
-                        border-top:1px solid #E0E0E0;
-                        margin-right:10px;
-                        padding-top:20px;
-                    }
-                    #product-brand-logo-big {
-                        border-radius:200px;
-                        display:block;
-                        float:left;
-                        height:80px;
-                        width:80px;
-                    }
-                    #brand-statement {
-                        float:left;
-                        width:430px
-                    }
-                    #brand-statement dt {
-                        font-weight:bold;
-                    }
-                    #brand-statement dt, #brand-statement dd {
-                        padding-left:20px;
-                    }
-                    #brand-statement dd {
-                        font-size:13px;
-                    }
-                    #brand-statement .btn {
-                        background: transparent;
-                        border: 1px solid #333;
-                        display:inline-block;
-                        color:#333 !important;
-                        font-size:smaller;
-                        margin-top:15px;
-                        padding:0 20px;
-                        text-align:center;
-                    }
-                </style>
-                <?php if ($model->brand->logo): ?>
-                    <a target="_blank" href="#">
-                        <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
-                    </a>
-                <?php endif; ?>
-                <dl id="brand-statement">
-                    <dt>
-                    <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
-                    </dt>
-                    <dd>
-                        <?php echo $model->brand->description; ?>
-                    </dd>
-                    <dd>
-                        <a href="#" class="btn">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
-                    </dd>
-                </dl>
-                <div class="clear"></div>
+                <?php echo $model->description ?>
             </div>
-        <?php endif; ?>
+
+            <?php if ($model->brand): ?>
+                <p class="tt margintop20px bdsprl">
+                    ABOUT <?php echo strtoupper($model->brand->name) ?>
+                </p>
+                <div class="ct">
+                    <style>
+                        .bdsprl {
+                            border-top:1px solid #E0E0E0;
+                            margin-right:10px;
+                            padding-top:20px;
+                        }
+                        #product-brand-logo-big {
+                            border-radius:200px;
+                            display:block;
+                            float:left;
+                            height:80px;
+                            width:80px;
+                        }
+                        #brand-statement {
+                            float:left;
+                            width:430px
+                        }
+                        #brand-statement dt {
+                            font-weight:bold;
+                        }
+                        #brand-statement dt, #brand-statement dd {
+                            padding-left:20px;
+                        }
+                        #brand-statement dd {
+                            font-size:13px;
+                        }
+                        #brand-statement .btn {
+                            background: transparent;
+                            border: 1px solid #333;
+                            display:inline-block;
+                            color:#333 !important;
+                            font-size:smaller;
+                            margin-top:15px;
+                            padding:0 20px;
+                            text-align:center;
+                        }
+                    </style>
+                    <?php if ($model->brand->logo): ?>
+                        <a target="_blank" href="#">
+                            <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
+                        </a>
+                    <?php endif; ?>
+                    <dl id="brand-statement">
+                        <dt>
+                        <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
+                        </dt>
+                        <dd>
+                            <?php echo $model->brand->description; ?>
+                        </dd>
+                        <dd>
+                            <a href="#" class="btn">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
+                        </dd>
+                    </dl>
+                    <div class="clear"></div>
+                </div>
+            <?php endif; ?>
 
 
-        <div class="sprl"></div>
-    </div>
-    <div class="grid_10">
-        <p class="tt">
-            SHIPPING &amp; RETURNS
-        </p>
+            <div class="sprl"></div>
+        </div>
+        <div class="grid_10">
+            <p class="tt">
+                SHIPPING &amp; RETURNS
+            </p>
 
-    </div>
-    <div class="clear-30"></div>
-    <div class="grid_24">
-        <p class="tt">
-            CUSTOMER REVIEWS
-        </p>
-        <div id="review-btn-empty">
-            <a href="javascript:void(0)" class="txt">NO REVIEWS YET, WRITE NOW</a> 
+        </div>
+        <div class="clear-30"></div>
+        <div class="grid_24">
+            <p class="tt">
+                CUSTOMER REVIEWS
+            </p>
+            <div id="review-btn-empty">
+                <a href="javascript:void(0)" class="txt">NO REVIEWS YET, WRITE NOW</a> 
+            </div>
         </div>
     </div>
 </div>
@@ -329,11 +330,11 @@ if ($model->css) {
             var __DURATION = 100;
             $.cart.add($('#product-id').val(), parseInt($('#qty').val()));
             $('#cart-total').html($.cart.total());
-            $(this).fadeOut(__DURATION, function(){
+            $(this).fadeOut(__DURATION, function() {
                 $('#view-cart').fadeIn(__DURATION);
             });
-            
+
         });
-        
+
     })(jQuery);
 </script>

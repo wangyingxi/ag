@@ -14,7 +14,9 @@ h3 {
     margin-top: 0;
     margin-bottom: 10px;
 }
-
+body {
+    background:#F4F4F4;
+}
 
 /*
  * basic control layout reset
@@ -221,12 +223,16 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 }
 .wp.top {
     /*box-shadow:0 0 4px rgba(0,0,0,0.2);*/
+    background:#FFF;
     border-bottom: 1px solid #e0e0e0;
 }
 .content {
+    padding-bottom:20px;
     padding-top:20px;
 }
-
+.wbg-wrapper {
+    background:#fff;
+}
 .wp.top .container_24 {
     /*border-bottom:1px solid #F0F0F0;*/
     padding-bottom:20px;

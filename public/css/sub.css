@@ -297,15 +297,39 @@
     margin:0;
     padding:0 0 0 36px;
 }
-.calculator-ico {
-    background:url(../img/ico.png) left -80px no-repeat;
+.checkout #use-paypal-address {
+    color:#aaa;
     cursor:pointer;
+}
+.checkout #use-paypal-address:hover {
+    color:#444;
+}
+.checkout #use-paypal-address:hover .ico {
+    background-position:-35px -63px;
+}
+.checkout #use-paypal-address .ico {
+    background:url(../img/ico.png) -5px -63px;
     display:inline-block;
-    height:22px;
-    margin-left: 10px;
-    top: 7px;
+    float:left;
+    height:25px;
+    margin-right:5px;
     width:20px;
 }
-.calculator-ico:hover {
-    background-position:left -110px;
+.checkout #use-paypal-address.selected {
+    color:#ef3546 !important;
+}
+.checkout #use-paypal-address.selected .ico {
+    background-position:-65px -63px;
+}
+.checkout .sub-tt {
+    background:#FBFBFB;
+    border-left:5px solid #EEE;
+    color:#aaa;
+    font-size:15px;
+    font-weight:lighter;
+    margin:0;
+    padding:10px 20px;
+}
+.checkout #address-panel {
+    padding:30px;
 }

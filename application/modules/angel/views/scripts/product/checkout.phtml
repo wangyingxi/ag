@@ -1,30 +1,28 @@
 
 
-<div class="content">
+<div class="content checkout wbg-wrapper">
     <div class="container_24">
         <div class="grid_24 marginbottom30px">
             <h1 class="nomargin"><?php echo $this->title ?></h1><span class="subt">please confirm the total amount for the order</span>
         </div>
         <div class="grid_24">
-            <h2 style="font-size:15px;font-weight:bold;margin:0;border-left:5px solid #419641;padding:0 20px">
-                Delivery Address
+            <h2 class="sub-tt clearfix">
+                <span class="l-ft">Delivery Address</span>
+                <span class="r-ft" id="use-paypal-address" title="check it then you needn't to write address, we will post it to your paypal address"><i class="ico"></i> use my paypal address</span>
             </h2>
-            <table>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
+            <div id='address-panel'>
+                djfis
+            </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
     (function($) {
-
+        $('#use-paypal-address').click(function(){
+            var $this = $('#use-paypal-address');
+            $this.toggleClass('selected');
+            $('#address-panel').slideToggle(200);
+        });
     })(jQuery);
 </script>
-
-<style>
-</style>
