@@ -2,27 +2,134 @@
 
 <div class="content checkout wbg-wrapper">
     <div class="container_24">
-        <div class="grid_24 marginbottom30px">
-            <h1 class="nomargin"><?php echo $this->title ?></h1><span class="subt">please confirm the total amount for the order</span>
+        <div class="grid_24">
+            <h1 class="nomargin"><?php echo $this->title ?></h1><span class="subtt-checkout">please confirm the total amount for the order</span>
         </div>
         <div class="grid_24">
-            <h2 class="sub-tt clearfix">
-                <span class="l-ft">Delivery Address</span>
-                <span class="r-ft" id="use-paypal-address" title="check it then you needn't to write address, we will post it to your paypal address"><i class="ico"></i> use my paypal address</span>
-            </h2>
-            <div id='address-panel'>
-                djfis
+            <div class="ck-tb">
+                <div class="ck-row tr">
+                    <div class="ck-cell menu">
+                        <ul>
+                            <li class='selected'>
+                                Write my address
+                            </li>
+                            <li>
+                                Login to load my address
+                            </li>
+                            <li>
+                                Use my paypal address
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="ck-cell addr" style="padding:20px;background:#F6F6F6">
+                        <div class="ck-addr-row">
+                            <label class="lb">Receiver</label>
+                            <input class="wtxt" type='text' />
+                        </div>
+                        <div class="ck-addr-row">
+                            <label class='lb'>Address</label>
+                            <input class="wtxt" type='text' />
+                        </div>
+                        <div class="ck-addr-row">
+                            <label class='lb'>Tel</label>
+                            <input class="wtxt" type='text' />
+                        </div>
+                        <div class="ck-addr-row">
+                            <label class='lb'>State</label>
+                            <input class="wtxt" type='text' />
+                        </div>
+                        <div class="ck-addr-row">
+                            <label class='lb'>Zip Code</label>
+                            <input class="wtxt" type='text' />
+                        </div>
+                        <div class="ck-addr-row">
+                            <label class='lb'>Country</label>
+                            <select>
+                                <option>United States</option>
+                                <option>England</option>
+                                <option>China</option>
+                                <option>Japan</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!--            <h2 class="sub-tt clearfix">
+                            <span class="l-ft">Delivery Address</span>
+                            <span class="r-ft" id="use-paypal-address" title="check it then you needn't to write address, we will post it to your paypal address"><i class="ico"></i> use my paypal address</span>
+                        </h2>
+                        <div id='address-panel'>
+                            djfis
+                        </div>-->
         </div>
     </div>
 </div>
-
+<style>
+    
+    .ck-row {
+        clear:both;
+    }
+    .ck-cell {
+        box-sizing:border-box;
+        float:left;
+        height:100%;
+        -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        -o-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+    .ck-cell.menu {
+        width:230px;
+    }
+    .ck-cell.menu ul {
+        display:block;
+    }
+    .ck-cell.menu ul li {
+        border-left:5px solid transparent;
+        cursor:pointer;
+        display:block;
+        list-style:none;
+        padding:10px 20px;
+        text-align:center;
+    }
+    .ck-cell.menu ul li:hover {
+        border-color:#EEE;
+    }
+    .ck-cell.menu ul li.selected {
+        background:#F6F6F6;
+        border-color:#EF3546 !Important;
+        font-weight:bold;
+    }
+    .ck-cell.menu ul li:hover {
+        font-weight:bold;
+    }
+    .ck-cell.addr {
+        width:710px;
+        border-right: 5px solid #EF3546;
+    }
+    .ck-row.tr {
+        height:auto;
+    }
+    .ck-addr-row {
+        margin-bottom:8px;
+    }
+    .ck-addr-row .lb {
+        display:inline-block;
+        margin-right:30px;
+        text-align:right;
+        width:100px;
+    }
+    .ck-addr-row .wtxt {
+        height:25px;
+        width:470px;
+    }
+</style>
 <script type="text/javascript">
     (function($) {
-        $('#use-paypal-address').click(function(){
-            var $this = $('#use-paypal-address');
-            $this.toggleClass('selected');
-            $('#address-panel').slideToggle(200);
-        });
+//        $('#use-paypal-address').click(function(){
+//            var $this = $('#use-paypal-address');
+//            $this.toggleClass('selected');
+//            $('#address-panel').slideToggle(200);
+//        });
     })(jQuery);
 </script>

@@ -55,7 +55,7 @@ a:hover {
     color: #ef3546;
     text-decoration: underline;
 }
-input[type="text"], input[type="search"], textarea {
+input[type="text"], input[type="search"], textarea, .wtxt {
     background: #F0F0F0;
     border: none;
     border-radius: 3px;
@@ -64,9 +64,20 @@ input[type="text"], input[type="search"], textarea {
     padding: 5px 10px;
     width: 180px;
 }
+.wtxt {
+    background:#FFF !important;
+    border:1px solid #DDD !important;
+}
 input[type="text"]:hover, input[type="text"]:focus, input[type="search"]:hover, input[type="search"]:focus, textarea:hover, textarea:focus {
     background: #E8E8E8;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+}
+.wtxt:hover {
+    background:#FFF !important;
+    border-color:#BBB !important;
+}
+.wtxt:focus {
+    border-color:#BBB !important;
 }
 input[type="text"][disabled="disabled"], input[type="search"][disabled="disabled"], textarea[disabled="disabled"] {
     background: #DDD !important;
@@ -247,14 +258,18 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 .search-bar input[type='text'] {
     background: transparent;
     border: none;
+    box-sizing:border-box;
     box-shadow: none !important;
     color: #c0c0c0;
-    height: 30px;
+    height: 100%;
     line-height: 30px;
-    margin: 5px 0;
-    padding: 0;
-    text-align: center;
+    margin: 0;
+    padding: 5px 40px;
     width: 100%;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 .search-bar input[type='text']:focus, .search-bar input[type='text']:hover {
     color: #000;
