@@ -161,8 +161,8 @@ class Angel_ManageController extends Angel_Controller_Action {
             $this->view->title = "创建商品";
             $this->view->separator = $this->SEPARATOR;
             $this->view->location = $this->bootstrap_options['stock_location'];
-            $this->view->brand = $brandModel->getAll();
-            $this->view->category = $categoryModel->getAll();
+            $this->view->brand = $brandModel->getAll(false);
+            $this->view->category = $categoryModel->getAll(false);
         }
     }
 
@@ -260,8 +260,8 @@ class Angel_ManageController extends Angel_Controller_Action {
                 if (!$target) {
                     $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
                 }
-                $this->view->brand = $brandModel->getAll();
-                $this->view->category = $categoryModel->getAll();
+                $this->view->brand = $brandModel->getAll(false);
+                $this->view->category = $categoryModel->getAll(false);
                 if ($copy) {
                     // 复制一个商品
                     $this->view->title = "复制并创建商品";
@@ -418,7 +418,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                 }
             }
             $this->view->title = "确认保存图片";
-            $this->view->phototype = $phototypeModel->getAll();
+            $this->view->phototype = $phototypeModel->getAll(false);
         }
     }
 
@@ -545,7 +545,7 @@ class Angel_ManageController extends Angel_Controller_Action {
 
             if ($id) {
                 $target = $photoModel->getById($id);
-                $phototype = $phototypeModel->getAll();
+                $phototype = $phototypeModel->getAll(false);
                 if (!$target) {
                     $this->_redirect($this->view->url(array(), 'manage-result') . '?error=' . $notFoundMsg);
                 }
@@ -842,7 +842,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         } else {
             // GET METHOD
             $this->view->title = "创建分类";
-            $this->view->categories = $categoryModel->getAll();
+            $this->view->categories = $categoryModel->getAll(false);
         }
     }
 
@@ -908,7 +908,7 @@ class Angel_ManageController extends Angel_Controller_Action {
         } else {
             // GET METHOD
             $this->view->title = "编辑分类";
-            $this->view->categories = $categoryModel->getAll();
+            $this->view->categories = $categoryModel->getAll(false);
 
             $id = $this->request->getParam("id");
             if ($id) {
