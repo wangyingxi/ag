@@ -24,7 +24,6 @@ body {
  */
 *, *:before, *:after {
 
-    color: #444;
     outline: none;
     position: relative;
 }
@@ -111,6 +110,29 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
  * util class
  *
  */
+.btn-group {
+    overflow: auto;
+    _height: 1% 
+}
+.btn-group .btn {
+    background-color:#F0F0F0;
+    border-radius:100px;
+    color:#999;
+    float:left;
+    margin-right:5px;
+    text-decoration: none;
+    text-shadow:0 1px 0 rgba(255,255,255,0.6);
+}
+.btn-group .btn:hover {
+    color:#444;
+}
+.btn-group .btn.selected {
+    background-color:#FFD800 !important;
+    cursor:default;
+    color:#FFF !important;
+    text-shadow:none;
+}
+
 .border-box {
     -webkit-box-sizing: border-box !important;
     -moz-box-sizing: border-box !important;
@@ -190,6 +212,12 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
     height: 1px;
     margin: 4px 0;
     width: auto;
+}
+.text-center {
+    text-align:center;
+}
+.text-right {
+    text-align:right;
 }
 .clearfix {
     overflow: auto;

@@ -5,131 +5,130 @@
         <div class="grid_24">
             <h1 class="nomargin"><?php echo $this->title ?></h1><span class="subtt-checkout">please confirm the total amount for the order</span>
         </div>
-        <div class="grid_24">
-            <div class="ck-tb">
-                <div class="ck-row tr">
-                    <div class="ck-cell menu">
-                        <ul>
-                            <li class='selected'>
-                                Write my address
-                            </li>
-                            <li>
-                                Login to load my address
-                            </li>
-                            <li>
-                                Use my paypal address
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="ck-cell addr" style="padding:20px;background:#F6F6F6">
-                        <div class="ck-addr-row">
-                            <label class="lb">Receiver</label>
-                            <input class="wtxt" type='text' />
-                        </div>
-                        <div class="ck-addr-row">
-                            <label class='lb'>Address</label>
-                            <input class="wtxt" type='text' />
-                        </div>
-                        <div class="ck-addr-row">
-                            <label class='lb'>Tel</label>
-                            <input class="wtxt" type='text' />
-                        </div>
-                        <div class="ck-addr-row">
-                            <label class='lb'>State</label>
-                            <input class="wtxt" type='text' />
-                        </div>
-                        <div class="ck-addr-row">
-                            <label class='lb'>Zip Code</label>
-                            <input class="wtxt" type='text' />
-                        </div>
-                        <div class="ck-addr-row">
-                            <label class='lb'>Country</label>
-                            <select>
-                                <option>United States</option>
-                                <option>England</option>
-                                <option>China</option>
-                                <option>Japan</option>
-                            </select>
-                        </div>
-                    </div>
+        <div class="grid_16">
+
+            <div class="btn-group">
+                <a href="javascript:void(0)" class="btn selected"><i class='halflings uni-paperclip'></i> Write it now</a>
+                <a href="javascript:void(0)" class="btn"><i class='halflings cloud_download'></i> Login &amp; Load my address</a>
+                <a href="javascript:void(0)" class="btn"><i class='font-paypal'></i> Use my paypal address</a>
+            </div>
+
+            <div>
+                <div class="ftb nlm">
+                    <p class="ftbp">
+                        <i class="halflings user"></i>
+                        <input type='text' class='nothing-txt' title="RECEIVER NAME" placeholder="RECEIVER NAME"/>
+                    </p>
+                </div>
+                <div class="ftb">
+                    <p class="ftbp">
+                        <i class="halflings phone_alt"></i>
+                        <input type='text' class='nothing-txt' title="TELEPHONE" placeholder="TELEPHONE"/>
+                    </p>
+                </div>
+                <div class="clear"></div>
+                <div class="ftb full nlm">
+                    <p class="ftbp">
+                        <i class="halflings home"></i>
+                        <input type='text' class='nothing-txt' title="STREET ADDRESS" placeholder="STREET ADDRESS"/>
+                    </p>
+                </div>
+                <div class="clear"></div>
+                <div class="ftb nlm">
+                    <p class="ftbp">
+                        <i class="halflings tag"></i>
+                        <input type='text' class='nothing-txt' title="CITY" placeholder="CITY"/>
+                    </p>
+                </div>
+                <div class="ftb">
+                    <p class="ftbp">
+                        <i class="halflings tags"></i>
+                        <input type='text' class='nothing-txt' title="STATE / COUNTY" placeholder="STATE / COUNTY"/>
+                    </p>
+                </div>
+                <div class="clear"></div>
+                <div class="ftb nlm">
+                    <p class="ftbp">
+                        <i class="halflings envelope"></i>
+                        <input type='text' class='nothing-txt' title="POSTAL CODE" placeholder="POSTAL CODE"/>
+                    </p>
+                </div>
+                <div class="ftb">
+                    <p class="ftbp">
+                        <i class="halflings globe"></i>
+                        <select title="COUNTRY">
+                            <option>CHOOSE COUNTRY</option>
+                            <option>United Kingdom</option>
+                            <option>United States</option>
+                            <option>Japan</option>
+                            <option>Hong Kong</option>
+                            <option>Germany</option>
+                        </select>
+                    </p>
                 </div>
             </div>
-            <!--            <h2 class="sub-tt clearfix">
-                            <span class="l-ft">Delivery Address</span>
-                            <span class="r-ft" id="use-paypal-address" title="check it then you needn't to write address, we will post it to your paypal address"><i class="ico"></i> use my paypal address</span>
-                        </h2>
-                        <div id='address-panel'>
-                            djfis
-                        </div>-->
+            <div class="clear-20"></div>
+            <div class="text-center">
+                <button type="button" class="btn">Confirm &amp; Pay via Paypal</button>
+            </div>
+            <div class="clear-50"></div>
         </div>
     </div>
 </div>
 <style>
-    
-    .ck-row {
-        clear:both;
+    .btn-group {
+        margin-bottom:30px;
     }
-    .ck-cell {
+    .nlm {
+        border-left:none !important;
+    }
+    .nothing-txt {
+        background:transparent !important;
+        border:0;
+        box-shadow:none !important;
+        padding:5px 0 !important;
+        width:240px !important;
+    }
+    .ftb {
+        border-bottom:1px solid #DDD;
+        border-left:1px solid #DDD;
         box-sizing:border-box;
         float:left;
-        height:100%;
-        -moz-box-sizing: border-box;
-        -ms-box-sizing: border-box;
-        -o-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
+        padding:12px;
+        width: 50%;
     }
-    .ck-cell.menu {
-        width:230px;
+    .ftb:hover {
+        background-color:#F8F8F8;
+        cursor:text;
     }
-    .ck-cell.menu ul {
-        display:block;
+    .ftb.full {
+        width: 100%;
     }
-    .ck-cell.menu ul li {
-        border-left:5px solid transparent;
-        cursor:pointer;
-        display:block;
-        list-style:none;
-        padding:10px 20px;
-        text-align:center;
+    .ftb.full .nothing-txt {
+        width:540px !important;
     }
-    .ck-cell.menu ul li:hover {
-        border-color:#EEE;
+    .ftbp {
+        padding-left:12px;
     }
-    .ck-cell.menu ul li.selected {
-        background:#F6F6F6;
-        border-color:#EF3546 !Important;
-        font-weight:bold;
+    .ftbp select {
+        background:#FFF;
+        height:30px;
+        margin:0;
+        padding:0 8px;
     }
-    .ck-cell.menu ul li:hover {
-        font-weight:bold;
-    }
-    .ck-cell.addr {
-        width:710px;
-        border-right: 5px solid #EF3546;
-    }
-    .ck-row.tr {
-        height:auto;
-    }
-    .ck-addr-row {
-        margin-bottom:8px;
-    }
-    .ck-addr-row .lb {
-        display:inline-block;
-        margin-right:30px;
-        text-align:right;
-        width:100px;
-    }
-    .ck-addr-row .wtxt {
-        height:25px;
-        width:470px;
+    .ftbp i {
+        margin-right: 8px;
     }
 </style>
 <script type="text/javascript">
     (function($) {
-//        $('#use-paypal-address').click(function(){
-//            var $this = $('#use-paypal-address');
-//            $this.toggleClass('selected');
-//            $('#address-panel').slideToggle(200);
-//        });
+        $('.ftb').click(function() {
+            var $this = $(this).closest('.ftb');
+            var txt = $this.find('.nothing-txt');
+            if (txt.length) {
+                txt.focus();
+            }
+
+        });
     })(jQuery);
 </script>
