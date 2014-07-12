@@ -18,15 +18,16 @@
                     <p class="ftbp">
                         <i class="halflings user"></i>
                         <input type='text' class='nothing-txt' title="RECEIVER NAME" placeholder="RECEIVER NAME"/>
-                        
+
                     </p>
-                    <span style="position: absolute;top:5px;left:46px;font-size:9px;color:#CCC;">RECEIVER NAME</span>
+                    <span class="top-c"></span>
                 </div>
                 <div class="ftb">
                     <p class="ftbp">
                         <i class="halflings phone_alt"></i>
                         <input type='text' class='nothing-txt' title="TELEPHONE" placeholder="TELEPHONE"/>
                     </p>
+                    <span class="top-c"></span>
                 </div>
                 <div class="clear"></div>
                 <div class="ftb full nlm">
@@ -34,6 +35,7 @@
                         <i class="halflings home"></i>
                         <input type='text' class='nothing-txt' title="STREET ADDRESS" placeholder="STREET ADDRESS"/>
                     </p>
+                    <span class="top-c"></span>
                 </div>
                 <div class="clear"></div>
                 <div class="ftb nlm">
@@ -41,12 +43,14 @@
                         <i class="halflings tag"></i>
                         <input type='text' class='nothing-txt' title="CITY" placeholder="CITY"/>
                     </p>
+                    <span class="top-c"></span>
                 </div>
                 <div class="ftb">
                     <p class="ftbp">
                         <i class="halflings tags"></i>
                         <input type='text' class='nothing-txt' title="STATE / COUNTY" placeholder="STATE / COUNTY"/>
                     </p>
+                    <span class="top-c"></span>
                 </div>
                 <div class="clear"></div>
                 <div class="ftb nlm">
@@ -54,6 +58,7 @@
                         <i class="halflings envelope"></i>
                         <input type='text' class='nothing-txt' title="POSTAL CODE" placeholder="POSTAL CODE"/>
                     </p>
+                    <span class="top-c"></span>
                 </div>
                 <div class="ftb">
                     <p class="ftbp">
@@ -100,8 +105,10 @@
         width: 50%;
     }
     .ftb:hover {
-        background-color:#F8F8F8;
         cursor:text;
+    }
+    .ftb:hover i, .ftb:hover input {
+        color:#31b0d5;
     }
     .ftb.full {
         width: 100%;
@@ -121,6 +128,15 @@
     .ftbp i {
         margin-right: 8px;
     }
+
+
+    .ftb .top-c {
+        color:#CCC;
+        font-size:9px;
+        left:46px;
+        position: absolute;
+        top:5px;
+    }
 </style>
 <script type="text/javascript">
     (function($) {
@@ -132,5 +148,27 @@
             }
 
         });
+
+        $('.ftb .nothing-txt').change(function() {
+            switchTopC();
+        });
+
+        function switchTopC() {
+            var DURA = 200;
+            $.each($('.ftb'), function() {
+                var $this = $(this).closest('.ftb');
+                var top_c = $this.find('.top-c');
+                var input = $this.find('.nothing-txt');
+                if (top_c.length && input.length) {
+                    top_c.html(input.attr('placeholder'));
+                    if (input.val()) {
+                        top_c.fadeIn(DURA);
+                    } else {
+                        top_c.fadeOut(DURA);
+                    }
+                }
+            });
+
+        }
     })(jQuery);
 </script>
