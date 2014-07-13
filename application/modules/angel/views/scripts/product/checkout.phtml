@@ -40,7 +40,7 @@
                 <div class="ftb nlm">
                     <p class="ftbp">
                         <i class="halflings user"></i>
-                        <input type='text' class='nothing-txt' title="CONTACT" placeholder="CONTACT"/>
+                        <input type='text' class='nothing-txt' id="contact" title="CONTACT" placeholder="CONTACT"/>
 
                     </p>
                     <span class="top-c"></span>
@@ -48,7 +48,7 @@
                 <div class="ftb">
                     <p class="ftbp">
                         <i class="halflings phone_alt"></i>
-                        <input type='text' class='nothing-txt' title="PHONE NUMBER" placeholder="PHONE NUMBER"/>
+                        <input type='text' class='nothing-txt' id="phone-number" title="PHONE NUMBER" placeholder="PHONE NUMBER"/>
                     </p>
                     <span class="top-c"></span>
                 </div>
@@ -56,7 +56,7 @@
                 <div class="ftb full nlm">
                     <p class="ftbp">
                         <i class="halflings home"></i>
-                        <input type='text' class='nothing-txt' title="STREET ADDRESS" placeholder="STREET ADDRESS"/>
+                        <input type='text' class='nothing-txt' id="street-address" title="STREET ADDRESS" placeholder="STREET ADDRESS"/>
                     </p>
                     <span class="top-c"></span>
                 </div>
@@ -64,14 +64,14 @@
                 <div class="ftb nlm">
                     <p class="ftbp">
                         <i class="halflings tag"></i>
-                        <input type='text' class='nothing-txt' title="CITY" placeholder="CITY"/>
+                        <input type='text' class='nothing-txt' id="city" title="CITY" placeholder="CITY"/>
                     </p>
                     <span class="top-c"></span>
                 </div>
                 <div class="ftb">
                     <p class="ftbp">
                         <i class="halflings tags"></i>
-                        <input type='text' class='nothing-txt' title="STATE / COUNTY" placeholder="STATE / COUNTY"/>
+                        <input type='text' class='nothing-txt' id="state" title="STATE / COUNTY" placeholder="STATE / COUNTY"/>
                     </p>
                     <span class="top-c"></span>
                 </div>
@@ -79,14 +79,14 @@
                 <div class="ftb nlm">
                     <p class="ftbp">
                         <i class="halflings envelope"></i>
-                        <input type='text' class='nothing-txt' title="ZIP / POSTAL CODE" placeholder="ZIP / POSTAL CODE"/>
+                        <input type='text' class='nothing-txt' id="zip" title="ZIP / POSTAL CODE" placeholder="ZIP / POSTAL CODE"/>
                     </p>
                     <span class="top-c"></span>
                 </div>
                 <div class="ftb">
                     <p class="ftbp">
                         <i class="halflings globe"></i>
-                        <select title="COUNTRY">
+                        <select title="COUNTRY" id="country">
                             <option>CHOOSE COUNTRY</option>
                             <option>United Kingdom</option>
                             <option>United States</option>
@@ -99,7 +99,7 @@
             </div>
             <div class="clear-20"></div>
             <div class="text-center">
-                <button type="button" class="btn">Confirm &amp; Pay via Paypal</button>
+                <button type="submit" class="btn checkout-btn">Confirm &amp; Pay via Paypal</button>
             </div>
             <div class="clear-50"></div>
         </div>
@@ -164,6 +164,9 @@
 </style>
 <script type="text/javascript">
     (function($) {
+        $(document).ready(function(){
+            $('#contact').focus();
+        });
         $('.ftb').click(function() {
             var $this = $(this).closest('.ftb');
             var txt = $this.find('.nothing-txt');
