@@ -21,11 +21,19 @@
             $(document).ready(function() {
                 $.currency.init();
                 $('#cart-total').html($.cart.total());
+                $('#login-btn').click(function() {
+                    $.alertbox({msg: $('.login-window')});
+                });
             });
         </script>
     </head>
 
     <body>
+        <div class="P_tmp">
+            <div class="login-window">
+                hahahha
+            </div>
+        </div>
         <!-- Top Start -->
         <div class="wp top clearfix">
             <div class="container_24">
@@ -40,7 +48,7 @@
                 <div class="grid_8">
                     <div class="info-bar">
                         <div class="l-ft">
-                            <a href="#">Login</a>
+                            <a href="#" id="login-btn">Login</a>
                         </div>
                         <span class="vsplr l-ft"></span>
                         <div class="cart-bar l-ft">
@@ -72,20 +80,20 @@
 
                     <div class="addthis-block">
                         <!-- AddThis Button BEGIN -->
-<!--                        <div class="addthis_toolbox addthis_default_style ">
-                            <a class="addthis_button_preferred_1"></a>
-                            <a class="addthis_button_preferred_2"></a>
-                            <a class="addthis_button_preferred_3"></a>
-                            <a class="addthis_button_preferred_4"></a>
-                            <a class="addthis_button_compact"></a>
-                            <a class="addthis_counter addthis_bubble_style"></a>
-                        </div>
-                        <script type="text/javascript">
-                            var addthis_config = {
-                                "data_track_addressbar": true
-                            };
-                        </script>
-                        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f4a185e7d9e1842"></script>-->
+                        <!--                        <div class="addthis_toolbox addthis_default_style ">
+                                                    <a class="addthis_button_preferred_1"></a>
+                                                    <a class="addthis_button_preferred_2"></a>
+                                                    <a class="addthis_button_preferred_3"></a>
+                                                    <a class="addthis_button_preferred_4"></a>
+                                                    <a class="addthis_button_compact"></a>
+                                                    <a class="addthis_counter addthis_bubble_style"></a>
+                                                </div>
+                                                <script type="text/javascript">
+                                                    var addthis_config = {
+                                                        "data_track_addressbar": true
+                                                    };
+                                                </script>
+                                                <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f4a185e7d9e1842"></script>-->
                         <!-- AddThis Button END -->
                     </div>
                 </div>

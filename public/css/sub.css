@@ -342,6 +342,7 @@
 }
 
 #pay-proc {
+    margin-top:10px;
     height:60px;
 }
 #pay-proc #step1 {
@@ -370,4 +371,14 @@
 }
 .checkout-btn {
     padding:10px 20px;
+}
+.pp-btn {
+    background:url(../img/paypal-btn.png) -10px -10px no-repeat;
+    height:40px;
+    width:220px;
+}
+.pp-btn:hover {
+    background: url(../img/paypal-btn.png) -10px -60px !important;
+    background-color:transparent !important;
+    box-shadow:none;
 }
