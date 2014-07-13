@@ -340,3 +340,31 @@
 .checkout #address-panel {
     padding:30px;
 }
+
+#pay-proc {
+    height:60px;
+}
+#pay-proc #step1 {
+    position: absolute;
+}
+#pay-proc #step2 {
+    left:50%;
+    margin-left:-50px;
+    position: absolute;
+}
+#pay-proc #step3 {
+    position: absolute;
+    right:0;
+}
+#pay-proc #proc {
+    background:#F0F0F0;
+    height:4px;
+    margin-top:-2px;
+    position:absolute;
+    top:50%;
+    width:100%;
+}
+#pay-proc #proc #inner {
+    background:#EF3546;
+    height:100%;
+}

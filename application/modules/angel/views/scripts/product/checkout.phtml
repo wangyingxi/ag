@@ -2,10 +2,33 @@
 
 <div class="content checkout wbg-wrapper">
     <div class="container_24">
-        <div class="grid_24">
+        <div class="grid_10">
             <h1 class="nomargin"><?php echo $this->title ?></h1><span class="subtt-checkout">please confirm the total amount for the order</span>
+            
         </div>
-        <div class="grid_16">
+        <div class="grid_14">
+            <div id="pay-proc">
+                <div class="red" id="step1">
+                    <i class="glyphicons shopping_cart"></i>
+                    Shopping Cart
+                </div>
+                
+                <div class="red" id="step2">
+                    <i class="glyphicons rotation_lock"></i>
+                    Checkout Order
+                </div>
+                
+                <div class="light-gray" id="step3">
+                    <i class="halflings saved"></i>
+                    Payment Complete
+                </div>
+                
+                <div id="proc">
+                    <div id="inner" style="width:50%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="grid_24">
 
             <div class="btn-group">
                 <a href="javascript:void(0)" class="btn selected"><i class='halflings uni-paperclip'></i> Write it now</a>
@@ -132,6 +155,7 @@
 
     .ftb .top-c {
         color:#CCC;
+        display: none;
         font-size:9px;
         left:46px;
         position: absolute;
@@ -149,7 +173,7 @@
 
         });
 
-        $('.ftb .nothing-txt').change(function() {
+        $('.ftb .nothing-txt').keyup(function() {
             switchTopC();
         });
 

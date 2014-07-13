@@ -147,6 +147,9 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 .gray {
     color: #888;
 }
+.light-gray {
+    color:#aaa;
+}
 .white {
     color: #FFF;
 }
