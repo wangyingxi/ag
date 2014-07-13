@@ -69,7 +69,7 @@ class Angel_ProductController extends Angel_Controller_Action {
             $this->_helper->json(array('data' => $resource,
                 'code' => $code));
         } else {
-            $this->view->title = "My Cart";
+            $this->view->title = "Shopping Cart";
         }
     }
 
