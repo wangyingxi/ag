@@ -22,7 +22,10 @@
                 $.currency.init();
                 $('#cart-total').html($.cart.total());
                 $('#login-btn').click(function() {
-                    var options = {content: $('.login-window').clone(true), padding: 0, modal: true, width: 380};
+                    var options = {content: $('.login-window').clone(true),
+                        padding: 0,
+                        modal: true,
+                        width: 350};
                     $.popup(options);
                 });
             });
@@ -39,7 +42,15 @@
                     </div>
                 </div>
                 <div style="padding:25px;">
-                    Email 
+                    <div style="margin-bottom:15px;border:1px solid #ccc;border-radius:100px;padding-left:40px;position:relative">
+                        <i style="position: absolute;left:15px;top:9px;" class="halflings envelope"></i>
+                        <input type="text" class="nothing-txt" placeholder="Your Email"/>
+                    </div>
+                    
+                    <div style="margin-bottom:15px;border:1px solid #ccc;border-radius:100px;padding-left:40px;position:relative">
+                        <i style="position: absolute;left:15px;top:9px;" class="glyphicons keys"></i>
+                        <input type="password" class="nothing-txt" placeholder="Password"/>
+                    </div>
                 </div>
             </div>
         </div>
