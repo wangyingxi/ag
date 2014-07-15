@@ -706,7 +706,6 @@
     };
 
     $.extend({
-        POPUPID: "P_popup",
         POPUPSETTINGS: {
             id: "P_popup",
             content: "hello",

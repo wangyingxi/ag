@@ -55,7 +55,8 @@ Common css
     position:absolute;
 }
 #P_popup {
-    background:rgba(255,255,255,0.6);
+    /*background:rgba(255,255,255,0.6);*/
+    background:rgba(0,0,0,0.4);
     display: none;
     height: 100%;
     left: 0;
@@ -66,10 +67,11 @@ Common css
 }
 .P_bg {
     background:#FFF;
-    border-radius:2px;
+    border-radius:3px;
     box-shadow:0 0 10px rgba(0,0,0,0.2);
     box-sizing: border-box;
     left:50%;
+    overflow:hidden;
     top:50%;
 }
 .P_closebtn {

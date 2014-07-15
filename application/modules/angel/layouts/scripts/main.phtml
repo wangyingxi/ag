@@ -22,7 +22,8 @@
                 $.currency.init();
                 $('#cart-total').html($.cart.total());
                 $('#login-btn').click(function() {
-                    $.alertbox({msg: $('.login-window')});
+                    var options = {content: $('.login-window').clone(true), padding: 0, modal: true, width: 380};
+                    $.popup(options);
                 });
             });
         </script>
@@ -31,7 +32,15 @@
     <body>
         <div class="P_tmp">
             <div class="login-window">
-                hahahha
+                <div style="background:#FFF;padding:25px;box-shadow:0 1px 2px rgba(0,0,0,0.08);">
+                    <div class="btn-group">
+                        <a href="javascript:void(0)" class="btn selected">Member Login</a>
+                        <a href="javascript:void(0)" class="btn">Register Now</a>
+                    </div>
+                </div>
+                <div style="padding:25px;">
+                    Email 
+                </div>
             </div>
         </div>
         <!-- Top Start -->

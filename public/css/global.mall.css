@@ -348,3 +348,6 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 .price, .price-option {
     display:none;
 }
+.login-window .btn-group .btn.selected {
+    background-color:#EF3546 !important;
+}
