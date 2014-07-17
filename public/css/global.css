@@ -90,3 +90,12 @@ Common css
 .P_closebtn:hover {
     color:#EF3546;
 }
+.left-float {
+    float:left;
+}
+.right-float {
+    float:right;
+}
+.no-float {
+    float:none;
+}

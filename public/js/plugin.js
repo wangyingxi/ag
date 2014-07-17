@@ -713,7 +713,7 @@
             closebtn: true,
 //            relocate: true,
             msg: "hello",
-            height: 360,
+            height: 'auto',
             width: 500,
             padding:25,
             textAlign:'left'
@@ -731,7 +731,6 @@
             content.addClass('P_bg')
                     .css('padding', $.POPUPSETTINGS.padding)
                     .css('margin-left', "-" + w / 2 + "px")
-                    .css('margin-top', "-" + h / 2 + "px")
                     .css('width', w)
                     .css('height', h)
                     .css('text-align', $.POPUPSETTINGS.textAlign);
@@ -739,7 +738,9 @@
             popupFrame.show();
             var clsbtn = $('<span>').addClass('P_closebtn').html("&times;");
             $('body').append(popupFrame.append($(content).append(clsbtn)));
-
+            var mt = "-" + $(content).height() / 2 + "px";
+            $(content).css('margin-top', mt);
+            
             if (!$.POPUPSETTINGS.modal) {
                 popupFrame.children().click(function(e) {
                     e.stopPropagation();
