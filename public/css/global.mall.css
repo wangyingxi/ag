@@ -416,3 +416,6 @@ input.nothing-txt {
 .login-window .valid-result {
     display:none;
 }
+.login-window .register-board {
+    display:none;
+}
