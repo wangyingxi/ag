@@ -308,8 +308,7 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 .info-bar {
     height: 40px;
     line-height: 40px;
-    position: absolute;
-    right: 0;
+    float:right;
 }
 .info-bar .vsplr {
     margin-top: 12px;

@@ -44,38 +44,38 @@
                 <div class="frm login-board">
                     <div class="form-c">
                         <i class="halflings envelope"></i>
-                        <input type="text" class="nothing-txt" placeholder="Email"/>
+                        <input class="email_val nothing-txt" type="text" placeholder="Email"/>
                     </div>
 
                     <div class="form-c mg">
                         <i class="glyphicons keys"></i>
-                        <input type="password" class="nothing-txt" placeholder="Password"/>
+                        <input class="password_val nothing-txt" type="password" placeholder="Password"/>
                     </div>
 
                     <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> Oops! Password does not match. Please try again</div>
-                    <button class="mg" onclick="$(this).closest('.frm').find('.valid-result').show()">Login</button>
+                    <button class="mg" onclick="login(this, '<?php echo $this->url(array(), 'login')?>')">Login</button>
                     <a href="#" class="forgot-pwd">Forgot password</a>
                     <div class="clear-line"></div>
                     <p class="text-center">Not a member yet ? <a href="javascript:void(0)" tag="register" onclick="switchLoginWindowTo(this)" class="red">Register now</a></p>
                 </div>
-                
+
                 <div class="frm register-board">
                     <div class="form-c">
                         <i class="halflings envelope"></i>
-                        <input type="text" class="nothing-txt" placeholder="Email"/>
+                        <input class="email_val nothing-txt" type="text" placeholder="Email"/>
                     </div>
                     <div class="form-c">
                         <i class="halflings user"></i>
-                        <input type="text" class="nothing-txt" placeholder="Nick Name"/>
+                        <input class="nick_name_val nothing-txt" type="text" placeholder="Nick Name"/>
                     </div>
                     <div class="form-c mg">
                         <i class="glyphicons keys"></i>
-                        <input type="password" class="nothing-txt" placeholder="Password"/>
+                        <input class="password_val nothing-txt" type="password" placeholder="Password"/>
                     </div>
 
-                    
+
                     <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> Oops! Password does not match. Please try again</div>
-                    <button class="mg" onclick="$(this).closest('.login-window').find('.valid-result').show()">Register</button>
+                    <button class="mg" onclick="register(this, '<?php echo $this->url(array(), 'register')?>')">Register</button>
                     <div class="clear-line"></div>
                     <p class="text-center">Already a member ? <a href="javascript:void(0)" tag="login" onclick="switchLoginWindowTo(this)" class="red">Login</a></p>
                 </div>
@@ -84,7 +84,7 @@
         <!-- Top Start -->
         <div class="wp top clearfix">
             <div class="container_24">
-                <div class="grid_6">
+                <div class="grid_5">
                     <a href="#" class="logo l-ft"><img src="/img/logo.png" alt="welcome to sitename"/></a>
                 </div>
                 <div class="grid_10">
@@ -92,10 +92,14 @@
                         <input type="text" placeholder="Search keywords or model #" />
                     </div>
                 </div>
-                <div class="grid_8">
+                <div class="grid_9">
                     <div class="info-bar">
                         <div class="l-ft">
-                            <a href="#" id="login-btn">Login</a>
+                            <?php if (!isset($this->me)): ?>
+                                <a href="#" id="login-btn">Login</a>
+                            <?php else: ?>
+                                <span class="light-gray">hi</span> <a href="#"><?php echo ucfirst($this->me->getUser()->username) ?></a>
+                            <?php endif; ?>
                         </div>
                         <span class="vsplr l-ft"></span>
                         <div class="cart-bar l-ft">
@@ -109,7 +113,7 @@
                                 <a class="price-option" currency="<?php echo $key ?>" currency-symbol="<?php echo $this->currency_symbol[$key] ?>" href="javascript:void(0)"> <?php echo $this->currency_symbol[$key] . ' ' . $key ?> </a>
                             <?php endforeach; ?>
                         </div>
-
+                        <div class="clear"></div>
                     </div>
                 </div>
                 <div class="grid_24 hot-tags">

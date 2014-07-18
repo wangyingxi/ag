@@ -143,3 +143,78 @@ function switchLoginWindowTo(obj) {
     board.siblings('.frm').hide();
     board.show();
 }
+
+function login(obj, url) {
+    var container = $(obj).closest('.frm');
+    var valid_result = container.find('.valid-result');
+    valid_result.hide();
+    var email = container.find('.email_val').val();
+    if (!email.isEmail()) {
+        valid_result.html('Please input correct email').show();
+        return;
+    }
+    var password = container.find('.password_val').val();
+    if (!password) {
+        valid_result.html('Please input password').show();
+        return;
+    }
+
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        data: {email: email, password: password, format: 'json'},
+        method: 'post',
+        success: function(response) {
+            if (response.code === 200) {
+                location.reload();
+            } else {
+                valid_result.html(response.msg).show();
+            }
+        },
+        error: function() {
+            valid_result.html('network error, please try again').show();
+        }
+    });
+}
+function register(obj, url) {
+    var container = $(obj).closest('.frm');
+    var valid_result = container.find('.valid-result');
+    valid_result.hide();
+    var email = container.find('.email_val').val();
+    if (!email.isEmail()) {
+        valid_result.html('Please input correct email').show();
+        return;
+    }
+    var username = container.find('.nick_name_val').val();
+    if (!username) {
+        valid_result.html('Please input Nick Name, we will know how to call you').show();
+        return;
+    }
+    var password = container.find('.password_val').val();
+    if (!password) {
+        valid_result.html('Please input password').show();
+        return;
+    }
+
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        data: {email: email, username: username, password: password, format: 'json'},
+        method: 'post',
+        success: function(response) {
+            if (response.code === 200) {
+                // 弹框提示注册成功，并且自动登录后刷新
+                location.reload();
+            } else {
+                valid_result.html(response.msg).show();
+            }
+        },
+        error: function() {
+            valid_result.html('network error, please try again').show();
+        }
+    });
+}
+String.prototype.isEmail = function() {
+    var reg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+    return reg.test(this);
+}
