@@ -95,10 +95,10 @@ function removeObject($this, url, containerSelector, valSelector) {
     if (!confirm('确认删除该对象？')) {
         return;
     }
-    if(!containerSelector) {
+    if (!containerSelector) {
         containerSelector = '.itm';
     }
-    if(!valSelector) {
+    if (!valSelector) {
         valSelector = '.tmp';
     }
     var container = $this.closest(containerSelector);
@@ -119,4 +119,27 @@ function removeObject($this, url, containerSelector, valSelector) {
             }
         }
     });
+}
+
+function switchLoginWindowTo(obj) {
+    var cls = "selected";
+
+    obj = $(obj);
+    var type = obj.attr('tag');
+    if (!type)
+        throw "tag attribute is undefined";
+
+    var container = obj.closest('.login-window');
+    var btns = container.find('.btn-group .btn');
+    btns.removeClass(cls);
+    $.each(btns, function() {
+        var $this = $(this);
+        if ($this.attr('tag') === type) {
+            $this.addClass(cls);
+        }
+        return;
+    });
+    var board = container.find('.' + type + '-board');
+    board.siblings('.frm').hide();
+    board.show();
 }

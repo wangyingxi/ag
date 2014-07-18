@@ -37,8 +37,8 @@
             <div class="login-window">
                 <div class="hd">
                     <div class="btn-group">
-                        <a href="javascript:void(0)" class="btn selected">Member Login</a>
-                        <a href="javascript:void(0)" class="btn">Register Now</a>
+                        <a href="javascript:void(0)" tag="login" class="btn selected" onclick="switchLoginWindowTo(this)">Member Login</a>
+                        <a href="javascript:void(0)" tag="register" class="btn" onclick="switchLoginWindowTo(this)">Register Now</a>
                     </div>
                 </div>
                 <div class="frm login-board">
@@ -53,10 +53,10 @@
                     </div>
 
                     <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> Oops! Password does not match. Please try again</div>
-                    <button class="mg" onclick="$(this).closest('.login-window').find('.valid-result').show()">Login</button>
+                    <button class="mg" onclick="$(this).closest('.frm').find('.valid-result').show()">Login</button>
                     <a href="#" class="forgot-pwd">Forgot password</a>
                     <div class="clear-line"></div>
-                    <p class="text-center">Not a member yet ? <a href="javascript:void(0)" class="red">Register now</a></p>
+                    <p class="text-center">Not a member yet ? <a href="javascript:void(0)" tag="register" onclick="switchLoginWindowTo(this)" class="red">Register now</a></p>
                 </div>
                 
                 <div class="frm register-board">
@@ -77,7 +77,7 @@
                     <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> Oops! Password does not match. Please try again</div>
                     <button class="mg" onclick="$(this).closest('.login-window').find('.valid-result').show()">Register</button>
                     <div class="clear-line"></div>
-                    <p class="text-center">Already a member ? <a href="javascript:void(0)" class="red">Login</a></p>
+                    <p class="text-center">Already a member ? <a href="javascript:void(0)" tag="login" onclick="switchLoginWindowTo(this)" class="red">Login</a></p>
                 </div>
             </div>
         </div>
