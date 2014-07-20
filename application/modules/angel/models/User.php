@@ -180,6 +180,24 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
         return $result;
     }
 
+    public function updateAddress($user, $contact, $street, $phone, $state, $city, $country, $zip) {
+        $result = false;
+
+        if (!(is_object($user) && ($user instanceof $this->_document_class))) {
+            $user = $this->validateUserId($user);
+        }
+        try {
+            $user->addAddressDoc($contact, $street, $phone, $state, $city, $country, $zip);
+            $this->_dm->persist($user);
+            $this->_dm->flush();
+            $result = true;
+        } catch (Exception $e) {
+            $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage() . "\n" . $e->getTraceAsString());
+            throw new Angel_Exception_User(Angel_Exception_User::USER_UPDATE_FAIL);
+        }
+        return $result;
+    }
+
     /**
      * 修改用户信息，返回的是用户对象
      * @param mix $user - string 为用户id，model为用户对象

@@ -40,7 +40,9 @@ Common css
 .hidden {
     display:none;
 }
-
+.half-opacity {
+    opacity:0.5;
+}
 .P_tmp {
     display:none;
 }

@@ -52,9 +52,10 @@
                         <input class="password_val nothing-txt" type="password" placeholder="Password"/>
                     </div>
 
-                    <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> Oops! Password does not match. Please try again</div>
+                    <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> <span>Oops! Password does not match. Please try again</span></div>
+                    
                     <button class="mg" onclick="login(this, '<?php echo $this->url(array(), 'login')?>')">Login</button>
-                    <a href="#" class="forgot-pwd">Forgot password</a>
+                    <div class="forgot-pwd"><a href="#">Forgot password</a></div>
                     <div class="clear-line"></div>
                     <p class="text-center">Not a member yet ? <a href="javascript:void(0)" tag="register" onclick="switchLoginWindowTo(this)" class="red">Register now</a></p>
                 </div>
@@ -74,7 +75,7 @@
                     </div>
 
 
-                    <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> Oops! Password does not match. Please try again</div>
+                    <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> <span>Oops! Password does not match. Please try again</span></div>
                     <button class="mg" onclick="register(this, '<?php echo $this->url(array(), 'register')?>')">Register</button>
                     <div class="clear-line"></div>
                     <p class="text-center">Already a member ? <a href="javascript:void(0)" tag="login" onclick="switchLoginWindowTo(this)" class="red">Login</a></p>
@@ -98,7 +99,7 @@
                             <?php if (!isset($this->me)): ?>
                                 <a href="#" id="login-btn">Login</a>
                             <?php else: ?>
-                                <span class="light-gray">hi</span> <a href="#"><?php echo ucfirst($this->me->getUser()->username) ?></a>
+                                <span class="light-gray">hey</span> <a href="#"><?php echo $this->me->getUser()->username ?></a>
                             <?php endif; ?>
                         </div>
                         <span class="vsplr l-ft"></span>

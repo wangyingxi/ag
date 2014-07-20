@@ -93,6 +93,19 @@ input[type="button"], input[type="submit"], button, .btn {
     margin: 0;
     padding: 5px 15px;
 }
+.btn.btn-default {
+    background:#F0F0F0;
+    border:1px solid #CCC;
+    color:#333;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+}
+.btn.btn-default:hover {
+    border-color:#aaa;
+}
+.btn.btn-lg {
+    font-size:14px;
+    padding:10px 20px;
+}
 input[type="button"]:hover, input[type="submit"]:hover, button:hover, btn:hover {
     background: #222;
     box-shadow: 0 1px 1px rgba(0,0,0,0.2);
@@ -389,8 +402,20 @@ input.nothing-txt {
     background:#EF3546 !important;
 }
 .login-window .forgot-pwd {
-    color:#aaa;
+    display:block;
+    margin-bottom:10px;
+    margin-top:-5px;
+    text-align:center;
     text-decoration: underline;
+}
+.login-window .forgot-pwd a:link {
+    color:#aaa;
+}
+.login-window .forgot-pwd a:visited {
+    color:#aaa;
+}
+.login-window .forgot-pwd a:hover {
+    color:#EF3546;
 }
 .login-window .frm {
     padding:25px;
@@ -404,10 +429,10 @@ input.nothing-txt {
     padding:20px 25px;
 }
 .login-window .forgot-pwd:link {
-    
+
 }
 .login-window .forgot-pwd:visited {
-    
+
 }
 .login-window .forgot-pwd:hover {
     color:#333;
@@ -417,4 +442,55 @@ input.nothing-txt {
 }
 .login-window .register-board {
     display:none;
+}
+.login-window .nothing-txt {
+    width: 280px !important;
+}
+
+.ftb.nlm {
+    border-left:none !important;
+}
+
+.ftb {
+    border-bottom:1px solid #DDD;
+    border-left:1px solid #DDD;
+    box-sizing:border-box;
+    float:left;
+    padding:22px 10px 8px 10px;
+    width: 50%;
+}
+.ftb:hover {
+    cursor:text;
+}
+.ftb:hover i, .ftb:hover input {
+    color:#EF3546;
+}
+.ftb.full {
+    width: 100%;
+}
+.ftb.full .nothing-txt {
+    width:540px !important;
+}
+.ftbp {
+    padding-left:12px;
+}
+.ftbp select {
+    background:#FFF;
+    height:30px;
+    margin:0;
+    padding:0 8px;
+}
+.ftbp i {
+    margin-right: 8px;
+}
+.ftb .top-c {
+    color:#CCC;
+    display: none;
+    font-size:smaller !important;
+    left:46px;
+    position: absolute;
+    top:10px;
+}
+.address-type.btn-group {
+    margin-bottom:30px;
 }

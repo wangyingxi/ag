@@ -1,4 +1,9 @@
-
+<?php
+$address = array();
+if ($this->me && $this->me->getUser()->address) {
+    $address = $this->me->getUser()->address;
+}
+?>
 
 <div class="content wbg-wrapper">
     <div class="container_24">
@@ -92,72 +97,18 @@
         <div class="grid_24">
 
             <div class="btn-group address-type">
-                <a href="javascript:void(0)" class="btn selected"><i class='halflings uni-paperclip'></i> Write address now</a>
-                <a href="javascript:void(0)" class="btn"><i class='halflings cloud_download'></i> Login &amp; Load my address</a>
+
+                <?php if (!$this->me) : ?>
+                    <a href="javascript:void(0)" class="btn selected"><i class='halflings uni-paperclip'></i> Write address now</a>
+                    <a href="javascript:void(0)" class="btn"><i class='halflings cloud_download'></i> Login &amp; Load my address</a>
+                <?php else: ?>
+                    <a href="javascript:void(0)" class="btn selected"><i class='halflings cloud'></i> My address</a>
+                <?php endif; ?>
                 <a href="javascript:void(0)" class="btn"><i class='font-paypal'></i> Use my paypal address</a>
             </div>
 
-            <div>
-                <div class="ftb nlm">
-                    <p class="ftbp">
-                        <i class="halflings user"></i>
-                        <input type='text' class='nothing-txt' id="contact" title="CONTACT" placeholder="CONTACT"/>
-
-                    </p>
-                    <span class="top-c"></span>
-                </div>
-                <div class="ftb">
-                    <p class="ftbp">
-                        <i class="halflings phone_alt"></i>
-                        <input type='text' class='nothing-txt' id="phone-number" title="PHONE NUMBER" placeholder="PHONE NUMBER"/>
-                    </p>
-                    <span class="top-c"></span>
-                </div>
-                <div class="clear"></div>
-                <div class="ftb full nlm">
-                    <p class="ftbp">
-                        <i class="halflings home"></i>
-                        <input type='text' class='nothing-txt' id="street-address" title="STREET ADDRESS" placeholder="STREET ADDRESS"/>
-                    </p>
-                    <span class="top-c"></span>
-                </div>
-                <div class="clear"></div>
-                <div class="ftb nlm">
-                    <p class="ftbp">
-                        <i class="halflings tag"></i>
-                        <input type='text' class='nothing-txt' id="city" title="CITY" placeholder="CITY"/>
-                    </p>
-                    <span class="top-c"></span>
-                </div>
-                <div class="ftb">
-                    <p class="ftbp">
-                        <i class="halflings tags"></i>
-                        <input type='text' class='nothing-txt' id="state" title="STATE / COUNTY" placeholder="STATE / COUNTY"/>
-                    </p>
-                    <span class="top-c"></span>
-                </div>
-                <div class="clear"></div>
-                <div class="ftb nlm">
-                    <p class="ftbp">
-                        <i class="halflings envelope"></i>
-                        <input type='text' class='nothing-txt' id="zip" title="ZIP / POSTAL CODE" placeholder="ZIP / POSTAL CODE"/>
-                    </p>
-                    <span class="top-c"></span>
-                </div>
-                <div class="ftb">
-                    <p class="ftbp">
-                        <i class="halflings globe"></i>
-                        <select title="COUNTRY" id="country">
-                            <option>CHOOSE COUNTRY</option>
-                            <option>United Kingdom</option>
-                            <option>United States</option>
-                            <option>Japan</option>
-                            <option>Hong Kong</option>
-                            <option>Germany</option>
-                        </select>
-                    </p>
-                </div>
-            </div>
+            <?php echo $this->partial('user/partials/_address_writer.phtml', array(address => $address)); ?>
+            
             <div class="clear-20"></div>
             <div class="text-center">
                 <button type="submit" class="pp-btn"></button>
@@ -293,7 +244,7 @@
                 $('html, body').animate({scrollTop: $('#pay-info').offset().top}, 300);
                 $('#contact').focus();
             } else {
-                var html = "<p class='marginbottom5px'>Sorry the cart is empty now.</p><button class='sm-btn black-btn'>Refresh Page</button>";
+                var html = "<p class='marginbottom5px'>Sorry the cart is empty now.</p><button class='sm-btn black-btn' onclick='location.reload();'>Refresh Page</button>";
                 $.alertbox({msg: html});
             }
         });
@@ -311,24 +262,6 @@
         });
     })(jQuery);
 
-
-    function switchTopC() {
-        var DURA = 200;
-        $.each($('.ftb'), function() {
-            var $this = $(this).closest('.ftb');
-            var top_c = $this.find('.top-c');
-            var input = $this.find('.nothing-txt');
-            if (top_c.length && input.length) {
-                top_c.html(input.attr('placeholder'));
-                if (input.val()) {
-                    top_c.fadeIn(DURA);
-                } else {
-                    top_c.fadeOut(DURA);
-                }
-            }
-        });
-
-    }
 </script>
 
 <style>
@@ -413,53 +346,5 @@
     #address-block {
         display:none;
     }
-    .address-type.btn-group {
-        margin-bottom:30px;
-    }
-    .nlm {
-        border-left:none !important;
-    }
 
-    .ftb {
-        border-bottom:1px solid #DDD;
-        border-left:1px solid #DDD;
-        box-sizing:border-box;
-        float:left;
-        padding:22px 10px 8px 10px;
-        width: 50%;
-    }
-    .ftb:hover {
-        cursor:text;
-    }
-    .ftb:hover i, .ftb:hover input {
-        color:#EF3546;
-    }
-    .ftb.full {
-        width: 100%;
-    }
-    .ftb.full .nothing-txt {
-        width:540px !important;
-    }
-    .ftbp {
-        padding-left:12px;
-    }
-    .ftbp select {
-        background:#FFF;
-        height:30px;
-        margin:0;
-        padding:0 8px;
-    }
-    .ftbp i {
-        margin-right: 8px;
-    }
-
-
-    .ftb .top-c {
-        color:#CCC;
-        display: none;
-        font-size:smaller !important;
-        left:46px;
-        position: absolute;
-        top:10px;
-    }
 </style>

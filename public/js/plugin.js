@@ -507,7 +507,6 @@
             var price_option = $(selector);
             var option = this.option.currency_option;
             var ddl_id = this.option.ddl_id;
-            var cookie_value = $.cookie(cookie_name);
             var html = $("<div>").attr('id', ddl_id).addClass('auto-hide');
             var base_cls = this.option.ddl_itm_cls;
             $.each(price_option, function() {
@@ -558,67 +557,67 @@
             }
         }
     };
-    $.initCurrency = function(selector) {
-        if (!selector)
-            selector = '.price-option';
-// write css
-        var style = "<style>";
-        style += ".price-option {display:none}";
-        style += ".price-option:first-child {display:inline;}";
-        style += "#currency-ddl {background:#FFF;box-shadow:0 0 10px rgba(0,0,0,0.2);display:none;position:absolute;width:90px;z-index:1}";
-        style += "#currency-ddl .currency-ddl-itm {cursor:pointer;display:block;padding:5px 20px;text-align:center;border-bottom:1px solid #F2F2F2;}";
-        style += "#currency-ddl .currency-ddl-itm:hover {background:#F8F8F8;}";
-        style += "#currency-ddl .currency-ddl-itm.selected {background:#F8F8F8 !important}"
-        style += "</style>";
-        $('body').append(style);
-        var cookie_name = 'currency';
-        var price_option = $(selector);
-        var option = {expires: 365, path: '/'};
-        var ddl_id = 'currency-ddl';
-        var cookie_value = $.cookie(cookie_name);
-        var html = $("<div>").attr('id', ddl_id).addClass('auto-hide');
-        $.each(price_option, function() {
-            var item = $(this);
-            var ddl_item = $("<div>").addClass("currency-ddl-itm").html(item.attr('currency-symbol') + " " + item.attr(cookie_name)).attr(cookie_name, item.attr(cookie_name));
-            ddl_item.click(function() {
-                // select currency
-                var $this = $(this).closest('.currency-ddl-itm');
-                var currency = $this.attr(cookie_name);
-                $('.price').hide();
-                $('.price[currency=' + currency + ']').show();
-                var ddl = $('#' + ddl_id);
-                if (!$this.hasClass('selected')) {
-                    $.cookie(cookie_name, currency, option);
-                    $this.siblings().removeClass('selected');
-                    $this.addClass('selected');
-                }
-                ddl.hide();
-                price_option.hide();
-                $(selector + "[currency=" + currency + "]").show();
-            });
-            html.append(ddl_item);
-            // item click
-            item.click(function() {
-                // toggle ddl board
-                var $this = $(this);
-                var x = $this.offset().left;
-                var y = $this.offset().top + 24;
-                var ddl = $('#' + ddl_id);
-                ddl.css('left', x).css('top', y);
-                ddl.toggle();
-            });
-        });
-        $('body').append(html);
-        var currency_ddl_itm = html.find('.currency-ddl-itm');
-        if (!cookie_value) {
-            // 将第一个置为选中状态
-            currency_ddl_itm.first().click();
-        } else {
-            var target = $('.currency-ddl-itm[currency=' + cookie_value + ']');
-            target.addClass('selected');
-            target.click();
-        }
-    };
+//    $.initCurrency = function(selector) {
+//        if (!selector)
+//            selector = '.price-option';
+//// write css
+//        var style = "<style>";
+//        style += ".price-option {display:none}";
+//        style += ".price-option:first-child {display:inline;}";
+//        style += "#currency-ddl {background:#FFF;box-shadow:0 0 10px rgba(0,0,0,0.2);display:none;position:absolute;width:90px;z-index:1}";
+//        style += "#currency-ddl .currency-ddl-itm {cursor:pointer;display:block;padding:5px 20px;text-align:center;border-bottom:1px solid #F2F2F2;}";
+//        style += "#currency-ddl .currency-ddl-itm:hover {background:#F8F8F8;}";
+//        style += "#currency-ddl .currency-ddl-itm.selected {background:#F8F8F8 !important}"
+//        style += "</style>";
+//        $('body').append(style);
+//        var cookie_name = 'currency';
+//        var price_option = $(selector);
+//        var option = {expires: 365, path: '/'};
+//        var ddl_id = 'currency-ddl';
+//        var cookie_value = $.cookie(cookie_name);
+//        var html = $("<div>").attr('id', ddl_id).addClass('auto-hide');
+//        $.each(price_option, function() {
+//            var item = $(this);
+//            var ddl_item = $("<div>").addClass("currency-ddl-itm").html(item.attr('currency-symbol') + " " + item.attr(cookie_name)).attr(cookie_name, item.attr(cookie_name));
+//            ddl_item.click(function() {
+//                // select currency
+//                var $this = $(this).closest('.currency-ddl-itm');
+//                var currency = $this.attr(cookie_name);
+//                $('.price').hide();
+//                $('.price[currency=' + currency + ']').show();
+//                var ddl = $('#' + ddl_id);
+//                if (!$this.hasClass('selected')) {
+//                    $.cookie(cookie_name, currency, option);
+//                    $this.siblings().removeClass('selected');
+//                    $this.addClass('selected');
+//                }
+//                ddl.hide();
+//                price_option.hide();
+//                $(selector + "[currency=" + currency + "]").show();
+//            });
+//            html.append(ddl_item);
+//            // item click
+//            item.click(function() {
+//                // toggle ddl board
+//                var $this = $(this);
+//                var x = $this.offset().left;
+//                var y = $this.offset().top + 24;
+//                var ddl = $('#' + ddl_id);
+//                ddl.css('left', x).css('top', y);
+//                ddl.toggle();
+//            });
+//        });
+//        $('body').append(html);
+//        var currency_ddl_itm = html.find('.currency-ddl-itm');
+//        if (!cookie_value) {
+//            // 将第一个置为选中状态
+//            currency_ddl_itm.first().click();
+//        } else {
+//            var target = $('.currency-ddl-itm[currency=' + cookie_value + ']');
+//            target.addClass('selected');
+//            target.click();
+//        }
+//    };
     $.cart = {
         option: {
             cart_name: 'cart',
@@ -706,7 +705,7 @@
     };
 
     $.extend({
-        POPUPSETTINGS: {
+        POPUPSETTINGSTMP: {
             id: "P_popup",
             content: "hello",
             modal: false,
@@ -719,21 +718,21 @@
             textAlign:'left'
         },
         popup: function(options) {
-            $.extend($.POPUPSETTINGS, options);
-            var id = $.POPUPSETTINGS.id;
+            var $popupsettings = $.extend({}, $.POPUPSETTINGSTMP, options);
+            var id = $popupsettings.id;
             var w = $(window);
             $('#' + id).remove();
             var popupFrame = $('<div>').attr('id', id);
-            var w = $.POPUPSETTINGS.width;
-            var h = $.POPUPSETTINGS.height;
-            var content = $.POPUPSETTINGS.content;
+            var w = $popupsettings.width;
+            var h = $popupsettings.height;
+            var content = $popupsettings.content;
             content = (typeof (content) === 'string') ? $(content) : content;
             content.addClass('P_bg')
-                    .css('padding', $.POPUPSETTINGS.padding)
+                    .css('padding', $popupsettings.padding)
                     .css('margin-left', "-" + w / 2 + "px")
                     .css('width', w)
                     .css('height', h)
-                    .css('text-align', $.POPUPSETTINGS.textAlign);
+                    .css('text-align', $popupsettings.textAlign);
 
             popupFrame.show();
             var clsbtn = $('<span>').addClass('P_closebtn').html("&times;");
@@ -741,7 +740,7 @@
             var mt = "-" + $(content).height() / 2 + "px";
             $(content).css('margin-top', mt);
             
-            if (!$.POPUPSETTINGS.modal) {
+            if (!$popupsettings.modal) {
                 popupFrame.children().click(function(e) {
                     e.stopPropagation();
                 });
@@ -754,11 +753,11 @@
                 $(this).closest('#' + id).remove();
             });
 
-            if ($.POPUPSETTINGS.closebtn) {
+            if ($popupsettings.closebtn) {
                 clsbtn.show();
             }
 
-//            if ($.POPUPSETTINGS.relocate) {
+//            if ($popupsettings.relocate) {
 //                var cw = content.width();
 //                var ch = content.height();
 //                var left = (w.width() - cw) / 2;
@@ -776,11 +775,12 @@
             };
             $.extend(_settings, options);
             _settings.modal = true;
-            $.extend($.POPUPSETTINGS, _settings);
+            
+            var $popupsettings = $.extend({}, $.POPUPSETTINGSTMP, _settings);
             var id = "P_alertbox";
             var msg = "";
-            if ($.POPUPSETTINGS.msg) {
-                msg = $.POPUPSETTINGS.msg;
+            if ($popupsettings.msg) {
+                msg = $popupsettings.msg;
             }
             var wp;
             if (typeof (msg) === 'object')
@@ -789,11 +789,11 @@
                 wp = $('<div>').addClass('P_wp').html(msg);
             var alertContent = $('<div>').attr('id', id).addClass('P_popupbg').append(wp);
 
-            $.POPUPSETTINGS.content = alertContent;
-            $.popup();
+            $popupsettings.content = alertContent;
+            $.popup($popupsettings);
         },
         popupclose: function() {
-            var id = $.POPUPSETTINGS.id;
+            var id = $.POPUPSETTINGSTMP.id;
             $('#' + id).fadeOut(150, function() {
                 $(this).remove();
             });

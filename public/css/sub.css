@@ -382,3 +382,9 @@
     background-color:transparent !important;
     box-shadow:none;
 }
+.user-page-lnk {
+    margin-bottom:30px;
+}
+.user-page-lnk .btn.selected {
+    background:#333 !important;
+}
