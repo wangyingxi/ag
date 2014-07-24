@@ -205,7 +205,7 @@ class Angel_Controller_Action extends Zend_Controller_Action {
                 $userModel = $this->getModel('user');
                 $isEmailExist = $userModel->isEmailExist($email);
                 if ($isEmailExist) {
-                    $error = "该邮箱已经存在，不能重复注册";
+                    $error = "Sorry, the email is used, please change another one";
                 } else {
                     $result = null;
                     if ($userType == 'user') {
@@ -219,17 +219,40 @@ class Angel_Controller_Action extends Zend_Controller_Action {
             } catch (Angel_Exception_User $e) {
                 $error = $e->getDetail();
             }
-            if ($result) {
-                $this->_redirect($this->view->url(array(), $defaultRedirectRoute) . '?register=success');
+
+            if ($this->getParam('format') == 'json') {
+                if ($result) {
+                    // login directly
+                    $auth = $userModel->auth($email, $password);
+                    $success = false;
+                    if ($auth['valid'] === true) {
+                        $ip = $this->getRealIpAddr();
+                        $result = $userModel->updateLoginInfo($auth['msg'], $ip);
+
+                        if ($result) {
+                            $success = true;
+                        }
+                    }
+                    if ($success) {
+                        $this->_helper->json(array('code' => 200));
+                    }
+                } else {
+                    $this->_helper->json(array('code' => 500,
+                        'msg' => $error));
+                }
             } else {
-                $this->view->error = $error;
+                if ($result) {
+                    $this->_redirect($this->view->url(array(), $defaultRedirectRoute) . '?register=success');
+                } else {
+                    $this->view->error = $error;
+                }
             }
         }
         $this->view->title = $pageTitle;
     }
 
     protected function userLogin($defaultRedirectRoute, $pageTitle) {
-        $errorMsg = "登录失败，请重试或找回密码";
+        $errorMsg = "Oops! Password does not match. Please try again";
         if ($this->request->isPost()) {
             $email = $this->request->getParam('email');
             if ($email) {
@@ -259,15 +282,25 @@ class Angel_Controller_Action extends Zend_Controller_Action {
             } catch (Angel_Exception_User $e) {
                 $error = $e->getMessage();
             }
-            if ($success) {
-                $goto = $this->getParam('goto');
-                $url = $this->view->url(array(), $defaultRedirectRoute);
-                if ($goto) {
-                    $url = $goto;
+
+            if ($this->getParam('format') == 'json') {
+                if ($success) {
+                    $this->_helper->json(array('code' => 200));
+                } else {
+                    $this->_helper->json(array('code' => 500,
+                        'msg' => $error));
                 }
-                $this->_redirect($url);
             } else {
-                $this->view->error = $errorMsg;
+                if ($success) {
+                    $goto = $this->getParam('goto');
+                    $url = $this->view->url(array(), $defaultRedirectRoute);
+                    if ($goto) {
+                        $url = $goto;
+                    }
+                    $this->_redirect($url);
+                } else {
+                    $this->view->error = $errorMsg;
+                }
             }
         } else {
             if ($this->getParam('register') == 'success') {

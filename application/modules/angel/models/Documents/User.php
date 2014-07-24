@@ -61,17 +61,14 @@ class User extends AbstractDocument{
     /** @ODM\String */
     protected $profile_image;
     
-    /** @ODM\String */
-    protected $phone;
-    
-    /** @ODM\String */
+    /** @ODM\EmbedOne(targetDocument="\Documents\AddressDoc") */
     protected $address;
     
     /** @ODM\String */
-    protected $ip;  // 用户最后一次登陆的ip
+    protected $ip;  // 用户最后一次登录的ip
     
     /** @ODM\Date */
-    protected $last_login;  // 用户最后一次登陆的时间
+    protected $last_login;  // 用户最后一次登录的时间
     
     /** @ODM\EmbedOne(targetDocument="\Documents\UserDoc") */
     protected $identity_front_doc; // 身份照正面
@@ -139,17 +136,27 @@ class User extends AbstractDocument{
     }
     
     /**
-     * 添加用户的身份证正面文件
-     * @param type $filename
-     * @param type $angelname 
+     * 添加或修改用户地址
+     * @param type $contact
+     * @param type $street 
+     * @param type $phone
+     * @param type $state 
+     * @param type $city
+     * @param type $country 
+     * @param type $zip 
      */
-    public function addIdentityFrontDoc($filename, $angelname){
-        $document = new \Documents\UserDoc();
+    public function addAddressDoc($contact, $street, $phone, $state, $city, $country, $zip){
+        $document = new \Documents\AddressDoc();
         
-        $document->filename = $filename;
-        $document->angelname = $angelname;
+        $document->contact = $contact;
+        $document->street = $street;
+        $document->phone = $phone;
+        $document->state = $state;
+        $document->city = $city;
+        $document->country = $country;
+        $document->zip = $zip;
         
-        $this->identity_front_doc = $document;
+        $this->address = $document;
         
         return $document;
     }

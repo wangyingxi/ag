@@ -1,0 +1,94 @@
+<?php
+$address = array();
+if ($this->me && $this->me->getUser()->address) {
+    $address = $this->me->getUser()->address;
+}
+?>
+
+<div class="content wbg-wrapper">
+    
+    <div class="container_24" id="address-block">
+    <div class="grid_24">
+
+
+        <div class="user-page-lnk btn-group">
+            <a href="javascript:void(0)" class="btn selected">Update Address</a>
+            <a href="javascript:void(0)" class="btn">Reset Password</a>
+        </div>
+
+        <?php echo $this->partial('user/partials/_address_writer.phtml', array(address => $address)); ?>
+        
+        <div class="clear-20"></div>
+        <div class="text-center">
+            <button type="button" id="save-address" class="btn btn-default btn-lg"><i class="halflings floppy_save"></i> Save address</button>
+        </div>
+        <div class="clear-50"></div>
+    </div>
+</div>
+    
+    
+    
+</div>
+
+<script type="text/javascript">
+
+    (function($) {
+        $('#save-address').click(function() {
+            var url = '<?php echo $this->url(array(), 'user-address') ?>';
+            var data = {
+                contact: $('#contact').val(),
+                street: $('#street').val(),
+                phone: $('#phone').val(),
+                city: $('#city').val(),
+                state: $('#state').val(),
+                country: $('#country').val(),
+                zip: $('#zip').val()
+            };
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                method: 'post',
+                data: data,
+                success: function(response) {
+                    if (response.code === 200) {
+                        $.alertbox({
+                            msg: "<i class='glyphicons circle_ok green tpx'></i><p class='green'>Successfully saved!</p>"
+                        });
+                    } else {
+                        $.alertbox({
+                            msg: "<i class='glyphicons circle_ok red tpx'></i><p class='red'>Sorry! Save failed, please try again!</p>",
+                            width: 360
+                        });
+                    }
+                },
+                error: function() {
+                    $.alertbox({
+                        msg: "<i class='glyphicons circle_ok red tpx'></i><p class='red'>Sorry network error, please try again!</p>",
+                        width: 360
+                    });
+                }
+            });
+        });
+        $('.ftb').click(function() {
+            var $this = $(this).closest('.ftb');
+            var txt = $this.find('.nothing-txt');
+            if (txt.length) {
+                txt.focus();
+            }
+
+        });
+
+        $('.ftb .nothing-txt').keyup(function() {
+            switchTopC();
+        });
+    })(jQuery);
+
+</script>
+
+<style>
+
+    .tpx {
+        font-size:36px;
+        margin-bottom:-5px;
+    }
+</style>

@@ -13,102 +13,17 @@ class Angel_IndexController extends Angel_Controller_Action {
     }
 
     /**
-     * 登陆 
+     * 登录
      */
     public function loginAction() {
-        if ($this->request->isXmlHttpRequest() && $this->request->isPost()) {
-            $email = $this->request->getParam('email');
-            $password = $this->request->getParam('pwd');
-            $remember = $this->request->getParam('remember', 'no');
-
-            try {
-                $userModel = $this->getModel('user');
-                $auth = $userModel->auth($email, $password);
-
-                $success = false;
-
-                if ($auth['valid'] === true) {
-                    $ip = $this->getRealIpAddr();
-                    $result = $userModel->updateLoginInfo($auth['msg'], $ip);
-
-                    if ($result) {
-                        if ($remember == 'yes') {
-                            setcookie($this->bootstrap_options['cookie']['remember_me'], $userModel->getRememberMeValue($auth['msg'], $ip), time() + $this->bootstrap_options['token']['expiry']['remember_me'] * 60, '/', $this->bootstrap_options['site']['domain']);
-                        }
-                        $success = true;
-                    }
-                }
-
-                $this->_helper->json(($success === true) ? 1 : 0);
-            } catch (Angel_Exception_User $e) {
-                $this->_helper->json(0);
-            }
-        }
+        $this->userLogin('home', "Welcome to login");
     }
 
     /**
      * 注册 
      */
     public function registerAction() {
-        if ($this->request->isXmlHttpRequest() && $this->request->isPost()) {
-
-            $user_type = $this->request->getParam('usertype');
-            $email = $this->request->getParam('email');
-            $username = $this->request->getParam('username');
-            $password = $this->request->getParam('pwd');
-
-            $result = false;
-            try {
-                $userModel = $this->getModel('user');
-                $result = $userModel->addUser($user_type, $email, $username, $password, Zend_Session::getId());
-            } catch (Angel_Exception_User $e) {
-                $this->_helper->json($e->getDetail());
-            }
-
-            $this->_helper->json(($result === false) ? 0 : 1);
-        } else {
-            $guarantor_register = $this->request->getParam('guarantor_register');
-            if ($guarantor_register == '1') {
-                // 获取token内容
-                $token = $this->request->getParam('token');
-                if (empty($token)) {
-                    $this->_redirect($this->view->url(array(), 'not-found'));
-                }
-                $tokenDocument = $this->getModel('token')->getTokenByToken($token);
-                if ($tokenDocument && !$tokenDocument->isExpired()) {
-                    $guarantor_email = $tokenDocument->params['email'];
-                    if (empty($guarantor_email)) {
-                        $this->_redirect($this->view->url(array(), 'not-found'));
-                    }
-                    $guarantee_company = $tokenDocument->params['company'];
-                    $company = $this->getModel('company')->getCompanyById($guarantee_company);
-                    if (!isset($company)) {
-                        $this->_redirect($this->view->url(array(), 'not-found'));
-                    }
-                    $guarantors = $company->guarantor_candidate;
-                    if (!isset($guarantors) || count($guarantors) == 0) {
-                        $this->_redirect($this->view->url(array(), 'not-found'));
-                    }
-                    $hasIt = false;
-                    $guarantor_name = "";
-                    foreach ($guarantors as $guarantor) {
-                        if ($guarantor->email == $guarantor_email) {
-                            $hasIt = true;
-                            $guarantor_name = $guarantor->name;
-                            break;
-                        }
-                    }
-                    if (!$hasIt) {
-                        $this->_redirect($this->view->url(array(), 'not-found'));
-                    }
-                    $this->view->guarantor_email = $guarantor_email;
-                    $this->view->guarantor_name = $guarantor_name;
-                } else {
-                    $this->_redirect($this->view->url(array(), 'not-found'));
-                }
-                $this->view->guarantor_register = 1;
-            }
-        }
+        $this->userRegister('login', "Welcome to register", "user");
     }
 
     /**
@@ -193,14 +108,7 @@ class Angel_IndexController extends Angel_Controller_Action {
     }
 
     public function logoutAction() {
-        Zend_Auth::getInstance()->clearIdentity();
-
-        $angel = $this->request->getCookie($this->bootstrap_options['cookie']['remember_me']);
-        if (!empty($angel)) {
-            $this->getModel('token')->disableToken($angel);
-        }
-
-        $this->_redirect($this->view->url(array(), 'login'));
+        $this->userLogout('cart');
     }
 
 }

@@ -3,7 +3,8 @@
 class Angel_ProductController extends Angel_Controller_Action {
 
     protected $login_not_required = array(
-        'view'
+        'view',
+        'cart'
     );
 
     public function init() {

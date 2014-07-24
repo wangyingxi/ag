@@ -95,10 +95,10 @@ function removeObject($this, url, containerSelector, valSelector) {
     if (!confirm('确认删除该对象？')) {
         return;
     }
-    if(!containerSelector) {
+    if (!containerSelector) {
         containerSelector = '.itm';
     }
-    if(!valSelector) {
+    if (!valSelector) {
         valSelector = '.tmp';
     }
     var container = $this.closest(containerSelector);
@@ -119,4 +119,139 @@ function removeObject($this, url, containerSelector, valSelector) {
             }
         }
     });
+}
+
+function switchLoginWindowTo(obj) {
+    var cls = "selected";
+
+    obj = $(obj);
+    var type = obj.attr('tag');
+    if (!type)
+        throw "tag attribute is undefined";
+
+    var container = obj.closest('.login-window');
+    var btns = container.find('.btn-group .btn');
+    btns.removeClass(cls);
+    $.each(btns, function() {
+        var $this = $(this);
+        if ($this.attr('tag') === type) {
+            $this.addClass(cls);
+        }
+        return;
+    });
+    var board = container.find('.' + type + '-board');
+    board.siblings('.frm').hide();
+    board.show();
+}
+
+function login(obj, url) {
+    var container = $(obj).closest('.frm');
+    var valid_result = container.find('.valid-result');
+    valid_result.hide();
+    var email = container.find('.email_val').val();
+    if (!email.isEmail()) {
+        valid_result.find('span').html('Please input correct email');
+        valid_result.show();
+        return;
+    }
+    var password = container.find('.password_val').val();
+    if (!password) {
+        valid_result.find('span').html('Please input password');
+        valid_result.show();
+        return;
+    }
+
+    $(obj).prop('disabled', true).addClass('half-opacity').attr('alt', $(obj).html()).html('sending ...');
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        data: {email: email, password: password, format: 'json'},
+        method: 'post',
+        success: function(response) {
+            if (response.code === 200) {
+                location.reload();
+            } else {
+                valid_result.html(response.msg).show();
+            }
+        },
+        error: function() {
+            valid_result.html('network error, please try again').show();
+        },
+        complete: function() {
+            $(obj).prop('disabled', false).removeClass('half-opacity').html($(obj).attr('alt'));
+        }
+    });
+}
+function register(obj, url) {
+    $.popupclose();
+
+    var container = $(obj).closest('.frm');
+    var valid_result = container.find('.valid-result');
+    valid_result.hide();
+    var email = container.find('.email_val').val();
+    if (!email.isEmail()) {
+        valid_result.find('span').html('Please input correct email');
+        valid_result.show();
+        return;
+    }
+    var username = container.find('.nick_name_val').val();
+    if (!username) {
+        valid_result.find('span').html('Please input Nick Name, we will know how to call you');
+        valid_result.show();
+        return;
+    }
+    var password = container.find('.password_val').val();
+    if (!password) {
+        valid_result.find('span').html('Please input password');
+        valid_result.show();
+        return;
+    }
+    $(obj).prop('disabled', true).addClass('half-opacity').attr('alt', $(obj).html()).html('sending ...');
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        data: {email: email, username: username, password: password, format: 'json'},
+        method: 'post',
+        success: function(response) {
+            if (response.code === 200) {
+                // 弹框提示注册成功，并且自动登录后刷新
+                $.popupclose();
+                var html = "<p class='marginbottom5px green'><i class='glyphicons circle_ok'></i> Congratulation! Successfully registered.</p><button class='sm-btn black-btn' onclick='location.reload();'>Login and Continue</button>";
+                $.alertbox({msg: html, width: 400, closebtn: false});
+
+            } else {
+                valid_result.find('span').html(response.msg);
+                valid_result.show();
+            }
+        },
+        error: function() {
+            valid_result.html('network error, please try again').show();
+        },
+        complete: function() {
+            $(obj).prop('disabled', false).removeClass('half-opacity').html($(obj).attr('alt'));
+        }
+    });
+}
+
+function switchTopC() {
+    var DURA = 200;
+    $.each($('.ftb'), function() {
+        var $this = $(this).closest('.ftb');
+        var top_c = $this.find('.top-c');
+        var input = $this.find('.nothing-txt');
+        if (top_c.length && input.length) {
+            top_c.html(input.attr('placeholder'));
+            if (input.val()) {
+                top_c.fadeIn(DURA);
+            } else {
+                top_c.fadeOut(DURA);
+            }
+        }
+    });
+
+}
+
+String.prototype.isEmail = function() {
+    var reg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+    return reg.test(this);
 }

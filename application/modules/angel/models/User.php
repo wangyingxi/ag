@@ -37,11 +37,13 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
         $usertype = "admin";
         return $this->registerUser($email, $password, $usertype, $salt, $checkemail);
     }
-    public function addUser($email, $password, $salt, $checkemail = true) {
+
+    public function addUser($email, $password, $username, $salt, $checkemail = true) {
         $usertype = "user";
-        return $this->registerUser($email, $password, $usertype, $salt, $checkemail);
+        return $this->registerUser($email, $password, $username, $usertype, $salt, $checkemail);
     }
-    protected function registerUser($email, $password, $usertype, $salt, $checkmail) {
+
+    protected function registerUser($email, $password, $username, $usertype, $salt, $checkmail) {
         $result = false;
         if (empty($email)) {
             throw new Angel_Exception_User(Angel_Exception_User::EMAIL_EMPTY);
@@ -53,12 +55,16 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
                 if ($this->isEmailExist($email)) {
                     throw new Angel_Exception_User(Angel_Exception_User::EMAIL_NOT_UNIQUE);
                 }
+//                if ($this->isUsernameExist($username)) {
+//                    throw new Angel_Exception_User(Angel_Exception_User::USERNAME_NOT_UNIQUE);
+//                }
             }
         }
 
         $user = new $this->_document_class();
 
         $user->email = $email;
+        $user->username = $username;
         $user->salt = $salt;
         $user->user_type = $usertype;
         $user->password = $password;
@@ -171,6 +177,24 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
             $result = true;
         }
 
+        return $result;
+    }
+
+    public function updateAddress($user, $contact, $street, $phone, $state, $city, $country, $zip) {
+        $result = false;
+
+        if (!(is_object($user) && ($user instanceof $this->_document_class))) {
+            $user = $this->validateUserId($user);
+        }
+        try {
+            $user->addAddressDoc($contact, $street, $phone, $state, $city, $country, $zip);
+            $this->_dm->persist($user);
+            $this->_dm->flush();
+            $result = true;
+        } catch (Exception $e) {
+            $this->_logger->info(__CLASS__, __FUNCTION__, $e->getMessage() . "\n" . $e->getTraceAsString());
+            throw new Angel_Exception_User(Angel_Exception_User::USER_UPDATE_FAIL);
+        }
         return $result;
     }
 
