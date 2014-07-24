@@ -714,8 +714,8 @@
             msg: "hello",
             height: 'auto',
             width: 500,
-            padding:25,
-            textAlign:'left'
+            padding: 25,
+            textAlign: 'left'
         },
         popup: function(options) {
             var $popupsettings = $.extend({}, $.POPUPSETTINGSTMP, options);
@@ -739,7 +739,7 @@
             $('body').append(popupFrame.append($(content).append(clsbtn)));
             var mt = "-" + $(content).height() / 2 + "px";
             $(content).css('margin-top', mt);
-            
+
             if (!$popupsettings.modal) {
                 popupFrame.children().click(function(e) {
                     e.stopPropagation();
@@ -769,13 +769,13 @@
         },
         alertbox: function(options) {
             var _settings = {
-                width:280,
-                height:120,
-                textAlign:'center'
+                width: 280,
+                height: 120,
+                textAlign: 'center'
             };
             $.extend(_settings, options);
             _settings.modal = true;
-            
+
             var $popupsettings = $.extend({}, $.POPUPSETTINGSTMP, _settings);
             var id = "P_alertbox";
             var msg = "";
@@ -800,6 +800,37 @@
         }
     });
 
+    $.fn.clickToggle = function() {
+        var $this = $(this);
+        var target = $('#' + $this.attr('rel'));
+        if (!target.length)
+            return;
+
+        var coverId = 'cover_for_ddl_in_page_2014';
+        $this.click(function() {
+            var x = $this.offset().left;
+            var y = $this.offset().top + $this.height() + 10;
+            target.css('left', x).css('top', y).css('z-index', 10);
+            target.toggle();
+            $('#' + coverId).toggle();
+        });
+        var cover = $('#' + coverId);
+        if (!cover.length) {
+            cover = $('<div>').attr('id', coverId)
+                    .css('position', 'absolute')
+                    .css('width', '100%')
+                    .css('height', '100%')
+                    .css('display', 'none')
+                    .css('left', 0)
+                    .css('top', 0)
+                    .css('z-index', 9);
+            cover.click(function(){
+                $(this).hide();
+                $('.click-toggle').hide();
+            });
+            $('body').append(cover);
+        }
+    };
 })(jQuery);
 /*!
  * jQuery Cookie Plugin v1.3.1

@@ -28,12 +28,14 @@
                         width: 400};
                     $.popup(options);
                 });
+                $('#my-username').clickToggle();
             });
         </script>
     </head>
 
     <body>
         <div class="P_tmp">
+
             <div class="login-window">
                 <div class="hd">
                     <div class="btn-group">
@@ -53,8 +55,8 @@
                     </div>
 
                     <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> <span>Oops! Password does not match. Please try again</span></div>
-                    
-                    <button class="mg" onclick="login(this, '<?php echo $this->url(array(), 'login')?>')">Login</button>
+
+                    <button class="mg" onclick="login(this, '<?php echo $this->url(array(), 'login') ?>')">Login</button>
                     <div class="forgot-pwd"><a href="#">Forgot password</a></div>
                     <div class="clear-line"></div>
                     <p class="text-center">Not a member yet ? <a href="javascript:void(0)" tag="register" onclick="switchLoginWindowTo(this)" class="red">Register now</a></p>
@@ -76,7 +78,7 @@
 
 
                     <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> <span>Oops! Password does not match. Please try again</span></div>
-                    <button class="mg" onclick="register(this, '<?php echo $this->url(array(), 'register')?>')">Register</button>
+                    <button class="mg" onclick="register(this, '<?php echo $this->url(array(), 'register') ?>')">Register</button>
                     <div class="clear-line"></div>
                     <p class="text-center">Already a member ? <a href="javascript:void(0)" tag="login" onclick="switchLoginWindowTo(this)" class="red">Login</a></p>
                 </div>
@@ -99,7 +101,9 @@
                             <?php if (!isset($this->me)): ?>
                                 <a href="#" id="login-btn">Login</a>
                             <?php else: ?>
-                                <span class="light-gray">hey</span> <a href="#"><?php echo $this->me->getUser()->username ?></a>
+                                <span class="light-gray">hey</span> <a href="#" id="my-username" rel="my-settings"><?php echo $this->me->getUser()->username ?></a>
+
+
                             <?php endif; ?>
                         </div>
                         <span class="vsplr l-ft"></span>
@@ -162,7 +166,20 @@
         </div>
         <!-- Bottom End -->
 
-
+        <div id="my-settings" class="dropdown-list click-toggle">
+            <div class="dropdown-itm">
+                <i class="halflings map-marker"></i>
+                <a href="<?php echo $this->url(array(), 'user-address') ?>">Update Address</a>
+            </div>
+            <div class="dropdown-itm">
+                <a href="<?php echo $this->url(array(), 'reset-password') ?>">Reset Password</a>
+            </div>
+            <div class="divider"></div>
+            <div class="dropdown-itm">
+                <i class="halflings off"></i>
+                <a href="<?php echo $this->url(array(), 'logout') ?>">Logout</a>
+            </div>
+        </div>
 
     </body>
 </html>

@@ -494,3 +494,29 @@ input.nothing-txt {
 .address-type.btn-group {
     margin-bottom:30px;
 }
+.divider {
+    background:#F0F0F0;
+    clear:both;
+    height:1px;
+    margin:0;
+}
+.dropdown-list {
+    background:#FFF;
+    box-shadow:0 0 10px rgba(0,0,0,0.12);
+    display:none;
+    position:absolute;
+}
+.dropdown-itm {
+    cursor: pointer;
+    display: block;
+    padding: 6px 20px 6px 35px;
+    position:relative;
+}
+.dropdown-itm:hover {
+    background-color:#FBFBFB;
+}
+.dropdown-itm .halflings {
+    left:11px;
+    position:absolute;
+    top:9px;
+}
