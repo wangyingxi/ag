@@ -100,7 +100,7 @@ if ($this->me && $this->me->getUser()->address) {
 
                 <?php if (!$this->me) : ?>
                     <a href="javascript:void(0)" class="btn selected"><i class='halflings uni-paperclip'></i> Write address now</a>
-                    <a href="javascript:void(0)" class="btn"><i class='halflings cloud_download'></i> Login &amp; Load my address</a>
+                    <a href="javascript:void(0)" class="btn" id="login-and-load"><i class='halflings cloud_download'></i> Login &amp; Load my address</a>
                 <?php else: ?>
                     <a href="javascript:void(0)" class="btn selected"><i class='halflings cloud'></i> My address</a>
                 <?php endif; ?>
@@ -108,7 +108,7 @@ if ($this->me && $this->me->getUser()->address) {
             </div>
 
             <?php echo $this->partial('user/partials/_address_writer.phtml', array(address => $address)); ?>
-            
+
             <div class="clear-20"></div>
             <div class="text-center">
                 <button type="submit" class="pp-btn"></button>
@@ -232,6 +232,10 @@ if ($this->me && $this->me->getUser()->address) {
     }
 
     (function($) {
+        if ($.cookie('just-checkout')) {
+            $.removeCookie('just-checkout');
+            $('#checkout-btn').click();
+        }
         requestCart();
         $('.cart-remove-btn').click(function() {
             var tr = $(this).closest('tr');
@@ -259,6 +263,11 @@ if ($this->me && $this->me->getUser()->address) {
 
         $('.ftb .nothing-txt').keyup(function() {
             switchTopC();
+        });
+
+        $('#login-and-load').click(function() {
+            $.cookie('just-checkout', true);
+            $('#login-btn').click();
         });
     })(jQuery);
 
