@@ -109,7 +109,7 @@ if ($this->me && $this->me->getUser()->address) {
 
             <?php
             $updateBtn = false;
-            if($this->me) {
+            if ($this->me) {
                 $updateBtn = true;
             }
             ?>
@@ -267,6 +267,26 @@ if ($this->me && $this->me->getUser()->address) {
             switchTopC();
         });
 
+        $('.ftb .nothing-txt, #country').change(function() {
+            var contact = $('#contact').val();
+            var phone = $('#phone').val();
+            var street = $('#street').val();
+            var city = $('#city').val();
+            var state = $('#state').val();
+            var zip = $('#zip').val();
+            var country = $('#country').val();
+            var bean = {
+                contact: contact,
+                phone: phone,
+                street: street,
+                city: city,
+                state: state,
+                zip: zip,
+                country: country
+            };
+            $.cookie('just-address', JSON.stringify(bean));
+        });
+
         $('#login-and-load').click(function() {
             $.cookie('just-checkout', true);
             $('#login-btn').click();
@@ -280,6 +300,19 @@ if ($this->me && $this->me->getUser()->address) {
                 $('#checkout-btn').click();
             };
             setTimeout(f, 1000);
+        }
+        // 如果刚刚输入了地址，及时补上
+        if ($.cookie('just-address')) {
+            var bean = JSON.parse($.cookie('just-address'));
+            if (bean) {
+                $.each(bean, function(k, v) {
+                    var val = $('#' + k).val();
+                    if (!val) {
+                        $('#' + k).val(v);
+                    }
+                });
+            }
+//            $.removeCookie('just-address');
         }
     })(jQuery);
 
