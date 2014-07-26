@@ -107,7 +107,13 @@ if ($this->me && $this->me->getUser()->address) {
                 <a href="javascript:void(0)" class="btn"><i class='font-paypal'></i> Use my paypal address</a>
             </div>
 
-            <?php echo $this->partial('user/partials/_address_writer.phtml', array(address => $address)); ?>
+            <?php
+            $updateBtn = false;
+            if($this->me) {
+                $updateBtn = true;
+            }
+            ?>
+            <?php echo $this->partial('user/partials/_address_writer.phtml', array(address => $address, updateBtn => $updateBtn)); ?>
 
             <div class="clear-20"></div>
             <div class="text-center">
@@ -232,10 +238,6 @@ if ($this->me && $this->me->getUser()->address) {
     }
 
     (function($) {
-        if ($.cookie('just-checkout')) {
-            $.removeCookie('just-checkout');
-            $('#checkout-btn').click();
-        }
         requestCart();
         $('.cart-remove-btn').click(function() {
             var tr = $(this).closest('tr');
@@ -269,6 +271,16 @@ if ($this->me && $this->me->getUser()->address) {
             $.cookie('just-checkout', true);
             $('#login-btn').click();
         });
+
+
+        // 检查所否刚刚正在填入地址的时候登录或者注册了，继续刚才的流程        
+        if ($.cookie('just-checkout')) {
+            $.removeCookie('just-checkout');
+            var f = function() {
+                $('#checkout-btn').click();
+            };
+            setTimeout(f, 1000);
+        }
     })(jQuery);
 
 </script>

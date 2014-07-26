@@ -62,4 +62,9 @@ $address = $this->address;
             </select>
         </p>
     </div>
+    <?php if ($this->updateBtn): ?>
+    <div style="padding:10px 20px 5px 18px;clear:both">
+        <input type="checkbox" id="update-it" checked="checked"/> <label class="gray" for="update-it">Update to my address</label>
+    </div>
+    <?php endif; ?>
 </div>
