@@ -64,6 +64,9 @@ class User extends AbstractDocument{
     /** @ODM\EmbedOne(targetDocument="\Documents\AddressDoc") */
     protected $address;
     
+    /** @ODM\Hash */
+    protected $attribute = array();    // 用户属性，各种设置存放的地方
+    
     /** @ODM\String */
     protected $ip;  // 用户最后一次登录的ip
     
@@ -78,9 +81,6 @@ class User extends AbstractDocument{
         
     /** @ODM\EmbedMany(targetDocument="\Documents\Reason") */
     protected $identity_refused_reason = array(); // 用户身份信息被拒绝的原因
-    
-    /** @ODM\EmbedMany(targetDocument="\Documents\InvestedCompany") */
-    protected $invested_companies = array(); // 投资过的公司
     
     /**
      * 验证身份是否正确 
@@ -232,28 +232,6 @@ class User extends AbstractDocument{
         return $arr;
     }
     
-    public function addGuarantors(\Documents\Company $company, $guarantor_id){
-        $orig = null;
-        foreach($this->guarantors as &$guarantor){
-            if($guarantor->guarantor_id == $guarantor_id){
-                $orig = $guarantor;
-            }
-        }
-        
-        if(!$orig){
-            $guarantor = new \Documents\Guarantor();
-            
-            $guarantor->company = $company;
-            $guarantor->guarantor_id = $guarantor_id;
-            $guarantor->active_bln = true;
-
-            $this->guarantors[] = $guarantor;
-        }
-        else{
-            $orig->active_bln = true;
-        }
-    }
-    
     public function removeGuarantor($guarantor_id){
         $result = false;
         
@@ -269,26 +247,4 @@ class User extends AbstractDocument{
         return $result;
     }
     
-    public function addInvestedCompanies($company, $percent, $amount){
-        $invested = new \Documents\InvestedCompany();
-        
-        $invested->company = $company;
-        $invested->percent = $percent;
-        $invested->amount = $amount;
-        
-        $this->invested_companies[] = $invested;
-    }
-    
-    public function hasAlreadyInvestedCompany($company_id){
-        $result = false;
-        
-        foreach($this->invested_companies as $company){
-            if($company->company->id == $company_id){
-                $result = true;
-                break;
-            }
-        }
-        
-        return $result;
-    }
 }

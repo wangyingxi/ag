@@ -463,152 +463,19 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
         return $imageService->generateImageFilename($this->getProfileImagePath($image), $version, false);
     }
 
-    /**
-     * 更新用户的个人身份信息
-     * @param string $user_id - user model id
-     * @param string $username - 姓名
-     * @param string $identity_id - 身份证
-     * @param string $phone - 电话号码
-     * @param string $address - 地址
-     * @param boolean $wait_tobe_validate － 是否修改的信息需要被管理员审核
-     * @return boolean false (fails) or user document (success)
-     * @throws Angel_Exception_User 
-     */
-    public function updateIndentityInfo($user_id, $username, $identity_id, $phone, $address, $wait_tobe_validate = true) {
-        $result = false;
-        $data = array();
-
-        if (empty($username)) {
-            throw new Angel_Exception_User(Angel_Exception_User::USERNAME_REQUIRED);
+    
+    public function setAttribute($user, $key, $value) {
+        $validated_key = array('operating-oid', 'new-msg');
+        if (!in_array($key, $validated_key)) {
+            return false;
         }
-        $data['username'] = $username;
-
-        if (empty($identity_id)) {
-            throw new Angel_Exception_User(Angel_Exception_User::IDENTITY_ID_REQUIRED);
-        }
-        $data['identity_id'] = $identity_id;
-
-        if (empty($phone)) {
-            throw new Angel_Exception_User(Angel_Exception_User::PHONE_REQUIRED);
-        }
-        $data['phone'] = $phone;
-
-        if (empty($address)) {
-            throw new Angel_Exception_User(Angel_Exception_User::ADDRESS_REQUIRED);
-        }
-        $data['address'] = $address;
-
-        $data['wait_tobe_validate'] = $wait_tobe_validate;
-
-        $user = $this->updateUser($user_id, $data);
-        if ($user && $wait_tobe_validate) {
-            // 通知管理员
-            Angel_Model_Email::sendEmail($this->_container->get('email'), Angel_Model_Email::EMAIL_REALNAME_VALIDATE_ADMIN, $this->_bootstrap_options['mail']['admin'], array('email' => $user->email));
-            $result = $user;
+        $attribute = $user->attribute;
+        if (!$attribute) {
+            $attribute = array();
         }
 
-        return $result;
-    }
-
-    /**
-     * 返回等待身份信息需验证的用户
-     * @return zend paginator or query dataset
-     */
-    public function getAllUsersInWaitTobeValidatedList($return_as_paginator = true) {
-        $query = $this->_dm->createQueryBuilder($this->_document_class)
-                ->field('wait_tobe_validate')->equals(true)
-                ->field('active_bln')->equals(true)
-                ->sort('createdAt', 'asc');
-
-        $result = null;
-        if ($return_as_paginator) {
-            $result = $this->paginator($query);
-        } else {
-            $result = $query->getQuery()->execute();
-        }
-
-        return $result;
-    }
-
-    /**
-     * 实名认证未通过审核
-     * @param string $user_id
-     * @param string $reason － 拒绝的原因
-     * @return boolean - actually if no exception was thrown, it always return true
-     * @throws Angel_Exception_User
-     * @throws Angel_Exception_Admin 
-     */
-    public function refuseIdentityInfo($user_id, $reason) {
-        $user = $this->validateUserId($user_id);
-
-        // 必须提供拒绝的原因
-        if (empty($reason)) {
-            throw new Angel_Exception_Admin(Angel_Exception_Admin::REFUSE_IDENTITY_INFO_REASON_REQUIRED);
-        }
-
-        $user->wait_tobe_validate = false;
-        $user->addIdentityRefusedReason($reason);
-
-        $this->_dm->persist($user);
-        $this->_dm->flush();
-
-        $params = array(
-            'name' => $user->username,
-            'reason' => $reason
-        );
-
-        Angel_Model_Email::sendEmail($this->_container->get('email'), Angel_Model_Email::EMAIL_IDENTITY_INFO_REFUSED, $user->email, $params);
-
-        return true;
-    }
-
-    /**
-     * 审核通过用户的实名认证
-     * @param string $user_id
-     * @return boolean - actually if no exception was thrown, it always return true
-     */
-    public function acceptIdentityInfo($user_id) {
-        $user = $this->validateUserId($user_id);
-
-        $user->validated_bln = true;
-        $user->wait_tobe_validate = false;
-
-        $this->_dm->persist($user);
-        $this->_dm->flush();
-
-        $params = array(
-            'name' => $user->username,
-            'is_investor' => $user->isInvestor()
-        );
-        Angel_Model_Email::sendEmail($this->_container->get('email'), Angel_Model_Email::EMAIL_IDENTITY_INFO_ACCEPTED, $user->email, $params);
-
-        return true;
-    }
-
-    /**
-     * 关注用户，创业者，投资人
-     * @param String $user_id - 关注人的ID
-     * @param String $target_user_id － 被关注人的ID
-     */
-    public function followUser($user_id, $target_user_id) {
-        $user = $this->validateUserId($user_id);
-        $target_user = $this->validateUserId($target_user_id);
-
-        $type = \Documents\Follow::FOLLOW_TARGET_STARTUP;
-        if ($target_user->isInvestor()) {
-            $type = \Documents\Follow::FOLLOW_TARGET_INVESTOR;
-        }
-
-        $follow = new \Documents\Follow();
-        $follow->user = $user;
-        $follow->target_type = $type;
-        $follow->target_user = $target_user;
-
-        $this->_dm->persist($follow);
-        $this->_dm->flush();
-
-        $result = $this->getModel('feed')->recordFollowUserFeed($user, $target_user);
-
+        $attribute[$key] = $value;
+        $result = $this->updateUser($user, array('attribute' => $attribute));
         return $result;
     }
 

@@ -121,6 +121,11 @@ abstract class Angel_Model_AbstractModel {
         }
         return $result;
     }
+    
+    public function getSingleBy($condition = false) {
+        $result = $this->getBy(false, $condition);
+        return $result->getSingleResult();
+    }
 
     public function getDocumentClass() {
         return $this->_document_class;
