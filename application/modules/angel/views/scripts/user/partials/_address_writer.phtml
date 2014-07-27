@@ -2,69 +2,80 @@
 $address = $this->address;
 ?>
 
-<div>
-    <div class="ftb nlm">
-        <p class="ftbp">
-            <i class="halflings user"></i>
-            <input type='text' class='nothing-txt' id="contact" title="CONTACT" placeholder="CONTACT" value="<?php echo $address->contact ?>"/>
+<div id="address-field-wrapper">
+    <div class="cover">
+        <div class="t1">
+            <img src="/img/ok-btn.png"/>
+            <div class="clear-10"></div>
+            <p class="t2">OK, please click the papal button below</p>
+            <p class="t3">we will delivery item to your paypal address</p>
+            <img src="https://cdn0.iconfinder.com/data/icons/slim-square-icons-basics/100/basics-08-128.png"/>
+        </div>
+    </div>
+    <div class="ct">
+        <div class="ftb nlm">
+            <p class="ftbp">
+                <i class="halflings user"></i>
+                <input type='text' class='nothing-txt' id="contact" title="CONTACT" placeholder="CONTACT" value="<?php echo $address->contact ?>"/>
 
-        </p>
-        <span class="top-c"></span>
+            </p>
+            <span class="top-c"></span>
+        </div>
+        <div class="ftb">
+            <p class="ftbp">
+                <i class="halflings phone_alt"></i>
+                <input type='text' class='nothing-txt' id="phone" title="PHONE NUMBER" placeholder="PHONE NUMBER" value="<?php echo $address->phone ?>"/>
+            </p>
+            <span class="top-c"></span>
+        </div>
+        <div class="clear"></div>
+        <div class="ftb full nlm">
+            <p class="ftbp">
+                <i class="halflings home"></i>
+                <input type='text' class='nothing-txt' id="street" title="STREET ADDRESS" placeholder="STREET ADDRESS" value="<?php echo $address->street ?>"/>
+            </p>
+            <span class="top-c"></span>
+        </div>
+        <div class="clear"></div>
+        <div class="ftb nlm">
+            <p class="ftbp">
+                <i class="halflings tag"></i>
+                <input type='text' class='nothing-txt' id="city" title="CITY" placeholder="CITY" value="<?php echo $address->city ?>"/>
+            </p>
+            <span class="top-c"></span>
+        </div>
+        <div class="ftb">
+            <p class="ftbp">
+                <i class="halflings tags"></i>
+                <input type='text' class='nothing-txt' id="state" title="STATE / COUNTY" placeholder="STATE / COUNTY" value="<?php echo $address->state ?>"/>
+            </p>
+            <span class="top-c"></span>
+        </div>
+        <div class="clear"></div>
+        <div class="ftb nlm">
+            <p class="ftbp">
+                <i class="halflings envelope"></i>
+                <input type='text' class='nothing-txt' id="zip" title="ZIP / POSTAL CODE" placeholder="ZIP / POSTAL CODE" value="<?php echo $address->zip ?>"/>
+            </p>
+            <span class="top-c"></span>
+        </div>
+        <div class="ftb">
+            <p class="ftbp">
+                <i class="halflings globe"></i>
+                <select title="COUNTRY" id="country" value="<?php echo $address->country ?>">
+                    <option value="">CHOOSE COUNTRY</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="us">United States</option>
+                    <option value="jp">Japan</option>
+                    <option value="hk">Hong Kong</option>
+                    <option value="de">Germany</option>
+                </select>
+            </p>
+        </div>
+        <?php if ($this->updateBtn): ?>
+            <div style="padding:10px 20px 5px 22px;clear:both">
+                <input type="checkbox" id="update-it" checked="checked" style="top:2px;margin:0"/> <label class="gray" style="font-size:smaller" for="update-it">Update to my address</label>
+            </div>
+        <?php endif; ?>
     </div>
-    <div class="ftb">
-        <p class="ftbp">
-            <i class="halflings phone_alt"></i>
-            <input type='text' class='nothing-txt' id="phone" title="PHONE NUMBER" placeholder="PHONE NUMBER" value="<?php echo $address->phone ?>"/>
-        </p>
-        <span class="top-c"></span>
-    </div>
-    <div class="clear"></div>
-    <div class="ftb full nlm">
-        <p class="ftbp">
-            <i class="halflings home"></i>
-            <input type='text' class='nothing-txt' id="street" title="STREET ADDRESS" placeholder="STREET ADDRESS" value="<?php echo $address->street ?>"/>
-        </p>
-        <span class="top-c"></span>
-    </div>
-    <div class="clear"></div>
-    <div class="ftb nlm">
-        <p class="ftbp">
-            <i class="halflings tag"></i>
-            <input type='text' class='nothing-txt' id="city" title="CITY" placeholder="CITY" value="<?php echo $address->city ?>"/>
-        </p>
-        <span class="top-c"></span>
-    </div>
-    <div class="ftb">
-        <p class="ftbp">
-            <i class="halflings tags"></i>
-            <input type='text' class='nothing-txt' id="state" title="STATE / COUNTY" placeholder="STATE / COUNTY" value="<?php echo $address->state ?>"/>
-        </p>
-        <span class="top-c"></span>
-    </div>
-    <div class="clear"></div>
-    <div class="ftb nlm">
-        <p class="ftbp">
-            <i class="halflings envelope"></i>
-            <input type='text' class='nothing-txt' id="zip" title="ZIP / POSTAL CODE" placeholder="ZIP / POSTAL CODE" value="<?php echo $address->zip ?>"/>
-        </p>
-        <span class="top-c"></span>
-    </div>
-    <div class="ftb">
-        <p class="ftbp">
-            <i class="halflings globe"></i>
-            <select title="COUNTRY" id="country" value="<?php echo $address->country ?>">
-                <option value="">CHOOSE COUNTRY</option>
-                <option value="uk">United Kingdom</option>
-                <option value="us">United States</option>
-                <option value="jp">Japan</option>
-                <option value="hk">Hong Kong</option>
-                <option value="de">Germany</option>
-            </select>
-        </p>
-    </div>
-    <?php if ($this->updateBtn): ?>
-    <div style="padding:10px 20px 5px 22px;clear:both">
-        <input type="checkbox" id="update-it" checked="checked" style="top:2px;margin:0"/> <label class="gray" style="font-size:smaller" for="update-it">Update to my address</label>
-    </div>
-    <?php endif; ?>
 </div>

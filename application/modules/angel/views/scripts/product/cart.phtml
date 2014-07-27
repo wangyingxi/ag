@@ -99,12 +99,13 @@ if ($this->me && $this->me->getUser()->address) {
             <div class="btn-group address-type">
 
                 <?php if (!$this->me) : ?>
-                    <a href="javascript:void(0)" class="btn selected"><i class='halflings uni-paperclip'></i> Write address now</a>
+                    <a href="javascript:void(0)" rel="1" class="btn selected" id="write-address-now"><i class='halflings uni-paperclip'></i> Write address now</a>
                     <a href="javascript:void(0)" class="btn" id="login-and-load"><i class='halflings cloud_download'></i> Login &amp; Load my address</a>
                 <?php else: ?>
-                    <a href="javascript:void(0)" class="btn selected"><i class='halflings cloud'></i> My address</a>
+                    <a href="javascript:void(0)" rel="1" class="btn selected" id="my-address"><i class='halflings cloud'></i> My address</a>
                 <?php endif; ?>
-                <a href="javascript:void(0)" class="btn"><i class='font-paypal'></i> Use my paypal address</a>
+                <a href="javascript:void(0)" rel="2" class="btn" id="using-pp"><i class='font-paypal'></i> Use my paypal address</a>
+                <input type="hidden" id="selected-address-type" value="1"/>
             </div>
 
             <?php
@@ -290,8 +291,20 @@ if ($this->me && $this->me->getUser()->address) {
         $('#login-and-load').click(function() {
             $.cookie('just-checkout', true);
             $('#login-btn').click();
+            switchTopC();
         });
-
+        $('#write-address-now, #using-pp, #my-address').click(function() {
+            $(this).addClass('selected').siblings('.selected').removeClass('selected');
+            $('#selected-address-type').val($(this).attr('rel'));
+        });
+        $('#using-pp').click(function() {
+            $('#address-field-wrapper .ct').addClass('blur-5px');
+            $('#address-field-wrapper .cover').fadeIn(300);
+        });
+        $('#write-address-now, #my-address').click(function() {
+            $('#address-field-wrapper .ct').removeClass('blur-5px');
+            $('#address-field-wrapper .cover').fadeOut(300);
+        });
 
         // 检查所否刚刚正在填入地址的时候登录或者注册了，继续刚才的流程        
         if ($.cookie('just-checkout')) {
@@ -399,6 +412,26 @@ if ($this->me && $this->me->getUser()->address) {
 
     #address-block {
         display:none;
+    }
+    #address-field-wrapper .cover {
+        background-color:rgba(255,255,255,0.6);
+        display:none;
+        height:100%;
+        left:0;
+        position:absolute;
+        top:0;
+        width:100%;
+        z-index:3;
+    }
+    #address-field-wrapper .cover .t1 {
+        padding-top:20px;
+        text-align: center;
+    }
+    #address-field-wrapper .cover .t2 {
+        font-size:18px;
+    }
+    #address-field-wrapper .cover .t3 {
+        color:rgba(0,0,0,0.5);
     }
 
 </style>
