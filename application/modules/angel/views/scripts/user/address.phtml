@@ -12,8 +12,8 @@ if ($this->me && $this->me->getUser()->address) {
 
 
             <div class="user-page-lnk btn-group">
-                <a href="javascript:void(0)" class="btn selected">Update Address</a>
-                <a href="javascript:void(0)" class="btn">Reset Password</a>
+                <a href="<?php echo $this->url(array(), 'user-address') ?>" class="btn selected">Update Address</a>
+                <a href="<?php echo $this->url(array(), 'reset-password') ?>" class="btn">Reset Password</a>
             </div>
 
             <?php echo $this->partial('user/partials/_address_writer.phtml', array(address => $address)); ?>
@@ -33,6 +33,7 @@ if ($this->me && $this->me->getUser()->address) {
 <script type="text/javascript">
 
     (function($) {
+        switchTopC();
         $('#save-address').click(function() {
             var url = '<?php echo $this->url(array(), 'user-address') ?>';
             var data = {
