@@ -6,28 +6,28 @@ if ($this->me && $this->me->getUser()->address) {
 ?>
 
 <div class="content wbg-wrapper">
-    
+
     <div class="container_24" id="address-block">
-    <div class="grid_24">
+        <div class="grid_24">
 
 
-        <div class="user-page-lnk btn-group">
-            <a href="javascript:void(0)" class="btn selected">Update Address</a>
-            <a href="javascript:void(0)" class="btn">Reset Password</a>
+            <div class="user-page-lnk btn-group">
+                <a href="javascript:void(0)" class="btn selected">Update Address</a>
+                <a href="javascript:void(0)" class="btn">Reset Password</a>
+            </div>
+
+            <?php echo $this->partial('user/partials/_address_writer.phtml', array(address => $address)); ?>
+
+            <div class="clear-20"></div>
+            <div class="text-center">
+                <button type="button" id="save-address" class="btn btn-default btn-lg"><i class="halflings floppy_save"></i> Save address</button>
+            </div>
+            <div class="clear-50"></div>
         </div>
-
-        <?php echo $this->partial('user/partials/_address_writer.phtml', array(address => $address)); ?>
-        
-        <div class="clear-20"></div>
-        <div class="text-center">
-            <button type="button" id="save-address" class="btn btn-default btn-lg"><i class="halflings floppy_save"></i> Save address</button>
-        </div>
-        <div class="clear-50"></div>
     </div>
-</div>
-    
-    
-    
+
+
+
 </div>
 
 <script type="text/javascript">
@@ -90,5 +90,8 @@ if ($this->me && $this->me->getUser()->address) {
     .tpx {
         font-size:36px;
         margin-bottom:-5px;
+    }
+    #address-field-wrapper .cover{
+        display:none !important;
     }
 </style>
