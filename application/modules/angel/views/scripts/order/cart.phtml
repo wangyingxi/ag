@@ -305,6 +305,33 @@ if ($this->me && $this->me->getUser()->address) {
             $('#address-field-wrapper .ct').removeClass('blur-5px');
             $('#address-field-wrapper .cover').fadeOut(300);
         });
+        $('.pp-btn').click(function() {
+
+            var query = $.cart.parse();
+            if (!query) {
+                // empty handle
+                return;
+            }
+            var data = new Array();
+            $.each(query, function(k, v) {
+                // id and unit
+                data.push(k + ":" + v);
+            });
+            var s = data.join('|');
+            data = {query: s};
+            $.ajax({
+                url: '<?php echo $this->url(array(), 'order-create') ?>',
+                dataType: 'json',
+                type: 'post',
+                data: data,
+                success: function(response) {
+                    alert(response);
+                },
+                error: function(response) {
+                    console.log(response);
+                }
+            });
+        });
 
         // 检查所否刚刚正在填入地址的时候登录或者注册了，继续刚才的流程        
         if ($.cookie('just-checkout')) {

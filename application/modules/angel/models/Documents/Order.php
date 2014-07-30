@@ -22,5 +22,5 @@ class Order extends AbstractDocument{
     protected $total;
     
     /** @ODM\EmbedMany(targetDocument="\Documents\OrderDetailDoc") */
-    protected $order_detail;
+    protected $order_detail = array();
 }
