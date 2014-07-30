@@ -40,20 +40,19 @@ class Angel_OrderController extends Angel_Controller_Action {
             if (!$currency) {
                 $currency = key($this->bootstrap_options['currency']);
             }
-
-            $order = $orderModel->create($user, $currency, $selected_address_type, $address);
-            $result = $this->updateOrderDetail($order, $currency, $resource);
-            if ($result && $update_it && $this->me && $address) {
-                // 更新用户地址
-                $me = $this->me->getUser();
-                $userModel = $this->getModel('user');
-                $userModel->updateAddress($me, $address->contact, $address->street, $address->phone, $address->state, $address->city, $address->country, $address->zip);
+            try {
+                $order = $orderModel->create($user, $currency, $selected_address_type, $address);
+                $result = $this->updateOrderDetail($order, $currency, $resource);
+                if ($result && $update_it && $this->me && $address) {
+                    // 更新用户地址
+                    $me = $this->me->getUser();
+                    $userModel = $this->getModel('user');
+                    $userModel->updateAddress($me, $address->contact, $address->street, $address->phone, $address->state, $address->city, $address->country, $address->zip);
+                }
+                $this->_helper->json(array('code' => 200));
+            } catch (Angel_Exception_Order $e) {
+                $this->_helper->json(array('code' => 500, 'error' => $e->getDetail()));
             }
-            $code = 500;
-            if ($result) {
-                $code = 200;
-            }
-            $this->_helper->json(array('code' => $code));
         }
     }
 

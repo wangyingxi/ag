@@ -337,7 +337,12 @@ if ($this->me && $this->me->getUser()->address) {
                 type: 'post',
                 data: data,
                 success: function(response) {
-                    // order created
+                    if (response.code === 200) {
+                        // order created
+                        alert('success');
+                    } else {
+                        alert(response.error);
+                    }
                 },
                 error: function(response) {
                     // failed
