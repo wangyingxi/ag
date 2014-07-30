@@ -82,10 +82,21 @@ abstract class Angel_Model_AbstractModel {
         }
         return $result;
     }
-    
+
+    public function update($target) {
+        try {
+            $this->_dm->persist($target);
+            $this->_dm->flush();
+            $result = true;
+        } catch (Exception $e) {
+            $result = false;
+        }
+        return $result;
+    }
+
     public function getByUser($user_id, $return_as_paginator = true, $condition = false) {
         $new_condition = array('owner.$id' => $user_id);
-        if(!$condition) {
+        if (!$condition) {
             $new_condition = array_merge($new_condition, $condition);
         }
         return $this->getBy($return_as_paginator = true, $new_condition);
@@ -104,7 +115,7 @@ abstract class Angel_Model_AbstractModel {
 
         return $result;
     }
-    
+
     public function getBy($return_as_paginator = true, $condition = false) {
         $query = $this->_dm->createQueryBuilder($this->_document_class);
         if (is_array($condition)) {
@@ -121,7 +132,7 @@ abstract class Angel_Model_AbstractModel {
         }
         return $result;
     }
-    
+
     public function getSingleBy($condition = false) {
         $result = $this->getBy(false, $condition);
         return $result->getSingleResult();

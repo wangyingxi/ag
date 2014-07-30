@@ -35,7 +35,8 @@ class Angel_Model_User extends Angel_Model_AbstractModel {
 
     public function addManageUser($email, $password, $salt, $checkemail = true) {
         $usertype = "admin";
-        return $this->registerUser($email, $password, $usertype, $salt, $checkemail);
+        list($username) = split("@", $email, 1);
+        return $this->registerUser($email, $password, $username, $usertype, $salt, $checkemail);
     }
 
     public function addUser($email, $password, $username, $salt, $checkemail = true) {

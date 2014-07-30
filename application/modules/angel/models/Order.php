@@ -10,7 +10,7 @@ class Angel_Model_Order extends Angel_Model_AbstractModel {
      * @return \Documents\Order － 返回的是新创建的订单
      * @throws \Angel_Exception_Order 
      */
-    public function create($user, $currency, $order_details) {
+    public function create($user, $currency, $selected_address_type, $address) {
         $order = new $this->_document_class();
 
         if (is_object($user) && ($user instanceof \Documents\User)) {
@@ -29,26 +29,13 @@ class Angel_Model_Order extends Angel_Model_AbstractModel {
                 $is_oid_validated = true;
             }
         }
+        $order->selected_address_type = $selected_address_type;
         $order->oid = $new_oid;
         /* CREATE NEW ORDER ID (END) */
         $order->currency = $currency;
-
-        $productModel = $this->getModel('product');
-        $total = 0;
-        foreach ($order_details as $detail) {
-            if ($detail["unit"]) {
-                $orderDetail = new \Documents\OrderDetailDoc();
-                $p = $productModel->getById($detail["id"]);
-                $orderDetail->product = $p;
-                $orderDetail->unit = $detail["unit"];
-                $orderDetail->price = $detail['selling_price'][$currency];
-                $total += $orderDetail->price * $orderDetail->unit;
-                
-                $order->order_detail[] = $orderDetail;
-            }
+        if($selected_address_type != 2 && $address) {
+            $order->address = $address;
         }
-        $order->total = $total;
-
         $this->_dm->persist($order);
         $this->_dm->flush();
 

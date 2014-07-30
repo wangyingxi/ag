@@ -15,6 +15,20 @@ class Angel_OrderController extends Angel_Controller_Action {
             $orderModel = $this->getModel('order');
             // parse cart
             $query = $this->request->getParam('query');
+            $update_it = $this->request->getParam('update_it');
+            $selected_address_type = $this->request->getParam('selected_address_type');
+            $address = false;
+            if ($selected_address_type != 2) {
+                $address = new \Documents\AddressDoc();
+                $address->contact = $this->request->getParam('contact');
+                $address->phone = $this->request->getParam('phone');
+                $address->street = $this->request->getParam('street');
+                $address->city = $this->request->getParam('city');
+                $address->state = $this->request->getParam('state');
+                $address->zip = $this->request->getParam('zip');
+                $address->country = $this->request->getParam('country');
+            }
+
             $resource = $this->parseCart($query);
             // me
             $user = false;
@@ -27,8 +41,41 @@ class Angel_OrderController extends Angel_Controller_Action {
                 $currency = key($this->bootstrap_options['currency']);
             }
 
-            $orderModel->create($user, $currency, $resource);
+            $order = $orderModel->create($user, $currency, $selected_address_type, $address);
+            $result = $this->updateOrderDetail($order, $currency, $resource);
+            if ($result && $update_it && $this->me && $address) {
+                // 更新用户地址
+                $me = $this->me->getUser();
+                $userModel = $this->getModel('user');
+                $userModel->updateAddress($me, $address->contact, $address->street, $address->phone, $address->state, $address->city, $address->country, $address->zip);
+            }
+            $code = 500;
+            if ($result) {
+                $code = 200;
+            }
+            $this->_helper->json(array('code' => $code));
         }
+    }
+
+    protected function updateOrderDetail($order, $currency, $order_details) {
+        $productModel = $this->getModel('product');
+        $orderModel = $this->getModel('order');
+        $total = 0;
+        foreach ($order_details as $detail) {
+            if ($detail["unit"]) {
+                $orderDetail = new \Documents\OrderDetailDoc();
+                $p = $productModel->getById($detail["id"]);
+                $orderDetail->product = $p;
+                $orderDetail->unit = $detail["unit"];
+                $orderDetail->price = $detail['selling_price'][$currency]['amount'];
+                $total += $orderDetail->price * $orderDetail->unit;
+
+                $order->order_detail[] = $orderDetail;
+            }
+        }
+        $order->total = $total;
+        $result = $orderModel->update($order);
+        return $result;
     }
 
     public function updateAction() {

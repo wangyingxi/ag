@@ -306,7 +306,6 @@ if ($this->me && $this->me->getUser()->address) {
             $('#address-field-wrapper .cover').fadeOut(300);
         });
         $('.pp-btn').click(function() {
-
             var query = $.cart.parse();
             if (!query) {
                 // empty handle
@@ -318,17 +317,30 @@ if ($this->me && $this->me->getUser()->address) {
                 data.push(k + ":" + v);
             });
             var s = data.join('|');
-            data = {query: s};
+            data = {
+                query: s,
+                contact: $('#contact').val(),
+                phone: $('#phone').val(),
+                street: $('#street').val(),
+                city: $('#city').val(),
+                state: $('#state').val(),
+                zip: $('#zip').val(),
+                country: $('#country').val(),
+                selected_address_type: $('#selected-address-type').val()
+            };
+            if ($('#update-it').length) {
+                data.update_it = $('#update-it').prop('checked') ? 1 : 0;
+            }
             $.ajax({
                 url: '<?php echo $this->url(array(), 'order-create') ?>',
                 dataType: 'json',
                 type: 'post',
                 data: data,
                 success: function(response) {
-                    alert(response);
+                    // order created
                 },
                 error: function(response) {
-                    console.log(response);
+                    // failed
                 }
             });
         });
