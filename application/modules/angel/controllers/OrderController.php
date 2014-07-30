@@ -64,7 +64,14 @@ class Angel_OrderController extends Angel_Controller_Action {
             if ($detail["unit"]) {
                 $orderDetail = new \Documents\OrderDetailDoc();
                 $p = $productModel->getById($detail["id"]);
-                $orderDetail->product = $p;
+                if ($p) {
+                    $orderDetail->product_id = $p->id;
+                    $orderDetail->protect_title = $p->title;
+                    $orderDetail->product_sku = $p->sku;
+                    if (count($p->photo)) {
+                        $orderDetail->product_photo_id = $p->photo[0]->id;
+                    }
+                }
                 $orderDetail->unit = $detail["unit"];
                 $orderDetail->price = $detail['selling_price'][$currency]['amount'];
                 $total += $orderDetail->price * $orderDetail->unit;
