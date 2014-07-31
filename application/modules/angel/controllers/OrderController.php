@@ -69,7 +69,10 @@ class Angel_OrderController extends Angel_Controller_Action {
                     $orderDetail->protect_title = $p->title;
                     $orderDetail->product_sku = $p->sku;
                     if (count($p->photo)) {
-                        $orderDetail->product_photo_id = $p->photo[0]->id;
+                        $photoDoc = new \Documents\PhotoDoc();
+                        $photoDoc->photo_id = $p->photo[0]->id;
+                        $photoDoc->photo_url_small = $this->view->photoImage($p->photo[0]->name . $p->photo[0]->type, 'small');
+                        $orderDetail->product_photo_doc = $photoDoc;
                     }
                 }
                 $orderDetail->unit = $detail["unit"];

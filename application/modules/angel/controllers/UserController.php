@@ -178,5 +178,15 @@ class Angel_UserController extends Angel_Controller_Action {
     public function profileAction() {
         
     }
+    
+    public function orderAction() {
+        if ($this->request->isXmlHttpRequest() && $this->request->isPost()) {
+            
+        } else {
+            $orderModel = $this->getModel('order');
+            $orders = $orderModel->getByUser($this->me->getUser()->id);
+            $this->view->orders = $orders;
+        }
+    }
 
 }

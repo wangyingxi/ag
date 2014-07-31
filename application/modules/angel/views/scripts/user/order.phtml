@@ -1,0 +1,36 @@
+
+<div class="content wbg-wrapper">
+
+    <div class="container_24" id="order-block">
+        <div class="grid_24">
+            
+
+            <div class="user-page-lnk btn-group">
+                <a href="<?php echo $this->url(array(), 'user-address') ?>" class="btn">Update Address</a>
+                <a href="<?php echo $this->url(array(), 'user-order') ?>" class="btn selected">Orders</a>
+                <a href="<?php echo $this->url(array(), 'reset-password') ?>" class="btn">Reset Password</a>
+            </div>
+
+            <div>
+                <?php foreach($this->orders as $order):?>
+                <?php var_dump($order->created_at) ?>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script type="text/javascript">
+
+    (function($) {
+
+    })(jQuery);
+
+</script>
+
+<style>
+
+</style>

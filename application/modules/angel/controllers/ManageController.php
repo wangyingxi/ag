@@ -364,10 +364,10 @@ class Angel_ManageController extends Angel_Controller_Action {
         $result['linkcolor'] = $this->request->getParam('css_linkcolor');
         $result['pricecolor'] = $this->request->getParam('css_pricecolor');
         $result['buttoncolor'] = $this->request->getParam('css_buttoncolor');
-        
+
         return $result;
     }
-    
+
     public function resultAction() {
         $this->view->error = $this->request->getParam('error');
         $this->view->redirectUrl = $this->request->getParam('redirectUrl');
@@ -488,12 +488,19 @@ class Angel_ManageController extends Angel_Controller_Action {
         $paginator->setCurrentPageNumber($page);
         $resource = array();
         foreach ($paginator as $r) {
+            $relatedProduct = $this->getModel('product')->getSingleBy(array('photo.$id' => new MongoId($r->id)));
+            $relatedBrand = $this->getModel('brand')->getSingleBy(array('logo.$id' => new MongoId($r->id)));
+            $delete = true;
+            if ($relatedProduct || $relatedBrand) {
+                $delete = false;
+            }
             $resource[] = array('path' => array('orig' => $this->view->photoImage($r->name . $r->type), 'main' => $this->view->photoImage($r->name . $r->type, 'main'), 'small' => $this->view->photoImage($r->name . $r->type, 'small'), 'large' => $this->view->photoImage($r->name . $r->type, 'large')),
                 'name' => $r->name,
                 'id' => $r->id,
                 'type' => $r->type,
                 'thumbnail' => $r->thumbnail,
-                'owner' => $r->owner);
+                'owner' => $r->owner,
+                'delete' => $delete);
         }
         // JSON FORMAT
         if ($this->getParam('format') == 'json') {

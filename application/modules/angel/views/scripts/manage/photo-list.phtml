@@ -62,7 +62,9 @@ $model = $this->model;
             <input type="hidden" class="tmp" value="<?php echo $p['id'] ?>"/>
             <div class="wp">
                 <p><?php echo $p['owner']->email . ' 上传' ?>
-                    <button class="pull-right btn btn-xs btn-danger remove-photo">删除</button>
+                    <?php if ($p['delete']): ?>
+                        <button class="pull-right btn btn-xs btn-danger remove-photo">删除</button>
+                    <?php endif; ?>
                 </p>
                 <div class="iwp">
                     <?php
