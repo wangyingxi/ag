@@ -4,7 +4,6 @@
     <div class="container_24" id="order-block">
         <div class="grid_24">
 
-
             <div class="user-page-lnk btn-group">
                 <a href="<?php echo $this->url(array(), 'user-address') ?>" class="btn">Update Address</a>
                 <a href="<?php echo $this->url(array(), 'user-order') ?>" class="btn selected">Orders</a>
@@ -14,7 +13,7 @@
                 <ul class="clearfix" id="order-header">
                     <li class="oid">Order #<span class="splr"></span></li>
                     <li class="address">Address<span class="splr"></span></li>
-                    <li class="order-detail">Order Items<span class="splr"></span></li>
+                    <li class="order-detail">Order Detail<span class="splr"></span></li>
                     <li class="operation">Operation</li>
                 </ul>
                 <div id="order-container">
@@ -24,23 +23,49 @@
                             <ul>
                                 <li class="oid">
                                     <i class="light-gray">#</i> <?php echo $order->oid ?>
+                                    <br/>
+                                    <p style='font-size:smaller;color:#999;'><?php echo $order->created_at->format('jS F y') ?></p>
                                 </li>
                                 <li class="address">
                                     <?php if ($order->address): ?>
-                                        <p class="clearfix"><span class="l1">Contact</span><span class="l2"><?php echo $order->address->contact ?></span></p>
-                                        <p class="clearfix"><span class="l1">Phone</span><span class="l2"><?php echo $order->address->phone ?></span></p>
-                                        <p class="clearfix"><span class="l1">Street</span><span class="l2"><?php echo $order->address->street ?></span></p>
-                                        <p class="clearfix"><span class="l1">City</span><span class="l2"><?php echo $order->address->city ?></span></p>
-                                        <p class="clearfix"><span class="l1">State / County</span><span class="l2"><?php echo $order->address->state ?></span></p>
-                                        <p class="clearfix"><span class="l1">Zip</span><span class="l2"><?php echo $order->address->zip ?></span></p>
-                                        <p class="clearfix"><span class="l1">Country</span><span class="l2"><?php echo $order->address->country ?></span></p>
+                                        <p class="clearfix"><span class="l1">contact</span><span class="l2"><?php echo $order->address->contact ? $order->address->contact : '-- --' ?></span></p>
+                                        <p class="clearfix"><span class="l1">phone</span><span class="l2"><?php echo $order->address->phone ? $order->address->phone : '-- --' ?></span></p>
+                                        <p class="clearfix"><span class="l1">street</span><span class="l2"><?php echo $order->address->street ? $order->address->street : '-- --' ?></span></p>
+                                        <p class="clearfix"><span class="l1">city</span><span class="l2"><?php echo $order->address->city ? $order->address->city : '-- --' ?></span></p>
+                                        <p class="clearfix"><span class="l1">state / county</span><span class="l2"><?php echo $order->address->state ? $order->address->state : '-- --' ?></span></p>
+                                        <p class="clearfix"><span class="l1">zip / postal code</span><span class="l2"><?php echo $order->address->zip ? $order->address->zip : '-- --' ?></span></p>
+                                        <p class="clearfix"><span class="l1">country</span><span class="l2"><?php echo $order->address->country ? $order->address->country : '-- --' ?></span></p>
                                     <?php endif; ?>
                                 </li>
                                 <li class="order-detail">
+                                    <?php if ($order->order_detail): ?>
+                                        <div class="wpr">
+                                            <?php $count = 1; ?>
+                                            <?php foreach ($order->order_detail as $order_detail): ?>
+                                                <ol>
+                                                    <li style="text-align:center;position:relative;min-height:34px;">
+                                                        <a target="_blank" href="<?php echo $this->url(array(id => $order_detail->product_id), 'product-view') ?>">
+                                                            <?php echo $count . '. ' . $order_detail->product_title ?>
+                                                        </a>
+                                                        <div style="font-size:smaller;color:#999;">
+                                                            <p>price &nbsp;&nbsp; <?php echo $this->currency_symbol_options[$order->currency] . $order_detail->price . $order->currency ?> &nbsp;&nbsp; / &nbsp;&nbsp; qty &nbsp;&nbsp; <?php echo $order_detail->unit . 'pcs' ?></p>
+                                                            <p></p>
 
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                                <?php $count++; ?>
+                                            <?php endforeach; ?>
+                                            <p style="color:#ef3546;text-align:center;border-top:1px dotted #bbb;padding-top:10px;margin-top:10px;">
+                                                TOTAL IS : <?php echo $this->currency_symbol_options[$order->currency] . $order->total . $order->currency ?>
+                                            </p>
+                                        </div>
+                                    <?php endif; ?>
                                 </li>
                                 <li class="operation">
-
+                                    <i class="glyphicons more"></i>
+                                    <p style='margin-bottom:10px'>Pending Payment</p>
+                                    <a href='#' class="btn" style="font-size:smaller;">Pay Now</a>
                                 </li>
                             </ul>
                         </div>
@@ -64,10 +89,11 @@
 
 <style>
     .order-itm {
-        border-bottom:1px solid #eee;
+        border-bottom:1px solid #DDD;
         padding:15px 0;
     }
     .order-itm:hover {
+        background:#F4F4F4;
         border-color:#bbb;
     }
     .order-itm ul {
@@ -75,6 +101,7 @@
     }
     .order-itm ul li {
         display: block;
+        line-height:24px;
         float:left;
     }
     .order-itm ul li.oid, #order-header .oid {
@@ -90,19 +117,20 @@
         width:350px;
     }
     .order-itm ul li.operation, #order-header .operation {
+        text-align:center;
         width:150px;
     }
     .order-itm ul li .l1, .order-itm ul li .l2 {
         display:inline-block;
         float:left;
-        width:120px;
+        width:140px;
     }
     .order-itm ul li .l1 {
-        color:#aaa;
+        color:#999;
         margin-left:15px;
     }
     .order-itm ul li .l2 {
-        width:150px;
+        width:130px;
         margin-right:15px;
     }
     #order-header li {
@@ -124,6 +152,16 @@
         display:block;
         background:#FFF;
     }
+    .order-detail .wpr {
+        padding:0 15px;
+    }
+    .order-detail ol {
+    }
+    .order-detail ol li {
+        display:block;
+        float:none;
+    }
+
     /*    #order-header li:nth-child(even)
         {
             background:#FBFBFB;

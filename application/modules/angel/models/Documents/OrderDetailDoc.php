@@ -11,9 +11,9 @@ class OrderDetailDoc extends AbstractDocument {
     protected $product_id;
 
     /** @ODM\String */
-    protected $protect_title;
+    protected $product_title;
 
-    /** @ODM\EmbedOne(targetDocument="\Documents\AddressDoc") */
+    /** @ODM\EmbedOne(targetDocument="\Documents\PhotoDoc") */
     protected $product_photo_doc;
 
     /** @ODM\String */

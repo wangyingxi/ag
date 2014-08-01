@@ -66,7 +66,7 @@ class Angel_OrderController extends Angel_Controller_Action {
                 $p = $productModel->getById($detail["id"]);
                 if ($p) {
                     $orderDetail->product_id = $p->id;
-                    $orderDetail->protect_title = $p->title;
+                    $orderDetail->product_title = $p->title;
                     $orderDetail->product_sku = $p->sku;
                     if (count($p->photo)) {
                         $photoDoc = new \Documents\PhotoDoc();
