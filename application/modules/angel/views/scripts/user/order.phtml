@@ -3,19 +3,50 @@
 
     <div class="container_24" id="order-block">
         <div class="grid_24">
-            
+
 
             <div class="user-page-lnk btn-group">
                 <a href="<?php echo $this->url(array(), 'user-address') ?>" class="btn">Update Address</a>
                 <a href="<?php echo $this->url(array(), 'user-order') ?>" class="btn selected">Orders</a>
                 <a href="<?php echo $this->url(array(), 'reset-password') ?>" class="btn">Reset Password</a>
             </div>
+            <?php if (count($this->orders)): ?>
+                <ul class="clearfix" id="order-header">
+                    <li class="oid">Order #<span class="splr"></span></li>
+                    <li class="address">Address<span class="splr"></span></li>
+                    <li class="order-detail">Order Items<span class="splr"></span></li>
+                    <li class="operation">Operation</li>
+                </ul>
+                <div id="order-container">
+                    <?php foreach ($this->orders as $order): ?>
+                        <div oid="<?php echo $order->oid ?>" ts="<?php echo $order->created_at->getTimestamp(); ?>" class="order-itm clearfix">
 
-            <div>
-                <?php foreach($this->orders as $order):?>
-                <?php var_dump($order->created_at) ?>
-                <?php endforeach; ?>
-            </div>
+                            <ul>
+                                <li class="oid">
+                                    <i class="light-gray">#</i> <?php echo $order->oid ?>
+                                </li>
+                                <li class="address">
+                                    <?php if ($order->address): ?>
+                                        <p class="clearfix"><span class="l1">Contact</span><span class="l2"><?php echo $order->address->contact ?></span></p>
+                                        <p class="clearfix"><span class="l1">Phone</span><span class="l2"><?php echo $order->address->phone ?></span></p>
+                                        <p class="clearfix"><span class="l1">Street</span><span class="l2"><?php echo $order->address->street ?></span></p>
+                                        <p class="clearfix"><span class="l1">City</span><span class="l2"><?php echo $order->address->city ?></span></p>
+                                        <p class="clearfix"><span class="l1">State / County</span><span class="l2"><?php echo $order->address->state ?></span></p>
+                                        <p class="clearfix"><span class="l1">Zip</span><span class="l2"><?php echo $order->address->zip ?></span></p>
+                                        <p class="clearfix"><span class="l1">Country</span><span class="l2"><?php echo $order->address->country ?></span></p>
+                                    <?php endif; ?>
+                                </li>
+                                <li class="order-detail">
+
+                                </li>
+                                <li class="operation">
+
+                                </li>
+                            </ul>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -32,5 +63,69 @@
 </script>
 
 <style>
-
+    .order-itm {
+        border-bottom:1px solid #eee;
+        padding:15px 0;
+    }
+    .order-itm:hover {
+        border-color:#bbb;
+    }
+    .order-itm ul {
+        display:block;
+    }
+    .order-itm ul li {
+        display: block;
+        float:left;
+    }
+    .order-itm ul li.oid, #order-header .oid {
+        width:150px;
+    }
+    .order-itm ul li.oid {
+        text-align:center;
+    }
+    .order-itm ul li.address, #order-header .address {
+        width:300px;
+    }
+    .order-itm ul li.order-detail, #order-header .order-detail {
+        width:350px;
+    }
+    .order-itm ul li.operation, #order-header .operation {
+        width:150px;
+    }
+    .order-itm ul li .l1, .order-itm ul li .l2 {
+        display:inline-block;
+        float:left;
+        width:120px;
+    }
+    .order-itm ul li .l1 {
+        color:#aaa;
+        margin-left:15px;
+    }
+    .order-itm ul li .l2 {
+        width:150px;
+        margin-right:15px;
+    }
+    #order-header li {
+        /*        border-top:1px solid #aaa;
+                border-bottom:1px solid #aaa;*/
+        background:#F8F8F8;
+        display:inline-block;
+        float:left;
+        padding:10px 0;
+        position:relative;
+        text-align:center;
+    }
+    #order-header li .splr {
+        height:100%;
+        position:absolute;
+        right:0;
+        width:1px;
+        top:0;
+        display:block;
+        background:#FFF;
+    }
+    /*    #order-header li:nth-child(even)
+        {
+            background:#FBFBFB;
+        }*/
 </style>
