@@ -166,6 +166,15 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 .gray {
     color: #888;
 }
+.green {
+    color: #20AA20 !important;
+}
+.cyan {
+    color: #28a4c9;
+}
+.orange {
+    color:#ed9c28;
+}
 .light-gray {
     color:#aaa;
 }
