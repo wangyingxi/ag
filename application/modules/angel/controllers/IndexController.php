@@ -11,7 +11,10 @@ class Angel_IndexController extends Angel_Controller_Action {
     public function indexAction() {
         $this->_forward('login');
     }
-
+    public function testAction() {
+//        $this->_helper->json(1);
+//        var_dump('hahaha');exit;
+    }
     /**
      * 登录
      */

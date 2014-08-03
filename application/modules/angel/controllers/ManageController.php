@@ -21,7 +21,15 @@ class Angel_ManageController extends Angel_Controller_Action {
     }
 
     public function indexAction() {
-        
+//        $ch = curl_init();
+//        curl_setopt($ch, CURLOPT_URL, 'http://www.baidu.com');
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//        $output = curl_exec($ch);
+//        if(curl_errno($ch)) {
+//            echo curl_error($ch);
+//        }
+//        var_dump(curl_getinfo($ch));
+//        curl_close($ch);
     }
 
     public function registerAction() {
