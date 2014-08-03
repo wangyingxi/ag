@@ -57,7 +57,7 @@ class Angel_OrderController extends Angel_Controller_Action {
     }
 
     public function removeAction() {
-        if ($this->me) {
+        if ($this->request->isPost() && $this->me) {
             $orderModel = $this->getModel('order');
             $id = $this->request->getParam('id');
             $user = $this->me->getUser();
@@ -77,6 +77,39 @@ class Angel_OrderController extends Angel_Controller_Action {
             }
             $this->_helper->json(array('code' => $code, 'error' => $error));
         }
+    }
+
+    public function receiveOrderAction() {
+        if ($this->request->isPost() && $this->me) {
+            $this->alterOrderStatusAction(4);
+        }
+    }
+
+    public function dispatchOrderAction() {
+        if ($this->request->isPost() && $this->me) {
+            $this->alterOrderStatusAction(3);
+        }
+    }
+
+    protected function alterOrderStatusAction($status) {
+        $orderModel = $this->getModel('order');
+        $id = $this->request->getParam('id');
+        $user = $this->me->getUser();
+
+        $order = $orderModel->getById($id);
+        $code = 500;
+        if ($order && $order->status == $status - 1 && ($user->user_type == 'admin' || $order->owner->id == $user->id)) {
+            // 可以修改
+            try {
+                $orderModel->save($id, array('status' => $status));
+                $code = 200;
+            } catch (Exception $ex) {
+                $error = $ex->getMessage();
+            }
+        } else {
+            $error = 'sorry you can not alter this order\'s status';
+        }
+        $this->_helper->json(array('code' => $code, 'error' => $error));
     }
 
     protected function updateOrderDetail($order, $currency, $order_details) {
