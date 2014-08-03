@@ -184,7 +184,7 @@ class Angel_UserController extends Angel_Controller_Action {
             
         } else {
             $orderModel = $this->getModel('order');
-            $orders = $orderModel->getByUser($this->me->getUser()->id);
+            $orders = $orderModel->getByUser($this->me->getUser()->id, false);
             $this->view->orders = $orders;
             $this->view->currency_symbol_options = $this->bootstrap_options['currency_symbol'];
             $this->view->order_status_options = $this->bootstrap_options['order_status'];

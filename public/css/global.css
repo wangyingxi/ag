@@ -92,6 +92,12 @@ Common css
 .P_closebtn:hover {
     color:#EF3546;
 }
+.P_confirm_btns {
+    margin-top:15px;
+}
+.P_confirm_btns .P_confirm_btn {
+    margin:0 5px;
+}
 .left-float {
     float:left;
 }

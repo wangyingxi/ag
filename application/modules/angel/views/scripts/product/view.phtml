@@ -207,15 +207,9 @@ if ($model->css) {
                         #brand-statement dd {
                             font-size:13px;
                         }
-                        #brand-statement .btn {
-                            background: transparent;
-                            border: 1px solid #333;
-                            display:inline-block;
-                            color:#333 !important;
-                            font-size:smaller;
+                        #brand-statement .slim-btn {
                             margin-top:15px;
-                            padding:0 20px;
-                            text-align:center;
+                            padding: 0 22px;
                         }
                     </style>
                     <?php if ($model->brand->logo): ?>
@@ -231,7 +225,7 @@ if ($model->css) {
                             <?php echo $model->brand->description; ?>
                         </dd>
                         <dd>
-                            <a href="#" class="btn">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
+                            <a href="#" class="slim-btn btn-sm">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
                         </dd>
                     </dl>
                     <div class="clear"></div>

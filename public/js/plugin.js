@@ -756,16 +756,6 @@
             if ($popupsettings.closebtn) {
                 clsbtn.show();
             }
-
-//            if ($popupsettings.relocate) {
-//                var cw = content.width();
-//                var ch = content.height();
-//                var left = (w.width() - cw) / 2;
-//                var top = (w.height() - ch) / 2;
-//
-//                content.css('left', left);
-//                content.css('top', top);
-//            }
         },
         alertbox: function(options) {
             var _settings = {
@@ -790,6 +780,65 @@
             var alertContent = $('<div>').attr('id', id).addClass('P_popupbg').append(wp);
 
             $popupsettings.content = alertContent;
+            $.popup($popupsettings);
+        },
+        confirm: function(options) {
+            var _settings = {
+                width: 300,
+                height: 90,
+                textAlign: 'center',
+                header: '',
+                msg: 'Are you sure？',
+                confirmText: 'YES',
+                cancelText: 'NO',
+                confirmCallback: false,
+                cancelCallback: false
+            };
+            $.extend(_settings, options);
+            _settings.modal = true;
+            var $popupsettings = $.extend({}, $.POPUPSETTINGSTMP, _settings);
+            $popupsettings.closebtn = false;
+            var id = "P_confirm";
+
+            var header = "";
+            if ($popupsettings.header) {
+                header = $popupsettings.header;
+            }
+            var msg = "";
+            if ($popupsettings.msg) {
+                msg = $popupsettings.msg;
+            }
+            var wp;
+
+            if (typeof (header) === 'object')
+                wp = $('<div>').addClass('P_wp_header').css('padding', 15).append(header);
+            else
+                wp = $('<div>').addClass('P_wp_header').css('padding', 15).html(header);
+            if (typeof (msg) === 'object')
+                wp = $('<div>').addClass('P_wp_msg').css('padding', 15).append(msg);
+            else
+                wp = $('<div>').addClass('P_wp_msg').css('padding', 15).html(msg);
+
+            var cancel = $('<button>').attr('class', 'P_confirm_btn btn btn-sm btn-gray').attr('action', 'cancel').attr('type', 'button').html($popupsettings.cancelText);
+            cancel.click(function() {
+                $.popupclose();
+                if ($popupsettings.cancelCallback) {
+                    $popupsettings.cancelCallback();
+                }
+            });
+            var confirm = $('<button>').attr('class', 'P_confirm_btn btn btn-sm btn-primary').attr('action', 'confirm').attr('type', 'button').html($popupsettings.confirmText);
+            confirm.click(function() {
+                $.popupclose();
+                if ($popupsettings.confirmCallback) {
+                    $popupsettings.confirmCallback();
+                }
+            });
+            var btns = $('<div>').attr('class', 'P_confirm_btns').append(confirm).append(cancel);
+            wp.append(btns);
+
+            var confirmContent = $('<div>').attr('id', id).addClass('P_popupbg').append(wp);
+            $popupsettings.padding = 0;
+            $popupsettings.content = confirmContent;
             $.popup($popupsettings);
         },
         popupclose: function() {
@@ -824,7 +873,7 @@
                     .css('left', 0)
                     .css('top', 0)
                     .css('z-index', 9);
-            cover.click(function(){
+            cover.click(function() {
                 $(this).hide();
                 $('.click-toggle').hide();
             });

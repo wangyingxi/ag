@@ -56,6 +56,29 @@ class Angel_OrderController extends Angel_Controller_Action {
         }
     }
 
+    public function removeAction() {
+        if ($this->me) {
+            $orderModel = $this->getModel('order');
+            $id = $this->request->getParam('id');
+            $user = $this->me->getUser();
+
+            $order = $orderModel->getById($id);
+            $code = 500;
+            if ($order && $order->status == 1 && ($user->user_type == 'admin' || $order->owner->id == $user->id)) {
+                // 可以删除
+                try {
+                    $orderModel->remove($id);
+                    $code = 200;
+                } catch (Exception $ex) {
+                    $error = $ex->getMessage();
+                }
+            } else {
+                $error = 'sorry you can not remove this order';
+            }
+            $this->_helper->json(array('code' => $code, 'error' => $error));
+        }
+    }
+
     protected function updateOrderDetail($order, $currency, $order_details) {
         $productModel = $this->getModel('product');
         $orderModel = $this->getModel('order');

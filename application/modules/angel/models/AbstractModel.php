@@ -95,11 +95,11 @@ abstract class Angel_Model_AbstractModel {
     }
 
     public function getByUser($user_id, $return_as_paginator = true, $condition = false) {
-        $new_condition = array('owner.$id' => $user_id);
-        if (!$condition) {
+        $new_condition = array('owner.$id' => new MongoId($user_id));
+        if ($condition) {
             $new_condition = array_merge($new_condition, $condition);
         }
-        return $this->getBy($return_as_paginator = true, $new_condition);
+        return $this->getBy($return_as_paginator, $new_condition);
     }
 
     public function getById($id) {

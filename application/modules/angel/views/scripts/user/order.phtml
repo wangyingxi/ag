@@ -18,13 +18,13 @@
                 </ul>
                 <div id="order-container">
                     <?php foreach ($this->orders as $order): ?>
-                        <div oid="<?php echo $order->oid ?>" ts="<?php echo $order->created_at->getTimestamp(); ?>" class="order-itm clearfix">
+                        <div mid="<?php echo $order->id ?>" oid="<?php echo $order->oid ?>" ts="<?php echo $order->created_at->getTimestamp(); ?>" class="order-itm clearfix">
 
                             <ul>
                                 <li class="oid">
                                     <i class="light-gray">#</i> <?php echo $order->oid ?>
                                     <br/>
-                                    <p style='font-size:smaller;color:#999;'><?php echo $order->created_at->format('jS F y') ?></p>
+                                    <p style='font-size:smaller;color:#999;'><strong><?php echo $order->created_at->format('jS M y') ?></strong></p>
                                 </li>
                                 <li class="address">
                                     <div class="pad">
@@ -73,7 +73,7 @@
                                         $iconCls = "";
                                         if ($order->status == 1) {
                                             $statusCls = "light-gray";
-                                            $iconCls = "glyphicons more";
+                                            $iconCls = "glyphicons alarm";
                                         } else if ($order->status == 2) {
                                             $statusCls = "green";
                                             $iconCls = "glyphicons cargo";
@@ -93,25 +93,28 @@
                                             <p style='margin-bottom:10px'><?php echo $this->order_status_options[$order->status] ?></p>
                                         </div>
                                         <?php if ($order->status == 1): ?>
-                                            <a href='#' class="btn" style="font-size:smaller;margin-bottom:5px;display:block;padding:0;">Pay Now</a>
-                                            <a href='#' class="btn" style="font-size:smaller;margin-bottom:5px;display:block;padding:0;">Delete</a>
+                                            <button class="btn btn-warning btn-sm pay-now-btn">pay now</button>
+                                            <button class="btn btn-gray btn-sm remove-btn">remove</button>
                                         <?php elseif ($order->status == 2): ?>
-                                            <p class="green" style="padding:5px;line-height:18px;font-size:smaller;background:#d0e9c6;">
+                                            <p class="green" style="padding:5px;line-height:18px;font-size:smaller;background:#ebf7e7;">
                                                 Thanks we got payment and item is dispatching for you.
                                             </p>
                                         <?php elseif ($order->status == 3): ?>
-                                            <p class="cyan" style="padding:5px;line-height:18px;font-size:smaller;background:#c4e3f3;">
+                                            <p class="cyan" style="margin-bottom:15px;padding:5px;line-height:18px;font-size:smaller;background:#e9f4fa;">
                                                 <?php
-                                                if($order->shipped_at) {
-                                                    $t = $order->shipped_at->format('jS F Y');
-                                                    $r1 = date_add($order->shipped_at, date_interval_create_from_date_string('10 days'))->format('jS F');
-                                                    $r2 = date_add($order->shipped_at, date_interval_create_from_date_string('15 days'))->format('jS F');
+                                                if ($order->shipped_at) {
+                                                    $t = $order->shipped_at->format('jS M Y');
+                                                    $r1 = date_add($order->shipped_at, date_interval_create_from_date_string('10 days'))->format('jS M');
+                                                    $r2 = date_add($order->shipped_at, date_interval_create_from_date_string('15 days'))->format('jS M');
                                                 }
-                                                
                                                 ?>
-                                                Item shipped on <?php echo $t ?>. Normally you will get it between <?php echo $r1?> to <?php echo $r2 ?>  
+                                                Shipped on <strong><?php echo $t ?></strong>. Expected arrival date is between <strong><?php echo $r1 ?></strong> to <strong><?php echo $r2 ?></strong>
                                             </p>
+                                            <button class="btn btn-sm btn-primary">received Item</button>
+                                        <?php elseif ($order->status == 4): ?>
+                                            <button class="btn btn-sm btn-danger">leave review</button>
                                         <?php endif; ?>
+
                                     </div>
                                 </li>
                             </ul>
@@ -129,7 +132,31 @@
 <script type="text/javascript">
 
     (function($) {
-
+        $('.remove-btn').click(function() {
+            var container = $(this).parents('.order-itm');
+            var mid = container.attr('mid');
+            var options = {
+                msg: 'Are you sure to remove order?',
+                confirmCallback: function() {
+                    var url = "<?php echo $this->url(array(), 'order-remove') ?>";
+                    var data = {id: mid};
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        dataType: 'json',
+                        data: data,
+                        success: function(response) {
+                            if (response.code === 200) {
+                                container.slideUp(200);
+                            } else {
+                                $.alertbox({msg: 'Failed : ' + response.error});
+                            }
+                        }
+                    });
+                }
+            };
+            $.confirm(options);
+        });
     })(jQuery);
 
 </script>

@@ -84,14 +84,27 @@ input[type="text"][disabled="disabled"], input[type="password"][disabled="disabl
     box-shadow: none !important;
     text-shadow: 0 1px 0 rgba(255,255,255,0.7);
 }
-input[type="button"], input[type="submit"], button, .btn {
+input[type="button"], input[type="submit"], button, .btn, .slim-btn {
     background: #555;
-    border: none;
+    border: 1px solid transparent;
     border-radius: 3px;
     box-shadow: none;
     color: #fff;
+    display:inline-block;
     margin: 0;
     padding: 5px 15px;
+}
+.slim-btn {
+    background:transparent;
+    border-color:#333;
+    border-radius:200px;
+    color:#333;
+}
+.slim-btn:hover {
+    background:transparent;
+    box-shadow:none;
+    border-color:#222;
+    color:#222;
 }
 .btn.btn-default {
     background:#F0F0F0;
@@ -100,18 +113,61 @@ input[type="button"], input[type="submit"], button, .btn {
     text-shadow: 0 1px 0 rgba(255,255,255,0.9);
 }
 .btn.btn-default:hover {
+    background:#F8F8F8;
     border-color:#aaa;
+    color:#333;
+}
+.btn.btn-warning {
+    background:#FFD800;
+    color:#333;
+    text-shadow:0 1px 0 rgba(255,255,255,0.4);
+}
+.btn.btn-warning:hover {
+    background:#FFF800;
+    color:#333;
+}
+.btn.btn-danger {
+    background:#EF3546;
+    color:#FFF;
+    text-shadow:0 1px 0 rgba(0,0,0,0.08);
+}
+.btn.btn-danger:hover {
+    background:#FF6271;
+    color:#FFF;
+}
+.btn.btn-primary {
+    background:#46a2df;
+    color:#FFF;
+    text-shadow:none;
+}
+.btn.btn-primary:hover {
+    background:#5abdff;
+    color:#FFF;
+}
+.btn.btn-gray {
+    background:#DDD;
+    color:#333;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+}
+.btn.btn-gray:hover {
+    background:#F0F0F0;
+    color:#333;
 }
 .btn.btn-lg {
     font-size:14px;
     padding:10px 20px;
 }
-input[type="button"]:hover, input[type="submit"]:hover, button:hover, btn:hover {
+.btn.btn-sm, .slim-btn.btn-sm {
+    font-size:smaller;
+    padding:1px 8px;
+}
+input[type="button"]:hover, input[type="submit"]:hover, button:hover, .btn:hover {
     background: #222;
     box-shadow: 0 1px 1px rgba(0,0,0,0.2);
     color: #fff;
     cursor: pointer;
     display: inline-block;
+    text-decoration: none;
 }
 input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabled"], button[disabled="disabled"], .btn[disabled="disabled"] {
     background: #777 !important;
@@ -130,6 +186,7 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 .btn-group .btn {
     background-color:#F0F0F0;
     border-radius:100px;
+    box-shadow:none !important;
     color:#999;
     float:left;
     margin-right:5px;
