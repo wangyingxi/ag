@@ -24,12 +24,12 @@
                                 <li class="oid">
                                     <i class="light-gray">#</i> <?php echo $order->oid ?>
                                     <br/>
-                                    <p style='font-size:smaller;color:#999;'><strong><?php echo $order->created_at->format('jS M y') ?></strong></p>
+                                    <p class="x-c-time"><strong><?php echo $order->created_at->format('jS M y') ?></strong></p>
                                 </li>
                                 <li class="address">
                                     <div class="pad">
                                         <?php if ($order->selected_address_type == 2): ?>
-                                            <div style="background-color:#F8F8F8;color:#999;font-size:smaller;text-align:center;margin-bottom:15px;">Paypal Address</div>
+                                            <div class="x-paypal-addr">Paypal Address</div>
                                         <?php endif; ?>
                                         <p class="clearfix"><span class="l1">contact</span><span class="l2"><?php echo $order->address->contact ? $order->address->contact : '-- --' ?></span></p>
                                         <p class="clearfix"><span class="l1">phone</span><span class="l2"><?php echo $order->address->phone ? $order->address->phone : '-- --' ?></span></p>
@@ -47,11 +47,11 @@
                                             <?php $count = 1; ?>
                                             <?php foreach ($order->order_detail as $order_detail): ?>
                                                 <ol>
-                                                    <li style="position:relative;min-height:34px;">
+                                                    <li>
                                                         <a target="_blank" href="<?php echo $this->url(array(id => $order_detail->product_id), 'product-view') ?>">
                                                             <?php echo $count . '. ' . $order_detail->product_title ?>
                                                         </a>
-                                                        <div style="font-size:smaller;color:#999;">
+                                                        <div class="x-price">
                                                             <p>price &nbsp;&nbsp; <?php echo $this->currency_symbol_options[$order->currency] . $order_detail->price . $order->currency ?> &nbsp;&nbsp; / &nbsp;&nbsp; qty &nbsp;&nbsp; <?php echo $order_detail->unit . 'pcs' ?></p>
                                                             <p></p>
 
@@ -60,7 +60,7 @@
                                                 </ol>
                                                 <?php $count++; ?>
                                             <?php endforeach; ?>
-                                            <p style="color:#ef3546;text-align:center;border-top:1px dotted #bbb;padding-top:10px;margin-top:10px;">
+                                            <p class="x-total">
                                                 TOTAL IS : <?php echo $this->currency_symbol_options[$order->currency] . $order->total . $order->currency ?>
                                             </p>
                                         <?php endif; ?>
@@ -90,17 +90,17 @@
                                         ?>
                                         <div class="<?php echo $statusCls ?>">
                                             <i class="<?php echo $iconCls ?>"></i>
-                                            <p style='margin-bottom:10px'><?php echo $this->order_status_options[$order->status] ?></p>
+                                            <p class="x-status" ><?php echo $this->order_status_options[$order->status] ?></p>
                                         </div>
                                         <?php if ($order->status == 1): ?>
-                                            <button class="btn btn-warning btn-sm pay-now-btn">pay now</button>
-                                            <button class="btn btn-gray btn-sm remove-btn">remove</button>
+                                            <a href="#" class="btn btn-warning btn-sm pay-now-btn">pay now</a>
+                                            <a href="javascript:void(0)" class="btn btn-gray btn-sm remove-btn">remove</a>
                                         <?php elseif ($order->status == 2): ?>
-                                            <p class="green" style="padding:5px;line-height:18px;font-size:smaller;background:#ebf7e7;">
+                                            <p class="green status-tip-2">
                                                 Thanks we got payment and item is dispatching for you.
                                             </p>
                                         <?php elseif ($order->status == 3): ?>
-                                            <p class="cyan" style="margin-bottom:15px;padding:5px;line-height:18px;font-size:smaller;background:#e9f4fa;">
+                                            <p class="cyan status-tip-3">
                                                 <?php
                                                 if ($order->shipped_at) {
                                                     $t = $order->shipped_at->format('jS M Y');
@@ -110,9 +110,9 @@
                                                 ?>
                                                 Shipped on <strong><?php echo $t ?></strong>. Expected arrival date is between <strong><?php echo $r1 ?></strong> to <strong><?php echo $r2 ?></strong>
                                             </p>
-                                            <button class="btn btn-sm btn-primary">received Item</button>
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-primary">received Item</a>
                                         <?php elseif ($order->status == 4): ?>
-                                            <button class="btn btn-sm btn-danger">leave review</button>
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-danger">leave review</a>
                                         <?php endif; ?>
 
                                     </div>
@@ -120,6 +120,11 @@
                             </ul>
                         </div>
                     <?php endforeach; ?>
+                </div>
+            <?php else : ?>
+                <div class="grid_24 empty-content-block">
+                    <p>Sorry haven't ordered anything yet.</p>
+                    <a href="/" class="btn">Continue shopping</a>
                 </div>
             <?php endif; ?>
         </div>
@@ -207,6 +212,10 @@
     .order-itm ul li .l2 {
         width:130px;
     }
+    ol > li {
+        min-height:34px;
+        position:relative;
+    }
     #order-header li {
         /*        border-top:1px solid #aaa;
                 border-bottom:1px solid #aaa;*/
@@ -232,7 +241,44 @@
         display:block;
         float:none;
     }
-
+    .x-price {
+        color:#999;
+        font-size:smaller;
+    }
+    .x-status {
+        margin-bottom:10px;
+    }
+    .x-c-time {
+        color:#999;
+        font-size:smaller;
+    }
+    .x-paypal-addr {
+        background-color:#F8F8F8;
+        color:#999;
+        font-size:smaller;
+        margin-bottom:15px;
+        text-align:center;
+    }
+    .x-total {
+        border-top:1px dotted #bbb;
+        color:#ef3546;
+        margin-top:10px;
+        padding-top:10px;
+        text-align:center;
+    }
+    .status-tip-2 {
+        background:#ebf7e7;
+        font-size:smaller;
+        line-height:18px;
+        padding:5px;
+    }
+    .status-tip-3 {
+        background:#e9f4fa;
+        font-size:smaller;
+        line-height:18px;
+        margin-bottom:15px;
+        padding:5px;
+    }
     /*    #order-header li:nth-child(even)
         {
             background:#FBFBFB;
