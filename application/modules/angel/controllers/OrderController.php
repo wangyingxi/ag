@@ -2,7 +2,7 @@
 
 class Angel_OrderController extends Angel_Controller_Action {
 
-    protected $login_not_required = array('create', 'cart');
+    protected $login_not_required = array('create', 'cart', 'paypal-pay');
 
     public function init() {
         parent::init();
@@ -55,7 +55,9 @@ class Angel_OrderController extends Angel_Controller_Action {
             }
         }
     }
-
+    public function paypalPayAction() {
+        
+    }
     public function removeAction() {
         if ($this->request->isPost() && $this->me) {
             $orderModel = $this->getModel('order');
