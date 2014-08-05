@@ -1,5 +1,13 @@
 <?php
 
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
+use PayPal\Api\Payer;
+use PayPal\Api\Amount;
+use PayPal\Api\Transaction;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Payment;
+
 class Angel_OrderController extends Angel_Controller_Action {
 
     protected $login_not_required = array('create', 'cart', 'paypal-pay');
@@ -55,9 +63,44 @@ class Angel_OrderController extends Angel_Controller_Action {
             }
         }
     }
+
     public function paypalPayAction() {
-        
+        $sdkConfig = array(
+            "mode" => "sandbox"
+        );
+
+        $cred = new OAuthTokenCredential("Ac3nVRAR8pjxA3WEjYdOBVfZ4-k_v0SU0gG6OOi9XYroPScRIEpHiyFigxki", "EE0DXRCBjx9V2thW1KgWH9iGVNJVP7ftBM_6XW0f_xisXPN5OanB-MCfjy-_", $sdkConfig);
+        $token = $cred->getAccessToken($sdkConfig);
+
+        $cred = "Bearer " . $token;
+        $apiContext = new ApiContext($cred, 'Request' . time());
+        $apiContext->setConfig($sdkConfig);
+
+        $payer = new Payer();
+        $payer->setPayment_method("paypal");
+
+        $amount = new Amount();
+        $amount->setCurrency("USD");
+        $amount->setTotal("1.2");
+
+        $transaction = new Transaction();
+        $transaction->setDescription("i just creating a payment");
+        $transaction->setAmount($amount);
+
+//        $baseUrl = getBaseUrl();
+        $redirectUrls = new RedirectUrls();
+        $redirectUrls->setReturn_url("https://devtools-paypal.com/guide/pay_paypal/php?success=true");
+        $redirectUrls->setCancel_url("https://devtools-paypal.com/guide/pay_paypal/php?cancel=true");
+
+        $payment = new Payment();
+        $payment->setIntent("sale");
+        $payment->setPayer($payer);
+        $payment->setRedirect_urls($redirectUrls);
+        $payment->setTransactions(array($transaction));
+
+        $payment->create($apiContext);
     }
+
     public function removeAction() {
         if ($this->request->isPost() && $this->me) {
             $orderModel = $this->getModel('order');
