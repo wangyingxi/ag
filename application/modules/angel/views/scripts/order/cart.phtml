@@ -241,9 +241,15 @@ if ($this->me && $this->me->getUser()->address) {
     (function($) {
         requestCart();
         $('.cart-remove-btn').click(function() {
-            var tr = $(this).closest('tr');
-            $.cart.set(tr.attr('id'), 0);
-            requestCart();
+            var $this = $(this);
+            $.confirm({
+                msg: 'Are you sure to remove this item?',
+                confirmCallback: function() {
+                    var tr = $this.closest('tr');
+                    $.cart.set(tr.attr('id'), 0);
+                    requestCart();
+                }
+            });
         });
         $('#checkout-btn').click(function() {
             if ($.cart.total()) {
@@ -263,11 +269,9 @@ if ($this->me && $this->me->getUser()->address) {
             }
 
         });
-
         $('.ftb .nothing-txt').keyup(function() {
             switchTopC();
         });
-
         $('.ftb .nothing-txt, #country').change(function() {
             var contact = $('#contact').val();
             var phone = $('#phone').val();
@@ -339,7 +343,11 @@ if ($this->me && $this->me->getUser()->address) {
                 success: function(response) {
                     if (response.code === 200) {
                         // order created
-                        alert('success');
+//                        var new_id = response.oid;
+                        $.alertbox({
+                            msg: "<i class='glyphicons ok green' style='font-size:32px;'></i><p>Redirecting to PAYPAL for checkout ...</p>",
+                            width:400
+                        });
                     } else {
                         alert(response.error);
                     }

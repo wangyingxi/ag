@@ -49,7 +49,7 @@ class Angel_OrderController extends Angel_Controller_Action {
                     $userModel = $this->getModel('user');
                     $userModel->updateAddress($me, $address->contact, $address->street, $address->phone, $address->state, $address->city, $address->country, $address->zip);
                 }
-                $this->_helper->json(array('code' => 200));
+                $this->_helper->json(array('code' => 200, 'oid' => $order->oid));
             } catch (Angel_Exception_Order $e) {
                 $this->_helper->json(array('code' => 500, 'error' => $e->getDetail()));
             }
