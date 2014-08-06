@@ -80,7 +80,7 @@ class Angel_OrderController extends Angel_Controller_Action {
 
         $amount = new Amount();
         $amount->setCurrency("USD");
-        $amount->setTotal("1.2");
+        $amount->setTotal(money_format("%i", 10.2));
 
         $transaction = new Transaction();
         $transaction->setDescription("i just creating a payment");
@@ -97,7 +97,9 @@ class Angel_OrderController extends Angel_Controller_Action {
         $payment->setRedirect_urls($redirectUrls);
         $payment->setTransactions(array($transaction));
 
-        $payment->create($apiContext);
+        $response = $payment->create($apiContext);
+        var_dump($response);
+        exit;
     }
 
     public function removeAction() {
