@@ -7,6 +7,7 @@ use PayPal\Api\Amount;
 use PayPal\Api\Transaction;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Payment;
+use PayPal\Api\PaymentExecution;
 
 class Angel_OrderController extends Angel_Controller_Action {
 
@@ -88,9 +89,10 @@ class Angel_OrderController extends Angel_Controller_Action {
 
 //        $baseUrl = getBaseUrl();
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturn_url("https://devtools-paypal.com/guide/pay_paypal/php?success=true");
+//        $redirectUrls->setReturn_url("https://devtools-paypal.com/guide/pay_paypal/php?success=true");
+//        $redirectUrls->setCancel_url("https://devtools-paypal.com/guide/pay_paypal/php?cancel=true");
+        $redirectUrls->setReturn_url("http://localhost/paypal/approval");
         $redirectUrls->setCancel_url("https://devtools-paypal.com/guide/pay_paypal/php?cancel=true");
-
         $payment = new Payment();
         $payment->setIntent("sale");
         $payment->setPayer($payer);
@@ -98,8 +100,36 @@ class Angel_OrderController extends Angel_Controller_Action {
         $payment->setTransactions(array($transaction));
 
         $response = $payment->create($apiContext);
+        $paymentId = $response->getId();
+        $_SESSION['payment_id'] = $paymentId;
+        $linksArr = $response->getLinks();
+
+        foreach ($linksArr as $links) {
+            if ($links->getRel() == 'approval_url') {
+                $approval_url = $links->getHref();
+            }
+        }
+        $this->redirect($approval_url);
+    }
+
+    public function paypalApprovalAction() {
+        $payment_id = $_SESSION['payment_id'];
+        $payer_id = $this->getParam('PayerID');
+        
+        $sdkConfig = array(
+            "mode" => "sandbox"
+        );
+
+        $cred = new OAuthTokenCredential("Ac3nVRAR8pjxA3WEjYdOBVfZ4-k_v0SU0gG6OOi9XYroPScRIEpHiyFigxki", "EE0DXRCBjx9V2thW1KgWH9iGVNJVP7ftBM_6XW0f_xisXPN5OanB-MCfjy-_", $sdkConfig);
+        $apiContext = new ApiContext($cred, 'Request' . time());
+        $apiContext->setConfig($sdkConfig);
+
+        $payment = new Payment();
+        $payment->setId($payment_id);
+        $execution = new PaymentExecution();
+        $execution->setPayer_id($payer_id);
+        $response = $payment->execute($execution, $apiContext);
         var_dump($response);
-        exit;
     }
 
     public function removeAction() {
