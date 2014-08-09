@@ -69,10 +69,7 @@ class Angel_OrderController extends Angel_Controller_Action {
             "mode" => "sandbox"
         );
 
-        $cred = new OAuthTokenCredential("Ac3nVRAR8pjxA3WEjYdOBVfZ4-k_v0SU0gG6OOi9XYroPScRIEpHiyFigxki", "EE0DXRCBjx9V2thW1KgWH9iGVNJVP7ftBM_6XW0f_xisXPN5OanB-MCfjy-_", $sdkConfig);
-//        $token = $cred->getAccessToken($sdkConfig);
-//
-//        $cred = "Bearer " . $token;
+        $cred = new OAuthTokenCredential($this->bootstrap_options['paypal']['client_id'], $this->bootstrap_options['paypal']['client_secret'], $sdkConfig);
         $apiContext = new ApiContext($cred, 'Request' . time());
         $apiContext->setConfig($sdkConfig);
         $payer = new Payer();

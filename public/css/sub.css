@@ -374,8 +374,8 @@
 }
 .pp-btn {
     background:url(../img/paypal-btn.png) -10px -10px no-repeat;
-    height:40px;
-    width:220px;
+    height:50px;
+    width:224px;
 }
 .pp-btn:hover {
     background: url(../img/paypal-btn.png) -10px -60px !important;
