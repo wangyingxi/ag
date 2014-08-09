@@ -345,9 +345,12 @@ if ($this->me && $this->me->getUser()->address) {
                         // order created
 //                        var new_id = response.oid;
                         $.alertbox({
-                            msg: "<i class='glyphicons ok green' style='font-size:32px;'></i><p>Redirecting to PAYPAL for checkout ...</p>",
+                            msg: "<i class='glyphicons ok green' style='font-size:32px;'></i><p>Order # " + response.oid + " </p><p>Redirecting to PAYPAL for checkout ...</p>",
                             width:400
                         });
+                        setTimeout(function(){
+                            location.href='<?php echo $this->url(array(), "paypal-pay") . "?oid=" ?>' + response.oid;
+                        }, 500)
                     } else {
                         alert(response.error);
                     }

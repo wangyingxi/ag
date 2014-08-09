@@ -66,6 +66,18 @@ class Angel_OrderController extends Angel_Controller_Action {
     }
 
     public function paypalPayAction() {
+        $oid = $this->request->getParam('oid');
+        if (!oid)
+            return false;
+
+        $orderModel = $this->getModel('order');
+        $order = $orderModel->getSingleBy(array('oid' => $oid));
+        if (!$order)
+            return false;
+        if ($order->status != 1)
+            return false;
+        $_SESSION['order_id'] = $order->oid;
+        
         $sdkConfig = array(
             "mode" => "sandbox"
         );
@@ -77,19 +89,18 @@ class Angel_OrderController extends Angel_Controller_Action {
         $payer->setPayment_method("paypal");
 
         $amount = new Amount();
-        $amount->setCurrency("USD");
-        $amount->setTotal(money_format("%i", 10.2));
+        $amount->setCurrency(strtoupper($order->currency));
+        $amount->setTotal(money_format("%i", $order->total));
 
         $transaction = new Transaction();
-        $transaction->setDescription("i just creating a payment");
+        $transaction->setDescription("I just creating a payment for " . $this->bootstrap_options['currency_symbol'][$order->currency] . $order->total . strtoupper($order->currency));
         $transaction->setAmount($amount);
 
-//        $baseUrl = getBaseUrl();
         $redirectUrls = new RedirectUrls();
 //        $redirectUrls->setReturn_url("https://devtools-paypal.com/guide/pay_paypal/php?success=true");
 //        $redirectUrls->setCancel_url("https://devtools-paypal.com/guide/pay_paypal/php?cancel=true");
-        $redirectUrls->setReturn_url("http://localhost/paypal/approval");
-        $redirectUrls->setCancel_url("https://devtools-paypal.com/guide/pay_paypal/php?cancel=true");
+        $redirectUrls->setReturn_url("http://www.v.com/paypal/approval");
+        $redirectUrls->setCancel_url("https://www.v.com/paypal/return?cancel=true");
         $payment = new Payment();
         $payment->setIntent("sale");
         $payment->setPayer($payer);
@@ -112,12 +123,12 @@ class Angel_OrderController extends Angel_Controller_Action {
     public function paypalApprovalAction() {
         $payment_id = $_SESSION['payment_id'];
         $payer_id = $this->getParam('PayerID');
-        
+
         $sdkConfig = array(
             "mode" => "sandbox"
         );
 
-        $cred = new OAuthTokenCredential("Ac3nVRAR8pjxA3WEjYdOBVfZ4-k_v0SU0gG6OOi9XYroPScRIEpHiyFigxki", "EE0DXRCBjx9V2thW1KgWH9iGVNJVP7ftBM_6XW0f_xisXPN5OanB-MCfjy-_", $sdkConfig);
+        $cred = new OAuthTokenCredential($this->bootstrap_options['paypal']['client_id'], $this->bootstrap_options['paypal']['client_secret'], $sdkConfig);
         $apiContext = new ApiContext($cred, 'Request' . time());
         $apiContext->setConfig($sdkConfig);
 
@@ -127,6 +138,9 @@ class Angel_OrderController extends Angel_Controller_Action {
         $execution->setPayer_id($payer_id);
         $response = $payment->execute($execution, $apiContext);
         var_dump($response);
+
+        $_SESSION['payment_id'] = null;
+        $_SESSION['order_id'] = null;
     }
 
     public function removeAction() {
@@ -211,7 +225,7 @@ class Angel_OrderController extends Angel_Controller_Action {
                 $order->order_detail[] = $orderDetail;
             }
         }
-        $order->total = $total;
+        $order->total = round($total, 2);
         $result = $orderModel->update($order);
         return $result;
     }
