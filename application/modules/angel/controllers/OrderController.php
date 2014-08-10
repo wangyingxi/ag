@@ -77,7 +77,7 @@ class Angel_OrderController extends Angel_Controller_Action {
         if ($order->status != 1)
             return false;
         $_SESSION['order_id'] = $order->oid;
-        
+
         $sdkConfig = array(
             "mode" => "sandbox"
         );
@@ -99,8 +99,8 @@ class Angel_OrderController extends Angel_Controller_Action {
         $redirectUrls = new RedirectUrls();
 //        $redirectUrls->setReturn_url("https://devtools-paypal.com/guide/pay_paypal/php?success=true");
 //        $redirectUrls->setCancel_url("https://devtools-paypal.com/guide/pay_paypal/php?cancel=true");
-        $redirectUrls->setReturn_url("http://www.v.com/paypal/approval");
-        $redirectUrls->setCancel_url("https://www.v.com/paypal/return?cancel=true");
+        $redirectUrls->setReturn_url("http://" . $_SERVER["SERVER_NAME"] . $this->view->url(array(), 'paypal-approval'));
+        $redirectUrls->setCancel_url("https://" . $_SERVER["SERVER_NAME"] . $this->view->url(array('action' => 'cancel'), 'paypal-approval'));
         $payment = new Payment();
         $payment->setIntent("sale");
         $payment->setPayer($payer);
@@ -137,7 +137,26 @@ class Angel_OrderController extends Angel_Controller_Action {
         $execution = new PaymentExecution();
         $execution->setPayer_id($payer_id);
         $response = $payment->execute($execution, $apiContext);
+//        var_dump($response);
+        $transactions = $response->getTransactions();
+        if (!count($transactions))
+            return false;
+        $transaction = $transactions[0];
+        $related_resources = $transaction->getRelatedResources();
+        if (!count($related_resources))
+            return false;
+        $related_resource = $related_resources[0];
+        $sale = $related_resource->getSale();
+        $state = $sale->getState();
+
         var_dump($response);
+        if ($state == 'completed') {
+            exit('PP success');
+        } else if ($state == 'pending') {
+            exit('PP pending');
+        } else {
+            exit('PP error');
+        }
 
         $_SESSION['payment_id'] = null;
         $_SESSION['order_id'] = null;
