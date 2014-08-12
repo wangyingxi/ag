@@ -67,99 +67,112 @@ class Angel_OrderController extends Angel_Controller_Action {
 
     public function paypalPayAction() {
         $oid = $this->request->getParam('oid');
-        if (!oid)
-            return false;
+        $result = false;
+        if ($oid) {
+            try {
+                $orderModel = $this->getModel('order');
+                $order = $orderModel->getSingleBy(array('oid' => $oid));
 
-        $orderModel = $this->getModel('order');
-        $order = $orderModel->getSingleBy(array('oid' => $oid));
-        if (!$order)
-            return false;
-        if ($order->status != 1)
-            return false;
-        $_SESSION['order_id'] = $order->oid;
+                if ($order && $order->status == 1) {
+                    $_SESSION['order_id'] = $order->oid;
 
-        $sdkConfig = array(
-            "mode" => "sandbox"
-        );
+                    $sdkConfig = array(
+                        "mode" => "sandbox"
+                    );
 
-        $cred = new OAuthTokenCredential($this->bootstrap_options['paypal']['client_id'], $this->bootstrap_options['paypal']['client_secret'], $sdkConfig);
-        $apiContext = new ApiContext($cred, 'Request' . time());
-        $apiContext->setConfig($sdkConfig);
-        $payer = new Payer();
-        $payer->setPayment_method("paypal");
+                    $cred = new OAuthTokenCredential($this->bootstrap_options['paypal']['client_id'], $this->bootstrap_options['paypal']['client_secret'], $sdkConfig);
+                    $apiContext = new ApiContext($cred, 'Request' . time());
+                    $apiContext->setConfig($sdkConfig);
+                    $payer = new Payer();
+                    $payer->setPayment_method("paypal");
 
-        $amount = new Amount();
-        $amount->setCurrency(strtoupper($order->currency));
-        $amount->setTotal(money_format("%i", $order->total));
+                    $amount = new Amount();
+                    $amount->setCurrency(strtoupper($order->currency));
+                    $amount->setTotal(money_format("%i", $order->total));
 
-        $transaction = new Transaction();
-        $transaction->setDescription("I just creating a payment for " . $this->bootstrap_options['currency_symbol'][$order->currency] . $order->total . strtoupper($order->currency));
-        $transaction->setAmount($amount);
+                    $transaction = new Transaction();
+                    $transaction->setDescription("I just creating a payment for " . $this->bootstrap_options['currency_symbol'][$order->currency] . $order->total . strtoupper($order->currency));
+                    $transaction->setAmount($amount);
 
-        $redirectUrls = new RedirectUrls();
+                    $redirectUrls = new RedirectUrls();
 //        $redirectUrls->setReturn_url("https://devtools-paypal.com/guide/pay_paypal/php?success=true");
 //        $redirectUrls->setCancel_url("https://devtools-paypal.com/guide/pay_paypal/php?cancel=true");
-        $redirectUrls->setReturn_url("http://" . $_SERVER["SERVER_NAME"] . $this->view->url(array(), 'paypal-approval'));
-        $redirectUrls->setCancel_url("https://" . $_SERVER["SERVER_NAME"] . $this->view->url(array('action' => 'cancel'), 'paypal-approval'));
-        $payment = new Payment();
-        $payment->setIntent("sale");
-        $payment->setPayer($payer);
-        $payment->setRedirect_urls($redirectUrls);
-        $payment->setTransactions(array($transaction));
+                    $redirectUrls->setReturn_url("http://" . $_SERVER["SERVER_NAME"] . $this->view->url(array(), 'paypal-approval'));
+                    $redirectUrls->setCancel_url("https://" . $_SERVER["SERVER_NAME"] . $this->view->url(array('action' => 'cancel'), 'paypal-approval'));
+                    $payment = new Payment();
+                    $payment->setIntent("sale");
+                    $payment->setPayer($payer);
+                    $payment->setRedirect_urls($redirectUrls);
+                    $payment->setTransactions(array($transaction));
 
-        $response = $payment->create($apiContext);
-        $paymentId = $response->getId();
-        $_SESSION['payment_id'] = $paymentId;
-        $linksArr = $response->getLinks();
+                    $response = $payment->create($apiContext);
+                    $paymentId = $response->getId();
+                    $_SESSION['payment_id'] = $paymentId;
+                    $linksArr = $response->getLinks();
 
-        foreach ($linksArr as $links) {
-            if ($links->getRel() == 'approval_url') {
-                $approval_url = $links->getHref();
+                    foreach ($linksArr as $links) {
+                        if ($links->getRel() == 'approval_url') {
+                            $approval_url = $links->getHref();
+                            break;
+                        }
+                    }
+                    $result = true;
+                }
+            } catch (Exception $ex) {
+                
             }
         }
-        $this->redirect($approval_url);
+
+        if ($result) {
+            $this->redirect($approval_url);
+        } else {
+            $this->redirect($this->view->url(array('action' => 'error'), 'paypal-return'));
+        }
     }
 
     public function paypalApprovalAction() {
-        $payment_id = $_SESSION['payment_id'];
-        $payer_id = $this->getParam('PayerID');
+        try {
+            $payment_id = $_SESSION['payment_id'];
+            $payer_id = $this->getParam('PayerID');
 
-        $sdkConfig = array(
-            "mode" => "sandbox"
-        );
+            $sdkConfig = array(
+                "mode" => "sandbox"
+            );
 
-        $cred = new OAuthTokenCredential($this->bootstrap_options['paypal']['client_id'], $this->bootstrap_options['paypal']['client_secret'], $sdkConfig);
-        $apiContext = new ApiContext($cred, 'Request' . time());
-        $apiContext->setConfig($sdkConfig);
+            $cred = new OAuthTokenCredential($this->bootstrap_options['paypal']['client_id'], $this->bootstrap_options['paypal']['client_secret'], $sdkConfig);
+            $apiContext = new ApiContext($cred, 'Request' . time());
+            $apiContext->setConfig($sdkConfig);
 
-        $payment = new Payment();
-        $payment->setId($payment_id);
-        $execution = new PaymentExecution();
-        $execution->setPayer_id($payer_id);
-        $response = $payment->execute($execution, $apiContext);
+            $payment = new Payment();
+            $payment->setId($payment_id);
+            $execution = new PaymentExecution();
+            $execution->setPayer_id($payer_id);
+            $response = $payment->execute($execution, $apiContext);
 //        var_dump($response);
-        $transactions = $response->getTransactions();
-        if (!count($transactions))
-            return false;
-        $transaction = $transactions[0];
-        $related_resources = $transaction->getRelatedResources();
-        if (!count($related_resources))
-            return false;
-        $related_resource = $related_resources[0];
-        $sale = $related_resource->getSale();
-        $state = $sale->getState();
+            $transactions = $response->getTransactions();
+            if (!count($transactions))
+                return false;
+            $transaction = $transactions[0];
+            $related_resources = $transaction->getRelatedResources();
+            if (!count($related_resources))
+                return false;
+            $related_resource = $related_resources[0];
+            $sale = $related_resource->getSale();
+            $state = $sale->getState();
 
-        var_dump($response);
-        if ($state == 'completed') {
-            exit('PP success');
-        } else if ($state == 'pending') {
-            exit('PP pending');
-        } else {
-            exit('PP error');
+//            var_dump($response);
+            if ($state == 'completed') {
+                exit('PP success');
+                $_SESSION['payment_id'] = null;
+                $_SESSION['order_id'] = null;
+            } else if ($state == 'pending') {
+                exit('PP pending');
+            } else {
+                exit('PP error');
+            }
+        } catch (Exception $ex) {
+            
         }
-
-        $_SESSION['payment_id'] = null;
-        $_SESSION['order_id'] = null;
     }
 
     public function removeAction() {
