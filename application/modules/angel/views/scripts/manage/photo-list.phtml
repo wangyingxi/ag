@@ -57,6 +57,9 @@ $model = $this->model;
     <a type="button" href="<?php echo $this->url(array(), 'manage-photo-upload') ?>" id="clear-cache" class="btn btn-success">上传图片</a>
 </div>
 <div class="row">
+    <?php
+    $c = 0;
+    ?>
     <?php foreach ($this->resource as $p): ?>
         <div class="col-md-3 itm">
             <input type="hidden" class="tmp" value="<?php echo $p['id'] ?>"/>
@@ -88,6 +91,10 @@ $model = $this->model;
                 </div>
             </div>
         </div>
+        <?php $c ++; ?>
+        <?php if ($c % 4 == 0): ?>
+            <div class="clearfix"></div>
+        <?php endif; ?>
     <?php endforeach; ?>
 </div>
 <div class="row">
