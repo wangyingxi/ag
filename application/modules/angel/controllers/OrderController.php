@@ -74,8 +74,15 @@ class Angel_OrderController extends Angel_Controller_Action {
                 $order = $orderModel->getSingleBy(array('oid' => $oid));
 
                 if ($order && $order->status == 1) {
-                    $_SESSION['order_id'] = $order->oid;
+                    if ($order->owner && !$this->me) {
+                        exit();
+                    }
+                    if ($order->owner && $this->me && $order->owner->id != $this->me->getUser()->id) {
+                        exit();
+                    }
 
+                    $_SESSION['order_id'] = $order->oid;
+                    // "mode" => "LIVE"
                     $sdkConfig = array(
                         "mode" => "sandbox"
                     );
@@ -131,10 +138,12 @@ class Angel_OrderController extends Angel_Controller_Action {
     }
 
     public function paypalApprovalAction() {
+        $result = false;
+        $action = 'error';
         try {
             $payment_id = $_SESSION['payment_id'];
             $payer_id = $this->getParam('PayerID');
-
+            // "mode" => "LIVE"
             $sdkConfig = array(
                 "mode" => "sandbox"
             );
@@ -148,31 +157,43 @@ class Angel_OrderController extends Angel_Controller_Action {
             $execution = new PaymentExecution();
             $execution->setPayer_id($payer_id);
             $response = $payment->execute($execution, $apiContext);
-//        var_dump($response);
             $transactions = $response->getTransactions();
-            if (!count($transactions))
-                return false;
-            $transaction = $transactions[0];
-            $related_resources = $transaction->getRelatedResources();
-            if (!count($related_resources))
-                return false;
-            $related_resource = $related_resources[0];
-            $sale = $related_resource->getSale();
-            $state = $sale->getState();
+            if (count($transactions)) {
+                $transaction = $transactions[0];
+                $related_resources = $transaction->getRelatedResources();
+                if (count($related_resources)) {
+                    $related_resource = $related_resources[0];
+                    $sale = $related_resource->getSale();
+                    $state = $sale->getState();
 
-//            var_dump($response);
-            if ($state == 'completed') {
-                exit('PP success');
-                $_SESSION['payment_id'] = null;
-                $_SESSION['order_id'] = null;
-            } else if ($state == 'pending') {
-                exit('PP pending');
-            } else {
-                exit('PP error');
+                    if ($state == 'completed') {
+                        $order_id = $_SESSION['order_id'];
+                        if ($order_id) {
+                            // set order status to 2;
+                            $orderModel = $this->getModel('order');
+                            $order = $orderModel->getSingleBy(array('oid' => $order_id));
+                            if ($order && $order->status == 1) {
+                                $orderModel->save($order->id, array('status' => 2));
+                                $_SESSION['payment_id'] = null;
+                                $_SESSION['order_id'] = null;
+                                $_COOKIE['cart'] = "";
+                                $result = true;
+                                $action = 'complete';
+                            } else {
+                                $action = 'expired';
+                            }
+                        } else {
+                            $action = 'expired';
+                        }
+                    } else if ($state == 'pending') {
+                        $action = $state;
+                    }
+                }
             }
         } catch (Exception $ex) {
             
         }
+        $this->redirect($this->view->url(array('action' => $action), 'paypal-return'));
     }
 
     public function removeAction() {

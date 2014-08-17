@@ -880,6 +880,100 @@
             $('body').append(cover);
         }
     };
+
+
+
+    /* LOADING (START) */
+    $.waiting = function(options) {
+        var settings = {
+            msg: false,
+            container: false,
+            color: 'yellow',
+            easing: 'linear'
+        };
+        $.extend(settings, options);
+        var msg = settings.msg;
+        var container = settings.container;
+        var color = settings.color;
+        var easing = settings.easing;
+
+        if ($('.rotatedivwrapper').length > 0) {
+            return;
+        }
+        var rotate_style_id = 'rotate-style';
+        if ($('#' + rotate_style_id).length === 0) {
+            var style = "<style id='" + rotate_style_id + "'>";
+            style += ".rotatedivwrapper {background:rgba(0,0,0,0.6);height:100%;left:0;position:fixed;top:0;width:100%;z-index:30;}";
+            style += ".rotatedivwrapper .rotatediv {display:block;left:50%;margin-left:-60px;margin-top:-60px;position:absolute;top:50%;}";
+            style += ".rotatedivwrapper > .msg {color:#FFF;left:50%;margin-left:-200px;top:50%;margin-top:42px;position:absolute;text-align:center;width:400px;}";
+            style += "</style>";
+            $('body').append(style);
+        }
+        var obja = $("<div>").addClass('rotatedivwrapper').append($('<div>').addClass('rotatediv'));
+        if (!container) {
+            container = $('body');
+        }
+        container.append(obja);
+        var wp = $('.rotatedivwrapper');
+        var wp_w = wp.width();
+        var wp_h = wp.height();
+
+        var x = (($(window).width()) / 2) - (wp_w / 2);
+        var y = ($(window).height() - wp_h) / 2;
+
+        wp.css('left', x);
+        wp.css('top', y);
+
+        $.rotateDiv(easing, color, false);
+        var intervalId = window.setInterval("$.rotateDiv(false,'" + color + "',false)", 500);
+
+        if (msg) {
+            var msgObj = $('<div>').addClass('msg').html(msg);
+            wp.append(msgObj);
+        }
+
+        wp.fadeIn('fast');
+        wp.attr('intid', intervalId);
+    };
+    $.rotateDiv = function(easing, color, target) {
+        if (!color)
+            color = 'yellow';
+        var rotate_div_style_id = 'rotate-div-style';
+        var rotate_img_url = '/img/loading/loading-64-' + color + '.png';
+        if ($('#' + rotate_div_style_id).length === 0) {
+            var style = "<style id='" + rotate_div_style_id + "'>";
+            style += ".rotatediv {background:url(" + rotate_img_url + ") center center no-repeat;display:inline-block;height:120px;width:120px;}";
+            style += "</style>";
+            $('body').append(style);
+        }
+
+
+        if (!easing) {
+            easing = 'linear';
+        }
+        if (!target)
+            target = $('.rotatediv');
+        target.animate({
+            rotate: '+=360deg'
+        }, 500, easing);
+    };
+    $.endWaiting = function() {
+        var wp = $('.rotatedivwrapper');
+        window.clearInterval(wp.attr('intid'));
+        wp.attr('intid', null);
+        wp.fadeOut('fast', function() {
+            wp.remove();
+        });
+    };
+    $.setWaitingMsg = function(msg) {
+        $('.rotatedivwrapper > .msg').html(msg);
+    }
+
+    /* LOADING (END) */
+
+
+
+
 })(jQuery);
 /*!
  * jQuery Cookie Plugin v1.3.1
