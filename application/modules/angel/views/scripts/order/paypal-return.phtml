@@ -12,21 +12,21 @@
                     break;
                 case 'pending':
                     $title = "Thanks, Order # " . $oid . " is pending";
-                    $description = "We will dispathch your order once payment arrived.";
+                    $description = "We will dispathch your order once payment arrived";
                     break;
                 case 'cancel':
                     $title = "Order has been cancelled";
-                    $description = "You can pay again for the order.";
+                    $description = "You can pay again for the order";
                     break;
                 case 'expired':
                     $reason = 'error';
                     $title = "Opps! This order is expired";
-                    $description = "Sorry, you can't pay this order anymore.";
+                    $description = "Sorry, you can't pay this order anymore";
                     break;
                 default:
                     // error
                     $title = "Opps! There is an error occurred";
-                    $description = "Sorry, internet server error occurred.";
+                    $description = "Sorry, internet server error occurred";
                     break;
             }
             $user = false;
@@ -34,27 +34,61 @@
                 $user = $this->me->getUser();
             }
             ?>
-            <div id="l1">
+            <div id="l1" class="clearfix">
                 <p id="l2">
                     <img width="64" src="/img/pp-<?php echo $reason; ?>.png" />
                 </p>
-                <p id="l3">
-                    <?php echo $title ?>
-                </p>
-                <p id="l4">
-                    <?php echo $description ?>
-                </p>
+                <div id="l5">
+                    <p id="l3">
+                        <?php echo $title ?>
+                    </p>
+                    <p id="l4" class="gray">
+                        <?php echo $description ?>
+                    </p>
+                </div>
             </div>
+
+            <?php if ($reason == 'complete' || $reason == 'pending'): ?>
+                <div id="b1">
+                    <div id="b2">
+                        <?php if ($user): ?>
+                            <p>
+                                For more information about order
+                            </p>
+                            <a href="/order" class="btn btn-default btn-sm">Check Order</a>
+                        <?php else: ?>
+                            <p>
+                                Get track number by email
+                            </p>
+                            <div>
+                                <input oid="<?php echo $this->oid ?>" placeholder="Your email" type="text" class="txt"/>
+                                <button class="btn btn-primary">Get</button>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div id="b1">
+                    <div id="b2">
+                        <p>
+                            Here are some helpful links instead
+                        </p>
+                        <a href="<?php echo $this->url(array(), 'cart') ?>" class="btn btn-primary btn-sm">Check cart &amp; try again</a>
+                        <a href="<?php echo $this->url(array(), 'cart') ?>" class="btn btn-default btn-sm">Continue shopping</a>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
 <style>
     #l1 {
-        padding: 50px;
+        padding: 30px 0;
         text-align:center;
     }
     #l2 {
         margin-bottom:20px;
+        margin-right:15px;
     }
     #l3 {
         font-size:20px;
@@ -62,5 +96,26 @@
     }
     #l4 {
         font-size:14px;
+    }
+    #l5 {
+    }
+
+    #b1 {
+        border-top:1px solid #ddd;
+        margin-top:20px;
+    }
+    #b2 {
+        padding:30px 0;
+        text-align:center;
+    }
+    #b2 > p {
+        margin-bottom:8px;
+    }
+    #b2 .txt {
+        height:22px;
+    }
+
+    .container_24 {
+        padding-bottom:30px;
     }
 </style>

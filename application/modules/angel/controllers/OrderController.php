@@ -201,8 +201,8 @@ class Angel_OrderController extends Angel_Controller_Action {
 
         if ($this->view->reason == 'complete') {
             $_SESSION['payment_id'] = null;
-            $_SESSION['order_id'] = null;
-            $_COOKIE['cart'] = null;
+//            $_SESSION['order_id'] = null;
+//            $_COOKIE['cart'] = null;
         }
     }
 

@@ -19,6 +19,9 @@ class Order extends AbstractDocument{
     protected $address;
     
     /** @ODM\String */
+    protected $email;
+    
+    /** @ODM\String */
     protected $currency;
     
     /** @ODM\Float */
