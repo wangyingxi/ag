@@ -11,7 +11,7 @@ use PayPal\Api\PaymentExecution;
 
 class Angel_OrderController extends Angel_Controller_Action {
 
-    protected $login_not_required = array('create', 'cart', 'paypal-pay');
+    protected $login_not_required = array('create', 'cart', 'paypal-pay', 'paypal-approval', 'paypal-return');
 
     public function init() {
         parent::init();
@@ -66,80 +66,82 @@ class Angel_OrderController extends Angel_Controller_Action {
     }
 
     public function paypalPayAction() {
-        $oid = $this->request->getParam('oid');
-        $result = false;
-        if ($oid) {
-            try {
-                $orderModel = $this->getModel('order');
-                $order = $orderModel->getSingleBy(array('oid' => $oid));
+        if ($this->request->isPost()) {
+            $oid = $this->request->getParam('oid');
+            $result = false;
+            if ($oid) {
+                try {
+                    $orderModel = $this->getModel('order');
+                    $order = $orderModel->getSingleBy(array('oid' => $oid));
 
-                if ($order && $order->status == 1) {
-                    if ($order->owner && !$this->me) {
-                        exit();
-                    }
-                    if ($order->owner && $this->me && $order->owner->id != $this->me->getUser()->id) {
-                        exit();
-                    }
+                    if ($order && $order->status == 1) {
+                        if ($order->owner && !$this->me) {
+                            exit();
+                        }
+                        if ($order->owner && $this->me && $order->owner->id != $this->me->getUser()->id) {
+                            exit();
+                        }
 
-                    $_SESSION['order_id'] = $order->oid;
-                    // "mode" => "LIVE"
-                    $sdkConfig = array(
-                        "mode" => "sandbox"
-                    );
+                        $_SESSION['order_id'] = $order->oid;
+                        // "mode" => "LIVE"
+                        $sdkConfig = array(
+                            "mode" => "sandbox"
+                        );
 
-                    $cred = new OAuthTokenCredential($this->bootstrap_options['paypal']['client_id'], $this->bootstrap_options['paypal']['client_secret'], $sdkConfig);
-                    $apiContext = new ApiContext($cred, 'Request' . time());
-                    $apiContext->setConfig($sdkConfig);
-                    $payer = new Payer();
-                    $payer->setPayment_method("paypal");
+                        $cred = new OAuthTokenCredential($this->bootstrap_options['paypal']['client_id'], $this->bootstrap_options['paypal']['client_secret'], $sdkConfig);
+                        $apiContext = new ApiContext($cred, 'Request' . time());
+                        $apiContext->setConfig($sdkConfig);
+                        $payer = new Payer();
+                        $payer->setPayment_method("paypal");
 
-                    $amount = new Amount();
-                    $amount->setCurrency(strtoupper($order->currency));
-                    $amount->setTotal(money_format("%i", $order->total));
+                        $amount = new Amount();
+                        $amount->setCurrency(strtoupper($order->currency));
+                        $amount->setTotal(money_format("%i", $order->total));
 
-                    $transaction = new Transaction();
-                    $transaction->setDescription("I just creating a payment for " . $this->bootstrap_options['currency_symbol'][$order->currency] . $order->total . strtoupper($order->currency));
-                    $transaction->setAmount($amount);
+                        $transaction = new Transaction();
+                        $transaction->setDescription("I just creating a payment for " . $this->bootstrap_options['currency_symbol'][$order->currency] . $order->total . strtoupper($order->currency));
+                        $transaction->setAmount($amount);
 
-                    $redirectUrls = new RedirectUrls();
+                        $redirectUrls = new RedirectUrls();
 //        $redirectUrls->setReturn_url("https://devtools-paypal.com/guide/pay_paypal/php?success=true");
 //        $redirectUrls->setCancel_url("https://devtools-paypal.com/guide/pay_paypal/php?cancel=true");
-                    $redirectUrls->setReturn_url("http://" . $_SERVER["SERVER_NAME"] . $this->view->url(array(), 'paypal-approval'));
-                    $redirectUrls->setCancel_url("https://" . $_SERVER["SERVER_NAME"] . $this->view->url(array('action' => 'cancel'), 'paypal-approval'));
-                    $payment = new Payment();
-                    $payment->setIntent("sale");
-                    $payment->setPayer($payer);
-                    $payment->setRedirect_urls($redirectUrls);
-                    $payment->setTransactions(array($transaction));
+                        $redirectUrls->setReturn_url("http://" . $_SERVER["SERVER_NAME"] . $this->view->url(array(), 'paypal-approval'));
+                        $redirectUrls->setCancel_url("http://" . $_SERVER["SERVER_NAME"] . $this->view->url(array('reason' => 'cancel'), 'paypal-return'));
+                        $payment = new Payment();
+                        $payment->setIntent("sale");
+                        $payment->setPayer($payer);
+                        $payment->setRedirect_urls($redirectUrls);
+                        $payment->setTransactions(array($transaction));
 
-                    $response = $payment->create($apiContext);
-                    $paymentId = $response->getId();
-                    $_SESSION['payment_id'] = $paymentId;
-                    $linksArr = $response->getLinks();
+                        $response = $payment->create($apiContext);
+                        $paymentId = $response->getId();
+                        $_SESSION['payment_id'] = $paymentId;
+                        $linksArr = $response->getLinks();
 
-                    foreach ($linksArr as $links) {
-                        if ($links->getRel() == 'approval_url') {
-                            $approval_url = $links->getHref();
-                            break;
+                        foreach ($linksArr as $links) {
+                            if ($links->getRel() == 'approval_url') {
+                                $approval_url = $links->getHref();
+                                break;
+                            }
                         }
+                        $result = true;
                     }
-                    $result = true;
+                } catch (Exception $ex) {
+                    
                 }
-            } catch (Exception $ex) {
-                
             }
-        }
 
-        if ($result) {
-            $this->redirect($approval_url);
-        } else {
-            $this->redirect($this->view->url(array('action' => 'error'), 'paypal-return'));
+            if ($result) {
+                $this->redirect($approval_url);
+            } else {
+                $this->redirect($this->view->url(array('reason' => 'error'), 'paypal-return'));
+            }
         }
     }
 
     public function paypalApprovalAction() {
         $result = false;
-        $action = 'error';
+        $reason = 'error';
         try {
             $payment_id = $_SESSION['payment_id'];
             $payer_id = $this->getParam('PayerID');
@@ -174,26 +176,34 @@ class Angel_OrderController extends Angel_Controller_Action {
                             $order = $orderModel->getSingleBy(array('oid' => $order_id));
                             if ($order && $order->status == 1) {
                                 $orderModel->save($order->id, array('status' => 2));
-                                $_SESSION['payment_id'] = null;
-                                $_SESSION['order_id'] = null;
-                                $_COOKIE['cart'] = "";
                                 $result = true;
-                                $action = 'complete';
+                                $reason = 'complete';
                             } else {
-                                $action = 'expired';
+                                $reason = 'expired';
                             }
                         } else {
-                            $action = 'expired';
+                            $reason = 'expired';
                         }
                     } else if ($state == 'pending') {
-                        $action = $state;
+                        $reason = $state;
                     }
                 }
             }
         } catch (Exception $ex) {
             
         }
-        $this->redirect($this->view->url(array('action' => $action), 'paypal-return'));
+        $this->redirect($this->view->url(array('reason' => $reason), 'paypal-return'));
+    }
+
+    public function paypalReturnAction() {
+        $this->view->reason = $this->request->getParam('reason');
+        $this->view->oid = $_SESSION['order_id'];
+
+        if ($this->view->reason == 'complete') {
+            $_SESSION['payment_id'] = null;
+            $_SESSION['order_id'] = null;
+            $_COOKIE['cart'] = null;
+        }
     }
 
     public function removeAction() {

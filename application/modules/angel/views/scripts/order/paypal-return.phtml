@@ -1,3 +1,66 @@
-<div>
-    Hi, You have paid
+
+<div class="content wbg-wrapper">
+    <div class="container_24">
+        <div class="grid_24">
+            <?php
+            $oid = $this->oid;
+            $reason = $this->reason;
+            switch ($reason) {
+                case 'complete':
+                    $title = "Congratulations.";
+                    $description = "Successfully paid order # " . $oid . ".";
+                    break;
+                case 'pending':
+                    $title = "Thanks, Order # " . $oid . " is pending";
+                    $description = "We will dispathch your order once payment arrived.";
+                    break;
+                case 'cancel':
+                    $title = "Order has been cancelled";
+                    $description = "You can pay again for the order.";
+                    break;
+                case 'expired':
+                    $reason = 'error';
+                    $title = "Opps! This order is expired";
+                    $description = "Sorry, you can't pay this order anymore.";
+                    break;
+                default:
+                    // error
+                    $title = "Opps! There is an error occurred";
+                    $description = "Sorry, internet server error occurred.";
+                    break;
+            }
+            $user = false;
+            if ($this->me) {
+                $user = $this->me->getUser();
+            }
+            ?>
+            <div id="l1">
+                <p id="l2">
+                    <img width="64" src="/img/pp-<?php echo $reason; ?>.png" />
+                </p>
+                <p id="l3">
+                    <?php echo $title ?>
+                </p>
+                <p id="l4">
+                    <?php echo $description ?>
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
+<style>
+    #l1 {
+        padding: 50px;
+        text-align:center;
+    }
+    #l2 {
+        margin-bottom:20px;
+    }
+    #l3 {
+        font-size:20px;
+        font-weight:bold;
+    }
+    #l4 {
+        font-size:14px;
+    }
+</style>

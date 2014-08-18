@@ -140,6 +140,9 @@ if ($this->me && $this->me->getUser()->address) {
         <span class="price-str">0</span>
     </div>
 </div>
+<form id="oid-form" action="<?php echo $this->url(array(), "paypal-pay") ?>" method="post">
+    <input type="hidden" name="oid" value="" id="oid"/>
+</form>
 
 <script type="text/javascript">
     function requestCart() {
@@ -344,15 +347,12 @@ if ($this->me && $this->me->getUser()->address) {
                 success: function(response) {
                     if (response.code === 200) {
                         // order created
-//                        var new_id = response.oid;
-//                        $.alertbox({
-//                            msg: "<i class='glyphicons ok green' style='font-size:32px;'></i><p>Order # " + response.oid + " </p><p>Redirecting to PAYPAL for checkout ...</p>",
-//                            width: 400
-//                        });
                         $.setWaitingMsg('Order number is ' + response.oid);
                         setTimeout(function() {
                             $.setWaitingMsg('Redirecting to paypal for checkout. <br/>Please waiting a moment.');
-                            location.href = '<?php echo $this->url(array(), "paypal-pay") . "?oid=" ?>' + response.oid;
+//                            location.href = '<?php echo $this->url(array(), "paypal-pay") . "?oid=" ?>' + response.oid;
+                            $('#oid').val(response.oid);
+                            $('#oid-form').submit();
                         }, 1000);
                     } else {
                         $.alertbox({
