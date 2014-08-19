@@ -127,7 +127,7 @@ class Angel_OrderController extends Angel_Controller_Action {
                         $result = true;
                     }
                 } catch (Exception $ex) {
-                    
+                    exit($ex->getMessage());
                 }
             }
 
@@ -178,6 +178,12 @@ class Angel_OrderController extends Angel_Controller_Action {
                                 $orderModel->save($order->id, array('status' => 2));
                                 $result = true;
                                 $reason = 'complete';
+                                if(!$this->me) {
+                                    $payer = $response->getPayer();
+                                    $payer_info = $payer->getPayerInfo();
+                                    $bind_email = $payer_info->getEmail();
+                                    $this->view->bind_email = $bind_email;
+                                }
                             } else {
                                 $reason = 'expired';
                             }
@@ -190,7 +196,7 @@ class Angel_OrderController extends Angel_Controller_Action {
                 }
             }
         } catch (Exception $ex) {
-            
+            exit($ex->getMessage());
         }
         $this->redirect($this->view->url(array('reason' => $reason), 'paypal-return'));
     }
