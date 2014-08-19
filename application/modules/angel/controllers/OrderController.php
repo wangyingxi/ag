@@ -170,21 +170,24 @@ class Angel_OrderController extends Angel_Controller_Action {
                     if ($state == 'completed' || $state == 'pending') {
                         $order_id = $_SESSION['order_id'];
                         if ($order_id) {
-                            // set order status to 2;
+                            // set order status to 3;
                             $orderModel = $this->getModel('order');
                             $order = $orderModel->getSingleBy(array('oid' => $order_id));
                             if ($order && $order->status == 1) {
                                 $param = array();
                                 if ($state == 'completed') {
+                                    $param['status'] = 3;
+                                } else {
                                     $param['status'] = 2;
                                 }
                                 if (!$this->me) {
                                     $payer = $response->getPayer();
                                     $payer_info = $payer->getPayerInfo();
-                                    $param['email'] = $bind_email = $payer_info->getEmail();
+                                    $bind_email = $payer_info->getEmail();
                                 } else {
-                                    $param['email'] = $bind_email = $this->me->getUser()->email;
+                                    $bind_email = $this->me->getUser()->email;
                                 }
+                                $param['email'] = $bind_email;
                                 $orderModel->save($order->id, $param);
                                 $reason = $state;
                             } else {
@@ -241,13 +244,13 @@ class Angel_OrderController extends Angel_Controller_Action {
 
     public function receiveOrderAction() {
         if ($this->request->isPost() && $this->me) {
-            $this->alterOrderStatusAction(4);
+            $this->alterOrderStatusAction(5);
         }
     }
 
     public function dispatchOrderAction() {
         if ($this->request->isPost() && $this->me) {
-            $this->alterOrderStatusAction(3);
+            $this->alterOrderStatusAction(4);
         }
     }
 
@@ -258,7 +261,7 @@ class Angel_OrderController extends Angel_Controller_Action {
 
         $order = $orderModel->getById($id);
         $code = 500;
-        if ($order && $order->status == $status - 1 && ($user->user_type == 'admin' || $order->owner->id == $user->id)) {
+        if ($order && $order->status < $status && ($user->user_type == 'admin' || $order->owner->id == $user->id)) {
             // 可以修改
             try {
                 $orderModel->save($id, array('status' => $status));

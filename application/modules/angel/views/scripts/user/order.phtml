@@ -75,15 +75,18 @@
                                             $statusCls = "light-gray";
                                             $iconCls = "glyphicons alarm";
                                         } else if ($order->status == 2) {
+                                            $statusCls = "purple";
+                                            $iconCls = "glyphicons roundabout";
+                                        } else if ($order->status == 3) {
                                             $statusCls = "green";
                                             $iconCls = "glyphicons cargo";
-                                        } else if ($order->status == 3) {
+                                        } else if ($order->status == 4) {
                                             $statusCls = "cyan";
                                             $iconCls = "glyphicons airplane";
-                                        } else if ($order->status == 4) {
+                                        } else if ($order->status == 5) {
                                             $statusCls = "red";
                                             $iconCls = "glyphicons gift";
-                                        } else if ($order->status == 5) {
+                                        } else if ($order->status == 6) {
                                             $statusCls = "orange";
                                             $iconCls = "glyphicons thumbs_up";
                                         }
@@ -96,11 +99,15 @@
                                             <a href="#" class="btn btn-warning btn-sm pay-now-btn">pay now</a>
                                             <a href="javascript:void(0)" class="btn btn-gray btn-sm remove-btn">remove</a>
                                         <?php elseif ($order->status == 2): ?>
-                                            <p class="green status-tip-2">
-                                                Thanks we got payment and item is dispatching for you.
+                                            <p class="purple status-tip-2">
+                                                Thanks for checking out the order we are waiting for money clearance.
                                             </p>
                                         <?php elseif ($order->status == 3): ?>
-                                            <p class="cyan status-tip-3">
+                                            <p class="green status-tip-3">
+                                                Thanks we got payment and item is dispatching for you.
+                                            </p>
+                                        <?php elseif ($order->status == 4): ?>
+                                            <p class="cyan status-tip-4">
                                                 <?php
                                                 if ($order->shipped_at) {
                                                     $t = $order->shipped_at->format('jS M Y');
@@ -111,7 +118,7 @@
                                                 Shipped on <strong><?php echo $t ?></strong>. Expected arrival date is between <strong><?php echo $r1 ?></strong> to <strong><?php echo $r2 ?></strong>
                                             </p>
                                             <a href="javascript:void(0)" class="btn btn-sm btn-primary">received Item</a>
-                                        <?php elseif ($order->status == 4): ?>
+                                        <?php elseif ($order->status == 5): ?>
                                             <a href="javascript:void(0)" class="btn btn-sm btn-danger">leave review</a>
                                         <?php endif; ?>
 
@@ -267,12 +274,18 @@
         text-align:center;
     }
     .status-tip-2 {
-        background:#ebf7e7;
+        background:#FDE5DD;
         font-size:smaller;
         line-height:18px;
         padding:5px;
     }
     .status-tip-3 {
+        background:#ebf7e7;
+        font-size:smaller;
+        line-height:18px;
+        padding:5px;
+    }
+    .status-tip-4 {
         background:#e9f4fa;
         font-size:smaller;
         line-height:18px;

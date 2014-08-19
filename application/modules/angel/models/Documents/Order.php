@@ -31,7 +31,7 @@ class Order extends AbstractDocument{
     protected $order_detail = array();
     
     /** @ODM\Int */
-    protected $status = 1;  // 订单状态（1，pending（等待支付）；2，dispatching（发货中）；3，dispatched（已发货）；4，received（已收货）；5，comment（已发表评论））
+    protected $status = 1;  // 订单状态（1，awaiting payment（等待支付）；2，pending（echeck）；3，dispatching（发货中）；4，dispatched（已发货）；5，received（已收货）；6，comment（已发表评论））
     
     /** @ODM\Date */
     protected $paid_at;

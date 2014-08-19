@@ -234,6 +234,9 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 .orange {
     color:#ed9c28;
 }
+.purple {
+    color:palevioletred;
+}
 .light-gray {
     color:#aaa;
 }
