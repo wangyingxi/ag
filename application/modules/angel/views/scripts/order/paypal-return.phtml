@@ -6,7 +6,7 @@
             $oid = $this->oid;
             $reason = $this->reason;
             switch ($reason) {
-                case 'complete':
+                case 'completed':
                     $title = "Congratulations.";
                     $description = "Successfully paid order # " . $oid . ".";
                     break;
@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <?php if ($reason == 'complete' || $reason == 'pending'): ?>
+            <?php if ($reason == 'completed' || $reason == 'pending'): ?>
                 <div id="b1">
                     <div id="b2">
                         <?php if ($user): ?>
