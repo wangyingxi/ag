@@ -175,15 +175,15 @@ class Angel_OrderController extends Angel_Controller_Action {
                             $orderModel = $this->getModel('order');
                             $order = $orderModel->getSingleBy(array('oid' => $order_id));
                             if ($order && $order->status == 1) {
-                                $orderModel->save($order->id, array('status' => 2));
-                                $result = true;
-                                $reason = 'complete';
-                                if(!$this->me) {
+                                $param = array('status' => 2);
+                                if (!$this->me) {
                                     $payer = $response->getPayer();
                                     $payer_info = $payer->getPayerInfo();
-                                    $bind_email = $payer_info->getEmail();
-                                    $this->view->bind_email = $bind_email;
+                                    $param['email'] = $bind_email = $payer_info->getEmail();
                                 }
+                                $orderModel->save($order->id, $param);
+                                $result = true;
+                                $reason = 'complete';
                             } else {
                                 $reason = 'expired';
                             }
@@ -198,12 +198,13 @@ class Angel_OrderController extends Angel_Controller_Action {
         } catch (Exception $ex) {
             exit($ex->getMessage());
         }
-        $this->redirect($this->view->url(array('reason' => $reason), 'paypal-return'));
+        $this->redirect($this->view->url(array('reason' => $reason), 'paypal-return') . '?bind_email=' . $bind_email);
     }
 
     public function paypalReturnAction() {
         $this->view->reason = $this->request->getParam('reason');
         $this->view->oid = $_SESSION['order_id'];
+        $this->view->bind_email = $this->request->getParam('bind_email');
 
         if ($this->view->reason == 'complete') {
             $_SESSION['payment_id'] = null;

@@ -58,11 +58,10 @@
                             <a href="/order" class="btn btn-default btn-sm">Check Order</a>
                         <?php else: ?>
                             <p>
-                                Get track number by email
+                                We will send track number to email <strong class="skyblue"><?php echo $this->bind_email; ?></strong>
                             </p>
                             <div>
-                                <input oid="<?php echo $this->oid ?>" placeholder="Your email" value="<?php echo $this->bind_email; ?>" type="text" class="txt"/>
-                                <button class="btn btn-primary">Get</button>
+                                <a href="<?php echo $this->url(array(), 'register') . '?oid=' . $this->oid . '&&email=' . $this->bind_email ?>" class="btn btn-primary">Register &amp; Bind Order</a>
                             </div>
                         <?php endif; ?>
                     </div>
