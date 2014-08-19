@@ -140,7 +140,6 @@ class Angel_OrderController extends Angel_Controller_Action {
     }
 
     public function paypalApprovalAction() {
-        $result = false;
         $reason = 'error';
         try {
             $payment_id = $_SESSION['payment_id'];
@@ -168,24 +167,28 @@ class Angel_OrderController extends Angel_Controller_Action {
                     $sale = $related_resource->getSale();
                     $state = $sale->getState();
 
-                    if ($state == 'completed') {
+                    if ($state == 'complete' || $state == 'pending') {
                         $order_id = $_SESSION['order_id'];
                         if ($order_id) {
                             // set order status to 2;
                             $orderModel = $this->getModel('order');
                             $order = $orderModel->getSingleBy(array('oid' => $order_id));
                             if ($order && $order->status == 1) {
-                                $param = array('status' => 2);
+                                $param = array();
+                                if ($state == 'complete') {
+                                    $param['status'] = 2;
+                                }
                                 if (!$this->me) {
                                     $payer = $response->getPayer();
                                     $payer_info = $payer->getPayerInfo();
                                     $param['email'] = $bind_email = $payer_info->getEmail();
+                                } else {
+                                    $param['email'] = $bind_email = $this->me->getUser()->email;
                                 }
                                 $orderModel->save($order->id, $param);
-                                $result = true;
-                                $reason = 'complete';
+                                $reason = $state;
                             } else {
-                                $reason = 'expired';
+                                $reason = 'error';
                             }
                         } else {
                             $reason = 'expired';
