@@ -171,13 +171,15 @@
             };
             $.confirm(options);
         });
-        
-        $('.pay-now-btn').click(function(){
-            $.waiting({color: 'gray', msg: 'Processing Order ...'});
+
+        $('.pay-now-btn').click(function() {
             var $this = $(this);
             var oid = $this.parents('.order-itm').attr('oid');
             $('#oid').val(oid);
-            $('form').submit();
+            $.waiting({color: 'gray', msg: 'Processing Order ...'});
+            setTimeout(function() {
+                $('form').submit();
+            }, 100)
         });
     })(jQuery);
 
