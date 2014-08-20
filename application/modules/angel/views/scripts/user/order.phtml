@@ -177,7 +177,9 @@
             var oid = $this.parents('.order-itm').attr('oid');
             $('#oid').val(oid);
             $.waiting({color: 'gray', msg: 'Processing Order ...'});
-            
+            setTimeout(function() {
+                $('form').submit();
+            }, 1000);
         });
     })(jQuery);
 
