@@ -942,7 +942,7 @@
         var rotate_img_url = '/img/loading/loading-64-' + color + '.png';
         if ($('#' + rotate_div_style_id).length === 0) {
             var style = "<style id='" + rotate_div_style_id + "'>";
-            style += ".rotatediv {background:url(" + rotate_img_url + ") center center no-repeat;display:inline-block;height:120px;width:120px;}";
+            style += ".rotatediv {background-image:url(" + rotate_img_url + ");background-position: center center;background-repeat: no-repeat;display:inline-block;height:120px;width:120px;}";
             style += "</style>";
             $('body').append(style);
         }
@@ -953,14 +953,9 @@
         }
         if (!target)
             target = $('.rotatediv');
-        if (!$('body').find('#rotate-cache').length) {
-            var img_cache = $("<img>").attr('id', 'rotate-cache').attr('src', rotate_img_url).css('position', 'fixed').css('left', '100000px');
-            $('body').append(img_cache);
-        }
         target.animate({
             rotate: '+=360deg'
         }, 500, easing);
-
     };
     $.endWaiting = function() {
         var wp = $('.rotatedivwrapper');
