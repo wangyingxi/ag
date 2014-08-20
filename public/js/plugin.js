@@ -939,7 +939,7 @@
         if (!color)
             color = 'yellow';
         var rotate_div_style_id = 'rotate-div-style';
-        var rotate_img_url = '/img/loading/loading-64-' + color + '.png?v=1.1';
+        var rotate_img_url = '/img/loading/loading-64-' + color + '.png';
         if ($('#' + rotate_div_style_id).length === 0) {
             var style = "<style id='" + rotate_div_style_id + "'>";
             style += ".rotatediv {background:url(" + rotate_img_url + ") center center no-repeat;display:inline-block;height:120px;width:120px;}";
