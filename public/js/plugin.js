@@ -953,9 +953,14 @@
         }
         if (!target)
             target = $('.rotatediv');
+        if (!$('body').find('#rotate-cache').length) {
+            var img_cache = $("<img>").attr('id', 'rotate-cache').attr('src', rotate_img_url).css('position', 'fixed').css('left', '100000px');
+            $('body').append(img_cache);
+        }
         target.animate({
             rotate: '+=360deg'
         }, 500, easing);
+
     };
     $.endWaiting = function() {
         var wp = $('.rotatedivwrapper');
