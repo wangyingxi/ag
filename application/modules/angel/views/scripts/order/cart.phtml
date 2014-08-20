@@ -257,8 +257,10 @@ if ($this->me && $this->me->getUser()->address) {
         $('#checkout-btn').click(function() {
             if ($.cart.total()) {
                 $('#address-block').show();
-                $('html, body').animate({scrollTop: $('#pay-info').offset().top}, 300);
+                $('html, body').animate({scrollTop: $('#address-block').offset().top}, 300);
                 $('#contact').focus();
+                $(this).unbind('click');
+                $(this).css('opacity', 0.5);
             } else {
                 var html = "<p class='marginbottom5px'>Sorry the cart is empty now.</p><button class='sm-btn black-btn' onclick='location.reload();'>Refresh Page</button>";
                 $.alertbox({msg: html});
@@ -462,6 +464,7 @@ if ($this->me && $this->me->getUser()->address) {
 
     #address-block {
         display:none;
+        padding-top:100px;
     }
     #address-field-wrapper .cover {
         background-color:rgba(255,255,255,0.7);
