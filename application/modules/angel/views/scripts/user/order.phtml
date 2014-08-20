@@ -96,7 +96,7 @@
                                             <p class="x-status" ><?php echo $this->order_status_options[$order->status] ?></p>
                                         </div>
                                         <?php if ($order->status == 1): ?>
-                                            <a href="#" class="btn btn-warning btn-sm pay-now-btn">pay now</a>
+                                            <a href="javascript:void(0)" class="btn btn-warning btn-sm pay-now-btn">pay now</a>
                                             <a href="javascript:void(0)" class="btn btn-gray btn-sm remove-btn">remove</a>
                                         <?php elseif ($order->status == 2): ?>
                                             <p class="purple status-tip-2">
@@ -140,7 +140,9 @@
 
 
 </div>
-
+<form method="post" action="<?php echo $this->url(array(), 'paypal-pay') ?>">
+    <input type="hidden" name="oid" id="oid" />
+</form>
 <script type="text/javascript">
 
     (function($) {
@@ -168,6 +170,14 @@
                 }
             };
             $.confirm(options);
+        });
+        
+        $('.pay-now-btn').click(function(){
+            $.waiting({color: 'gray', msg: 'Processing Order ...'});
+            var $this = $(this);
+            var oid = $this.parents('.order-itm').attr('oid');
+            $('#oid').val(oid);
+            $('form').submit();
         });
     })(jQuery);
 
