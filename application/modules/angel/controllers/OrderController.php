@@ -158,6 +158,8 @@ class Angel_OrderController extends Angel_Controller_Action {
             $execution = new PaymentExecution();
             $execution->setPayer_id($payer_id);
             $response = $payment->execute($execution, $apiContext);
+//            var_dump($response);
+//            exit;
             $transactions = $response->getTransactions();
             if (count($transactions)) {
                 $transaction = $transactions[0];
@@ -180,14 +182,27 @@ class Angel_OrderController extends Angel_Controller_Action {
                                 } else {
                                     $param['status'] = 2;
                                 }
+                                $payer = $response->getPayer();
+                                $payer_info = $payer->getPayerInfo();
                                 if (!$this->me) {
-                                    $payer = $response->getPayer();
-                                    $payer_info = $payer->getPayerInfo();
                                     $bind_email = $payer_info->getEmail();
                                 } else {
                                     $bind_email = $this->me->getUser()->email;
                                 }
                                 $param['email'] = $bind_email;
+                                if ($order->selected_address_type == 2) {
+                                    // 发送到Paypal地址
+                                    $address = new \Documents\AddressDoc();
+                                    $address->contact = $payer_info->getFirstName() . ' ' . $payer_info->getLastName();
+                                    $paypal_address = $payer_info->getShippingAddress();
+                                    $address->street = $paypal_address->getLine1() . ' ' . $paypal_address->getLine2();
+                                    $address->phone = $payer_info->getPhone();
+                                    $address->state = $paypal_address->getState();
+                                    $address->city = $paypal_address->getCity();
+                                    $address->country = $paypal_address->getCountryCode();
+                                    $address->zip = $paypal_address->getPostalCode();
+                                    $param['address'] = $address;
+                                }
                                 $orderModel->save($order->id, $param);
                                 $reason = $state;
                             } else {
