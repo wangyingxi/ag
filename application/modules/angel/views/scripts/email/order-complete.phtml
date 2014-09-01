@@ -1,5 +1,6 @@
 <?php
 $order = $this->param['order'];
+var_dump($order->toArray());
 $username = 'Dear user';
 if ($order->address && $order->address->contact) {
     $username = 'Dear ' . $order->address->contact;
