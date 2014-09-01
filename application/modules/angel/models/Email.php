@@ -44,7 +44,7 @@ class Angel_Model_Email{
     // 通知担保人公司开始融资
     const EMAIL_GUARANTOR_COMPANY_START_FUNDING = 'guarantor-company-start-funding';
     
-    const EMAIL_ORDER_COMPLETE = 'order-complete';
+    const EMAIL_ORDER_COMPLETE = 'order_complete';
     
     public static function getSubject($template){
         switch($template){
@@ -71,7 +71,7 @@ class Angel_Model_Email{
     
     public static function sendEmail($emailService, $template, $to, $params, $subject=''){
         $subject = empty($subject) ? self::getSubject($template) : $subject;
-        echo $subject;exit;
+        
         return $emailService->sendEmail($template, $to, $subject, $params);
     }
 }
