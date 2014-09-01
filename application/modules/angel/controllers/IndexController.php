@@ -107,6 +107,8 @@ class Angel_IndexController extends Angel_Controller_Action {
                 $this->_helper->json(0);
             }
             $this->_helper->json(($result === false) ? 0 : 1);
+        } else {
+            $this->view->title = 'Forgot password';
         }
     }
 

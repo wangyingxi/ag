@@ -44,13 +44,14 @@ class Angel_Model_Email{
     // 通知担保人公司开始融资
     const EMAIL_GUARANTOR_COMPANY_START_FUNDING = 'guarantor-company-start-funding';
     
+    const EMAIL_ORDER_COMPLETE = 'order_complete';
     
     public static function getSubject($template){
         switch($template){
             case self::EMAIL_NEW_USER_EMAIL_VALIDATION:
-                return '帐号激活邮件';
+                return 'WELCOME MY FRIEND';
             case self::EMAIL_FORGOT_PASSWORD:
-                return '你的登录密码';
+                return 'New Password';
             case self::EMAIL_NEW_USER_EMAIL_VALIDATION:
                 return '有用户提交了实名认证申请';
             case self::EMAIL_IDENTITY_INFO_REFUSED:
@@ -63,6 +64,8 @@ class Angel_Model_Email{
                 return '你的公司信息申请未通过审核';
             case self::EMAIL_COMPANY_INFO_ACCEPTED:
                 return '你的公司信息申请通过了审核';
+            case self::EMAIL_ORDER_COMPLETE:
+                return 'Order Complete Notification';
         }
     }
     

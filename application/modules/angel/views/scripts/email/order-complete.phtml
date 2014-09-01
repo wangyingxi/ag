@@ -1,0 +1,12 @@
+<?php
+$order = $this->order;
+$username = 'dear user';
+if ($order->address && $order->address->contact) {
+    $username = 'dear ' . $order->address->contact;
+}
+?>
+
+<div>
+    <p><?php echo $username ?> : </p>
+    <p>Order <?php echo $order->oid?> is completed. we will dispatch items for you asap! Thanks for your kindly patience!</p>
+</div>

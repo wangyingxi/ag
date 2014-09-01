@@ -22,10 +22,12 @@
                 $.currency.init();
                 $('#cart-total').html($.cart.total());
                 $('#login-btn').click(function() {
-                    var options = {content: $('.login-window').clone(true),
+                    var options = {
+                        content: $('.login-window').clone(true),
                         padding: 0,
                         modal: true,
-                        width: 400};
+                        width: 400
+                    };
                     $.popup(options);
                 });
                 $('#my-username').clickToggle();
@@ -57,7 +59,7 @@
                     <div class="valid-result mg red text-center"><i class="halflings warning-sign"></i> <span>Oops! Password does not match. Please try again</span></div>
 
                     <button class="mg" onclick="login(this, '<?php echo $this->url(array(), 'login') ?>')">Login</button>
-                    <div class="forgot-pwd"><a href="#">Forgot password</a></div>
+                    <div class="forgot-pwd"><a href="<?php echo $this->url(array(), 'forgot-password') ?>">Forgot password</a></div>
                     <div class="clear-line"></div>
                     <p class="text-center">Not a member yet ? <a href="javascript:void(0)" tag="register" onclick="switchLoginWindowTo(this)" class="red">Register now</a></p>
                 </div>

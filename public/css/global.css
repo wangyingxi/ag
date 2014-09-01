@@ -127,3 +127,12 @@ Common css
 
     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false); /* IE6~IE9 */
 }
+.font14px {
+    font-size:14px;
+}
+.font16px {
+    font-size:16px;
+}
+.font18px {
+    font-size:18px;
+}

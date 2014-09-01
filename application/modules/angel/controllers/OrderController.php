@@ -205,6 +205,13 @@ class Angel_OrderController extends Angel_Controller_Action {
                                 }
                                 $orderModel->save($order->id, $param);
                                 $reason = $state;
+
+                                // send email
+                                try {
+                                    $orderModel->orderCompleteMail($order);
+                                } catch (Exception $ex) {
+                                    // Nothing to do.
+                                }
                             } else {
                                 $reason = 'error';
                             }

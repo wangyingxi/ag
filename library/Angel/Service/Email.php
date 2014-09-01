@@ -26,6 +26,7 @@ class Angel_Service_Email{
             $layout->setLayout('email');
             $view = $layout->getView();
             $view->domain_url = $this->_bootstrap_options['site']['domainurl'];
+            $view->site_name = $this->_bootstrap_options['site']['sitename'];
 
             $view = new Zend_View();
             $view->params = $params;
