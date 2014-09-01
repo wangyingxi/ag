@@ -1,20 +1,20 @@
 <?php
 
-class Angel_Service_Email{
+class Angel_Service_Email {
 
     protected $_bootstrap_options;
-    
-    public function __construct($bootstrap_options){
+
+    public function __construct($bootstrap_options) {
         $this->_bootstrap_options = $bootstrap_options;
     }
-    
-    public function sendEmail($template, $to, $subject, $params=array()){
-        try{
+
+    public function sendEmail($template, $to, $subject, $params = array(), $admin = '') {
+        try {
             $config = array('auth' => 'Login',
-                            'port' => $this->_bootstrap_options['mail']['port'],
-                            'ssl' => 'ssl',
-                            'username' => $this->_bootstrap_options['mail']['username'],
-                            'password' => $this->_bootstrap_options['mail']['password']);
+                'port' => $this->_bootstrap_options['mail']['port'],
+                'ssl' => 'ssl',
+                'username' => $this->_bootstrap_options['mail']['username'],
+                'password' => $this->_bootstrap_options['mail']['password']);
 
             $tr = new Zend_Mail_Transport_Smtp($this->_bootstrap_options['mail']['server'], $config);
             Zend_Mail::setDefaultTransport($tr);
@@ -32,21 +32,22 @@ class Angel_Service_Email{
             $view->params = $params;
             $view->setScriptPath($this->_bootstrap_options['mail']['view_script']);
 
-            $layout->content = $view->render($template.'.phtml');
+            $layout->content = $view->render($template . '.phtml');
 
             $content = $layout->render();
-            $mail->setBodyText(preg_replace('/<[^>]+>/','', $content));
+            $mail->setBodyText(preg_replace('/<[^>]+>/', '', $content));
             $mail->setBodyHtml($content);
-            $mail->setFrom($this->_bootstrap_options['mail']['from'],  $this->_bootstrap_options['mail']['from_name']);
+            $mail->setFrom($this->_bootstrap_options['mail']['from'], $this->_bootstrap_options['mail']['from_name']);
             $mail->addTo($to);
+            if ($admin)
+                $mail->addTo($admin);
             $mail->setSubject($subject);
             $mail->send();
-        }
-        catch (Exception $e){
+        } catch (Exception $e) {
             // 这里要完善
         }
-        
+
         return true;
     }
-    
+
 }
