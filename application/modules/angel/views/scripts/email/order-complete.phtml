@@ -1,8 +1,8 @@
 <?php
 $order = $this->order;
-$username = 'dear user';
+$username = 'Dear user';
 if ($order->address && $order->address->contact) {
-    $username = 'dear ' . $order->address->contact;
+    $username = 'Dear ' . $order->address->contact;
 }
 ?>
 

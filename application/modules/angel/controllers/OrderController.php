@@ -204,6 +204,8 @@ class Angel_OrderController extends Angel_Controller_Action {
                                     $param['address'] = $address;
                                 }
                                 $orderModel->save($order->id, $param);
+                                $order->email = $param['email'];
+                                $order->address = $param['address'];
                                 $reason = $state;
 
                                 // send email

@@ -50,11 +50,10 @@ class Angel_Model_Order extends Angel_Model_AbstractModel {
     public function orderCompleteMail($order) {
         if (!$order->email)
             return;
-
         $params = array("order" => $order);
         $router = Zend_Controller_Front::getInstance()->getRouter();
-        $params['url'] = $this->_bootstrap_options['site']['domainurl'] . $router->assemble(array(), 'login');
         Angel_Model_Email::sendEmail($this->_container->get('email'), Angel_Model_Email::EMAIL_ORDER_COMPLETE, $order->email, $params);
+
         return;
     }
 
