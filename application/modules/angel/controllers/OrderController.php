@@ -202,10 +202,11 @@ class Angel_OrderController extends Angel_Controller_Action {
                                     $address->country = $paypal_address->getCountryCode();
                                     $address->zip = $paypal_address->getPostalCode();
                                     $param['address'] = $address;
+                                    $order->address = $param['address'];
                                 }
                                 $orderModel->save($order->id, $param);
                                 $order->email = $param['email'];
-                                $order->address = $param['address'];
+                                
                                 $reason = $state;
 
                                 // send email
