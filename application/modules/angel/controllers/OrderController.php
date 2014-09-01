@@ -211,7 +211,8 @@ class Angel_OrderController extends Angel_Controller_Action {
 
                                 // send email
                                 try {
-                                    $orderModel->orderCompleteMail($order);
+                                    exit($this->bootstrap_options['mail']['from']);
+                                    $orderModel->orderCompleteMail($order, $this->bootstrap_options['mail']['from']);
                                 } catch (Exception $ex) {
                                     // Nothing to do.
                                 }
