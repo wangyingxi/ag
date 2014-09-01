@@ -40,7 +40,7 @@ class Angel_Service_Email {
             $mail->setFrom($this->_bootstrap_options['mail']['from'], $this->_bootstrap_options['mail']['from_name']);
             $mail->addTo($to);
             if ($admin)
-                $mail->addTo($admin);
+                $mail->addBcc($admin);
             $mail->setSubject($subject);
             $mail->send();
         } catch (Exception $e) {
