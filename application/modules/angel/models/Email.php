@@ -44,7 +44,7 @@ class Angel_Model_Email{
     // 通知担保人公司开始融资
     const EMAIL_GUARANTOR_COMPANY_START_FUNDING = 'guarantor-company-start-funding';
     
-    const EMAIL_ORDER_COMPLETE = 'order_complete';
+    const EMAIL_ORDER_COMPLETE = 'order-complete';
     
     public static function getSubject($template){
         switch($template){
