@@ -62,7 +62,25 @@ class Angel_ManageController extends Angel_Controller_Action {
             exit;
         }
     }
+    public function orderListAction() {
+        $page = $this->request->getParam('page');
+        if (!$page) {
+            $page = 1;
+        }
+        $orderModel = $this->getModel('order');
+        $paginator = $orderModel->getAll();
+        $paginator->setItemCountPerPage($this->bootstrap_options['default_page_size']);
+        $paginator->setCurrentPageNumber($page);
+        $resource = array();
+        foreach ($paginator as $r) {
 
+            $resource[] = array('title' => $r->title,
+                'id' => $r->id,
+                'sub_title' => $r->sub_title,
+                'address' => $r->address,
+                'owner' => $r->owner);
+        }
+    }
     public function productListAction() {
         $page = $this->request->getParam('page');
         if (!$page) {

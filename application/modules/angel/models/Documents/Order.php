@@ -33,6 +33,12 @@ class Order extends AbstractDocument{
     /** @ODM\Int */
     protected $status = 1;  // 订单状态（1，awaiting payment（等待支付）；2，pending（echeck）；3，dispatching（发货中）；4，dispatched（已发货）；5，received（已收货）；6，comment（已发表评论））
     
+    /** @ODM\String */
+    protected $track_number;
+    
+    /** @ODM\String */
+    protected $shipper;
+    
     /** @ODM\Date */
     protected $paid_at;
     
