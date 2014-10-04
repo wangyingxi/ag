@@ -19,8 +19,8 @@
         <script type="text/javascript" src="<?php echo $this->jsPath('plugin.js'); ?>"></script>
         <script type="text/javascript">
             $(document).ready(function() {
-                $.currency.init();
-                $('#cart-total').html($.cart.total());
+//                $.currency.init();
+//                $('#cart-total').html($.cart.total());
                 $('#login-btn').click(function() {
                     var options = {
                         content: $('.login-window').clone(true),
@@ -92,23 +92,24 @@
                 <div class="grid_5">
                     <a href="#" class="logo l-ft"><img src="/img/logo.png" alt="welcome to sitename"/></a>
                 </div>
-                <div class="grid_10">
-                    <div class="search-bar">
+                <div class="grid_14">
+                    <img src="/img/P92033858697.38329-4"/>
+<!--                    <div class="search-bar">
                         <input type="text" placeholder="Search keywords or model #" />
-                    </div>
+                    </div>-->
                 </div>
-                <div class="grid_9">
+                <div class="grid_5">
                     <div class="info-bar">
                         <div class="l-ft">
                             <?php if (!isset($this->me)): ?>
-                                <a href="#" id="login-btn">Login</a>
+                            <a href="#" id="login-btn" class="btn btn-sm btn-default">Login / Register</a>
                             <?php else: ?>
                                 <span class="light-gray">hey</span> <a href="#" id="my-username" rel="my-settings"><?php echo $this->me->getUser()->username ?></a>
 
 
                             <?php endif; ?>
                         </div>
-                        <span class="vsplr l-ft"></span>
+<!--                        <span class="vsplr l-ft"></span>
                         <div class="cart-bar l-ft">
                             Cart
                             <a id="cart-total" href="<?php echo $this->url(array(), 'cart') ?>"> 0 </a>
@@ -116,10 +117,10 @@
                         <span class="vsplr l-ft"></span>
 
                         <div class="currency-bar l-ft">
-                            <?php foreach ($this->currency as $key => $val): ?>
-                                <a class="price-option" currency="<?php echo $key ?>" currency-symbol="<?php echo $this->currency_symbol[$key] ?>" href="javascript:void(0)"> <?php echo $this->currency_symbol[$key] . ' ' . $key ?> </a>
-                            <?php endforeach; ?>
-                        </div>
+                        <?php foreach ($this->currency as $key => $val): ?>
+                                    <a class="price-option" currency="<?php echo $key ?>" currency-symbol="<?php echo $this->currency_symbol[$key] ?>" href="javascript:void(0)"> <?php echo $this->currency_symbol[$key] . ' ' . $key ?> </a>
+                        <?php endforeach; ?>
+                        </div>-->
                         <div class="clear"></div>
                     </div>
                 </div>
@@ -173,9 +174,9 @@
                 <i class="halflings map-marker"></i>
                 <a href="<?php echo $this->url(array(), 'user-address') ?>">Update Address</a>
             </div>
-            <div class="dropdown-itm">
-                <a href="<?php echo $this->url(array(), 'user-order') ?>">Orders</a>
-            </div>
+            <!--            <div class="dropdown-itm">
+                            <a href="<?php echo $this->url(array(), 'user-order') ?>">Orders</a>
+                        </div>-->
             <div class="dropdown-itm">
                 <a href="<?php echo $this->url(array(), 'reset-password') ?>">Reset Password</a>
             </div>

@@ -28,6 +28,9 @@ class Product extends AbstractDocument {
     /** @ODM\String */
     protected $description;
 
+    /** @ODM\String */
+    protected $buy_link;
+    
     /** @ODM\ReferenceMany(targetDocument="\Documents\Photo") */
     protected $photo = array();
 

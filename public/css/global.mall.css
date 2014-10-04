@@ -357,9 +357,13 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
     padding: 20px 0 0;
 }
 .wp.top {
-    /*box-shadow:0 0 4px rgba(0,0,0,0.2);*/
-    background:#FFF;
-    border-bottom: 1px solid #e0e0e0;
+    box-shadow:0 0 3px rgba(0,0,0,0.15);
+    background:#FBFBFB;
+    /*border-bottom: 1px solid #FFF;*/
+    z-index:2;
+}
+.wp.top:hover {
+    box-shadow:0 1px 4px rgba(0,0,0,0.2);
 }
 .content {
     padding-bottom:20px;
@@ -367,6 +371,7 @@ input[type="button"][disabled="disabled"], input[type="submit"][disabled="disabl
 }
 .wbg-wrapper {
     background:#fff;
+    box-shadow:0 0 3px rgba(0,0,0,0.15);
 }
 .wp.top .container_24 {
     /*border-bottom:1px solid #F0F0F0;*/

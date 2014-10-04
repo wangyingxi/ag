@@ -118,6 +118,10 @@ $model = $this->model;
                 <textarea row="10" class="form-control" id="description" name="description"><?php echo $model->description ?></textarea>
             </div>
             <div class="form-group">
+                <label>购买链接：</label>
+                <input type="text" class="form-control" id="buy_link" name="buy_link" data-toggle="popover" value="<?php echo $model->buy_link ?>">
+            </div>
+            <div class="form-group">
                 <label>商品所在地（仓储）：</label>
                 <input type="hidden" id="location" name='location'/>
                 <ul class='location-ul clearfix'>

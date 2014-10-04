@@ -137,15 +137,15 @@ if ($model->css) {
                 <?php endif; ?>
 
                 <div id="product-buy" class="clearfix">
-                    <div id="set-qty">
+<!--                    <div id="set-qty">
                         <button id="sub-btn"></button>
                         <input type="text" id="qty" maxlength="2" value="1"/>
                         <button id="add-btn"></button>
-                    </div>
+                    </div>-->
 
-                    <button id="add-to-cart">
-                        <i class="ico"></i>Add To Cart
-                    </button>
+                    <a href="<?php echo $model->buy_link; ?>" id="add-to-cart">
+                        <i class="ico"></i>Buy at eBay
+                    </a>
 
                     <button id="view-cart" class="green-btn" onclick="location.href = '/cart'">
                         <i class="ico"></i>Added &amp; View Cart
@@ -163,6 +163,11 @@ if ($model->css) {
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
+                    <div class="clear-30"></div>
+                    <div>
+                        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f4a185e7d9e1842" async></script>
+                        <div class="addthis_sharing_toolbox"></div>
+                    </div>
             </div>
         </div>
     </div>
@@ -255,31 +260,31 @@ if ($model->css) {
 <script type="text/javascript">
     (function($) {
         $('.big-photo').xCenter();
-        var qty = $('#qty');
-        qty.integerInput();
-        var minus = $('#sub-btn');
-        minus.bind('click', function() {
-            var val = parseInt(qty.val());
-            if (typeof val === 'number' && !isNaN(val)) {
-                val = val - 1;
-                if (val == 0) {
-                    val = 1;
-                }
-                qty.val(val);
-            } else {
-                qty.val(1);
-            }
-        });
-        var plus = $('#add-btn');
-        plus.bind('click', function() {
-            var val = parseInt(qty.val());
-            if (typeof val === 'number' && !isNaN(val)) {
-                val = val + 1;
-                qty.val(val);
-            } else {
-                qty.val(1);
-            }
-        });
+//        var qty = $('#qty');
+//        qty.integerInput();
+//        var minus = $('#sub-btn');
+//        minus.bind('click', function() {
+//            var val = parseInt(qty.val());
+//            if (typeof val === 'number' && !isNaN(val)) {
+//                val = val - 1;
+//                if (val == 0) {
+//                    val = 1;
+//                }
+//                qty.val(val);
+//            } else {
+//                qty.val(1);
+//            }
+//        });
+//        var plus = $('#add-btn');
+//        plus.bind('click', function() {
+//            var val = parseInt(qty.val());
+//            if (typeof val === 'number' && !isNaN(val)) {
+//                val = val + 1;
+//                qty.val(val);
+//            } else {
+//                qty.val(1);
+//            }
+//        });
 
         // set gallary selected
         var __cls1 = 'selected';
@@ -321,12 +326,12 @@ if ($model->css) {
             }
         });
         $('#add-to-cart').click(function() {
-            var __DURATION = 100;
-            $.cart.add($('#product-id').val(), parseInt($('#qty').val()));
-            $('#cart-total').html($.cart.total());
-            $(this).fadeOut(__DURATION, function() {
-                $('#view-cart').fadeIn(__DURATION);
-            });
+//            var __DURATION = 100;
+//            $.cart.add($('#product-id').val(), parseInt($('#qty').val()));
+//            $('#cart-total').html($.cart.total());
+//            $(this).fadeOut(__DURATION, function() {
+//                $('#view-cart').fadeIn(__DURATION);
+//            });
 
         });
 

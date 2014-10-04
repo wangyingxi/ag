@@ -135,6 +135,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $sku = $this->request->getParam('sku');
             $status = $this->request->getParam('status');
             $description = $this->request->getParam('description');
+            $buy_link = $this->request->getParam('buy_link');
             $photo = $this->decodePhoto();
             $location = $this->getLocation();
             $base_price = floatval($this->request->getParam('base_price'));
@@ -170,7 +171,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                             $this->_redirect($this->view->url(array(), 'manage-result') . '?error="notfound category"');
                         }
                     }
-                    $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand, $category, $css);
+                    $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $buy_link, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand, $category, $css);
                 }
             } catch (Angel_Exception_Product $e) {
                 $error = $e->getDetail();
@@ -206,6 +207,7 @@ class Angel_ManageController extends Angel_Controller_Action {
             $sku = $this->request->getParam('sku');
             $status = $this->request->getParam('status');
             $description = $this->request->getParam('description');
+            $buy_link = $this->request->getParam('buy_link');
             $photo = $this->decodePhoto();
             $location = $this->getLocation();
             $base_price = floatval($this->request->getParam('base_price'));
@@ -245,7 +247,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                     if ($isSkuExist) {
                         $error = "该SKU已经存在，不能重复使用";
                     } else {
-                        $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand, $category, $css);
+                        $result = $productModel->addProduct($title, $short_title, $sub_title, $sku, $status, $description, $buy_link, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand, $category, $css);
                     }
                 } else {
                     // EDIT
@@ -258,7 +260,7 @@ class Angel_ManageController extends Angel_Controller_Action {
                     if ($isSkuExist) {
                         $error = "该SKU已经存在，不能重复使用";
                     } else {
-                        $result = $productModel->saveProduct($id, $title, $short_title, $sub_title, $sku, $status, $description, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand, $category, $css);
+                        $result = $productModel->saveProduct($id, $title, $short_title, $sub_title, $sku, $status, $description, $buy_link, $photo, $location, $base_price, $selling_price, $owner, $scale, $brand, $category, $css);
                     }
                 }
             } catch (Angel_Exception_Product $e) {
