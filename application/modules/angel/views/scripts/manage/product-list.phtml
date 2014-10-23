@@ -70,12 +70,12 @@ $model = $this->model;
                     <p><?php echo $p['title'] ?></p>
                     <p><i><?php echo $p['sub_title'] ?></i></p>
                 </div>
-                <div class="btn-group">
-                    <a href="<?php echo $this->url(array(), 'manage-product-save') . '?id=' . $p['id'] ?>" class="btn btn-info btn-sm">编辑</a>
-                    <a href="<?php echo $this->url(array(), 'manage-product-save') . '?copy=true&&id=' . $p['id'] ?>" class="btn btn-default btn-sm">复制</a>
+                <div class="btn-group"></div>
 
-                    <a target="_blank" href="<?php echo $this->url(array('id' => $p['id']), 'product-view') . '/D' ?>" class="btn btn-default btn-sm">预览</a>
-                </div>
+                <a href="<?php echo $this->url(array(), 'manage-product-save') . '?id=' . $p['id'] ?>" class="btn btn-info btn-sm">编辑</a>
+                <a href="<?php echo $this->url(array(), 'manage-product-save') . '?copy=true&&id=' . $p['id'] ?>" class="btn btn-default btn-sm">复制</a>
+
+                <a target="_blank" href="<?php echo $this->url(array('id' => $p['id']), 'product-view') ?>" class="btn btn-default btn-sm">预览</a>
             </div>
         </div>
         <?php $c ++; ?>

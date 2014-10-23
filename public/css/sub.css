@@ -118,7 +118,7 @@
 #product-buy {
     padding: 20px 0;
 }
-#product-buy #add-to-cart, #product-buy #view-cart {
+#product-buy #add-to-cart, #product-buy #view-cart, .add-to-cart-list {
     color: #FFF;
     display: block;
     height: 42px;
@@ -126,7 +126,10 @@
     margin: 0;
     padding: 5px 26px 5px 24px;
 }
-#product-buy #add-to-cart {
+.add-to-cart-list {
+    padding:4px 16px 4px 16px;
+}
+#product-buy #add-to-cart, .add-to-cart-list {
     display:inline-block;
     height: 32px;
     line-height: 30px;
@@ -135,19 +138,29 @@
     background-image: -webkit-gradient(linear,left top,left bottom,from(#0079bc),to(#00509d));
     border:none;
 }
-#product-buy #add-to-cart:hover {
+.add-to-cart-list {
+    height:14px;
+    line-height:14px;
+    font-size:12px;
+    visibility: hidden;
+}
+.pdt-grid:hover .add-to-cart-list {
+    visibility: visible;
+}
+#product-buy #add-to-cart:hover, .add-to-cart-list:hover {
     background: #00509d;
+    color:#FFF;
 }
 #product-buy #view-cart {
     display:none;
 }
-#product-buy #add-to-cart, #product-buy #set-qty, #product-buy #view-cart {
+#product-buy #add-to-cart, #product-buy #set-qty, #product-buy #view-cart, .add-to-cart-list {
     border-radius: 3px;
 }
-#product-buy #add-to-cart *, #product-buy #view-cart * {
+#product-buy #add-to-cart *, #product-buy #view-cart *, .add-to-cart-list * {
     float: left;
 }
-#product-buy #add-to-cart .ico, #product-buy #view-cart .ico {
+#product-buy #add-to-cart .ico, #product-buy #view-cart .ico, .add-to-cart-list .ico {
     background-position: -62px 1px;
     display: inline-block;
     height: 30px;
@@ -396,4 +409,30 @@
 }
 .user-page-lnk .btn.selected {
     background:#333 !important;
+}
+.pdt-grid {
+    
+    float:left;
+    margin-right:26px;
+    width:218px;
+}
+.pdt-grid.ed {
+    margin-right:0;
+}
+.pdt-img-a {
+    border-bottom:1px dotted #bbb;
+    display:block;
+    width:100%;
+}
+.pdt-img {
+    width:100%;
+}
+.pdt-ct {
+    padding:20px 0;
+}
+.pdt-tt {
+    margin-bottom:10px;
+}
+.pdt-wp {
+    margin-bottom:10px;
 }

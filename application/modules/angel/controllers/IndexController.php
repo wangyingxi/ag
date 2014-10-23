@@ -9,12 +9,37 @@ class Angel_IndexController extends Angel_Controller_Action {
     }
 
     public function indexAction() {
-        $this->_forward('login');
+//        $this->_forward('login');
+        $productModel = $this->getModel('product');
+        $paginator = $productModel->getAll(false);
+        $resource = array();
+        foreach ($paginator as $r) {
+            $path = $this->bootstrap_options['image_broken_ico']['middle'];
+            if (count($r->photo)) {
+                try {
+                    if ($r->photo[0]->name) {
+                        $path = $this->view->photoImage($r->photo[0]->name . $r->photo[0]->type, 'main');
+                    }
+                } catch (Doctrine\ODM\MongoDB\DocumentNotFoundException $e) {
+                    // 图片被删除的情况
+                }
+            }
+
+            $resource[] = array('title' => $r->title,
+                'id' => $r->id,
+                'sub_title' => $r->sub_title,
+                'location' => $r->location,
+                'buy_link' => $r->buy_link,
+                'path' => $path);
+        }
+        $this->view->products = $resource;
     }
+
     public function testAction() {
 //        $this->_helper->json(1);
 //        var_dump('hahaha');exit;
     }
+
     /**
      * 登录
      */
