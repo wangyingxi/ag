@@ -101,7 +101,7 @@ if ($model->css) {
                 <?php if ($model->brand): ?>
                     <h2 id="product-brand" class="clearfix">
                         <span>by</span>
-                        <a href="#" class="bold"><?php echo strtoupper($model->brand->name) ?></a>
+                        <a href="#"><?php echo strtoupper($model->brand->name) ?></a>
                         <?php if ($model->brand->logo): ?>
                             <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo"/>
                         <?php endif; ?>
@@ -182,7 +182,7 @@ if ($model->css) {
             </div>
 
             <?php if ($model->brand): ?>
-                <p class="tt margintop20px bdsprl">
+                <!--<p class="tt margintop20px bdsprl">
                     ABOUT <?php echo strtoupper($model->brand->name) ?>
                 </p>
                 <div class="ct">
@@ -234,7 +234,7 @@ if ($model->css) {
                         </dd>
                     </dl>
                     <div class="clear"></div>
-                </div>
+                </div>-->
             <?php endif; ?>
 
 
@@ -242,7 +242,7 @@ if ($model->css) {
         </div>
         <div class="grid_10">
             <p class="tt">
-                SHIPPING &amp; RETURNS
+                RELATIVE PRODUCTS
             </p>
 
         </div>
