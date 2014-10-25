@@ -118,7 +118,7 @@
 
 }
 #product-buy {
-    padding: 20px 0;
+    padding: 20px 0 0 0;
 }
 #product-buy #add-to-cart, #product-buy #view-cart, .add-to-cart-list {
     color: #FFF;
