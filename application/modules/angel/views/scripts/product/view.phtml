@@ -68,16 +68,6 @@ if ($model->css) {
                 <?php
                 $path = $this->photoImage($model->photo[0]->name . $model->photo[0]->type, 'large');
                 ?>
-                <a href="javascript:void(0)" id="big-photo-link" class="clearfix">
-                    <img class="big-photo" src="<?php echo $path ?>"/>
-                </a>
-            <?php endif; ?>
-            <div class="clear"></div>
-
-        </div>
-
-        <div class="grid_10">
-            <div class="lpad-30">
                 <ul id="breadcrumb" class="clearfix">
                     <li>
                         <a href="/">HOME</a>
@@ -96,6 +86,17 @@ if ($model->css) {
                     <?php endif; ?>
 
                 </ul>
+                <a href="javascript:void(0)" id="big-photo-link" class="clearfix">
+                    <img class="big-photo" src="<?php echo $path ?>"/>
+                </a>
+            <?php endif; ?>
+            <div class="clear"></div>
+
+        </div>
+
+        <div class="grid_10">
+            <div class="lpad-30">
+
 
                 <h1 id="product-title"><?php echo $model->title ?></h1>
                 <?php if ($model->brand): ?>
@@ -137,11 +138,11 @@ if ($model->css) {
                 <?php endif; ?>
 
                 <div id="product-buy" class="clearfix">
-<!--                    <div id="set-qty">
-                        <button id="sub-btn"></button>
-                        <input type="text" id="qty" maxlength="2" value="1"/>
-                        <button id="add-btn"></button>
-                    </div>-->
+                    <!--                    <div id="set-qty">
+                                            <button id="sub-btn"></button>
+                                            <input type="text" id="qty" maxlength="2" value="1"/>
+                                            <button id="add-btn"></button>
+                                        </div>-->
 
                     <a href="<?php echo $model->buy_link; ?>" id="add-to-cart">
                         <i class="ico"></i>Buy at eBay
@@ -163,11 +164,11 @@ if ($model->css) {
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
-                    <div class="clear-30"></div>
-                    <div>
-                        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f4a185e7d9e1842" async></script>
-                        <div class="addthis_sharing_toolbox"></div>
-                    </div>
+                <div class="clear-30"></div>
+                <div>
+                    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f4a185e7d9e1842" async></script>
+                    <div class="addthis_sharing_toolbox"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -182,59 +183,59 @@ if ($model->css) {
             </div>
 
             <?php if ($model->brand): ?>
-                <!--<p class="tt margintop20px bdsprl">
-                    ABOUT <?php echo strtoupper($model->brand->name) ?>
-                </p>
-                <div class="ct">
-                    <style>
-                        .bdsprl {
-                            border-top:1px solid #E0E0E0;
-                            margin-right:10px;
-                            padding-top:20px;
-                        }
-                        #product-brand-logo-big {
-                            border-radius:200px;
-                            display:block;
-                            float:left;
-                            height:80px;
-                            width:80px;
-                        }
-                        #brand-statement {
-                            float:left;
-                            width:430px
-                        }
-                        #brand-statement dt {
-                            font-weight:bold;
-                        }
-                        #brand-statement dt, #brand-statement dd {
-                            padding-left:20px;
-                        }
-                        #brand-statement dd {
-                            font-size:13px;
-                        }
-                        #brand-statement .slim-btn {
-                            margin-top:15px;
-                            padding: 0 22px;
-                        }
-                    </style>
-                    <?php if ($model->brand->logo): ?>
-                        <a target="_blank" href="#">
-                            <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
-                        </a>
-                    <?php endif; ?>
-                    <dl id="brand-statement">
-                        <dt>
-                        <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
-                        </dt>
-                        <dd>
-                            <?php echo $model->brand->description; ?>
-                        </dd>
-                        <dd>
-                            <a href="#" class="slim-btn btn-sm">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
-                        </dd>
-                    </dl>
-                    <div class="clear"></div>
-                </div>-->
+                    <!--<p class="tt margintop20px bdsprl">
+                        ABOUT <?php echo strtoupper($model->brand->name) ?>
+                    </p>
+                    <div class="ct">
+                        <style>
+                            .bdsprl {
+                                border-top:1px solid #E0E0E0;
+                                margin-right:10px;
+                                padding-top:20px;
+                            }
+                            #product-brand-logo-big {
+                                border-radius:200px;
+                                display:block;
+                                float:left;
+                                height:80px;
+                                width:80px;
+                            }
+                            #brand-statement {
+                                float:left;
+                                width:430px
+                            }
+                            #brand-statement dt {
+                                font-weight:bold;
+                            }
+                            #brand-statement dt, #brand-statement dd {
+                                padding-left:20px;
+                            }
+                            #brand-statement dd {
+                                font-size:13px;
+                            }
+                            #brand-statement .slim-btn {
+                                margin-top:15px;
+                                padding: 0 22px;
+                            }
+                        </style>
+                <?php if ($model->brand->logo): ?>
+                                <a target="_blank" href="#">
+                                    <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
+                                </a>
+                <?php endif; ?>
+                        <dl id="brand-statement">
+                            <dt>
+                            <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
+                            </dt>
+                            <dd>
+                <?php echo $model->brand->description; ?>
+                            </dd>
+                            <dd>
+                                <a href="#" class="slim-btn btn-sm">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
+                            </dd>
+                        </dl>
+                        <div class="clear"></div>
+                    </div>-->
             <?php endif; ?>
 
 
@@ -258,8 +259,8 @@ if ($model->css) {
     </div>
 </div>
 <script type="text/javascript">
-    (function($) {
-        $('.big-photo').xCenter();
+                        (function($) {
+                            $('.big-photo').xCenter();
 //        var qty = $('#qty');
 //        qty.integerInput();
 //        var minus = $('#sub-btn');
@@ -286,46 +287,46 @@ if ($model->css) {
 //            }
 //        });
 
-        // set gallary selected
-        var __cls1 = 'selected';
-        var __cls2 = '.s-img-wp';
-        var s_img = $(__cls2);
-        if (s_img.length > 0) {
-            $(s_img[0]).addClass(__cls1);
-        }
+                            // set gallary selected
+                            var __cls1 = 'selected';
+                            var __cls2 = '.s-img-wp';
+                            var s_img = $(__cls2);
+                            if (s_img.length > 0) {
+                                $(s_img[0]).addClass(__cls1);
+                            }
 
-        s_img.click(function() {
-            var $this = $(this).closest(__cls2);
-            if ($this.hasClass(__cls1)) {
-                return;
-            }
-            $this.siblings(__cls2).removeClass(__cls1);
-            $this.addClass(__cls1);
+                            s_img.click(function() {
+                                var $this = $(this).closest(__cls2);
+                                if ($this.hasClass(__cls1)) {
+                                    return;
+                                }
+                                $this.siblings(__cls2).removeClass(__cls1);
+                                $this.addClass(__cls1);
 
-            var large = $this.attr('large');
-            $('#big-photo-link .big-photo').attr('src', large);
-        });
+                                var large = $this.attr('large');
+                                $('#big-photo-link .big-photo').attr('src', large);
+                            });
 
-        $('.rt-arr-btn').click(function() {
-            var s = $(__cls2 + "." + __cls1);
-            var next = s.next(__cls2);
-            if (next.length) {
-                next.click();
-            } else {
-                $(s.siblings(__cls2).get(0)).click();
-            }
-        });
+                            $('.rt-arr-btn').click(function() {
+                                var s = $(__cls2 + "." + __cls1);
+                                var next = s.next(__cls2);
+                                if (next.length) {
+                                    next.click();
+                                } else {
+                                    $(s.siblings(__cls2).get(0)).click();
+                                }
+                            });
 
-        $('.lt-arr-btn').click(function() {
-            var s = $(__cls2 + "." + __cls1);
-            var prev = s.prev(__cls2);
-            if (prev.length) {
-                prev.click();
-            } else {
-                $(s.siblings(__cls2).get(s.siblings(__cls2).length - 1)).click();
-            }
-        });
-        $('#add-to-cart').click(function() {
+                            $('.lt-arr-btn').click(function() {
+                                var s = $(__cls2 + "." + __cls1);
+                                var prev = s.prev(__cls2);
+                                if (prev.length) {
+                                    prev.click();
+                                } else {
+                                    $(s.siblings(__cls2).get(s.siblings(__cls2).length - 1)).click();
+                                }
+                            });
+                            $('#add-to-cart').click(function() {
 //            var __DURATION = 100;
 //            $.cart.add($('#product-id').val(), parseInt($('#qty').val()));
 //            $('#cart-total').html($.cart.total());
@@ -333,7 +334,7 @@ if ($model->css) {
 //                $('#view-cart').fadeIn(__DURATION);
 //            });
 
-        });
+                            });
 
-    })(jQuery);
+                        })(jQuery);
 </script>
