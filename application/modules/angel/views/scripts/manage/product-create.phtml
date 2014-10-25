@@ -57,6 +57,9 @@
     .scale-ul li {
         margin-right: 30px;
     }
+    #description {
+        height:200px;
+    }
 </style>
 <h1 class="page-title"><?php echo $this->title ?></h1>
 <div class="row">
@@ -124,6 +127,7 @@
                     <?php foreach ($this->location as $key => $val): ?>
                         <li>
                             <input type="checkbox" id="<?php echo $key ?>"/> <label for="<?php echo $key ?>"><?php echo $val; ?>仓储</label>
+                            <input type="text" id="<?php echo $key ?>-link" value="" placeholder="<?php echo $val; ?>购买链接"/>
                         </li>
                     <?php endforeach; ?>
                 </ul>
