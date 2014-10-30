@@ -107,27 +107,13 @@
                 <textarea row="10" class="form-control" id="description" name="description"></textarea>
             </div>
             <div class="form-group">
-                <label>购买链接：</label>
-                <input type="text" class="form-control" id="buy_link" name="buy_link" data-toggle="popover" value="">
-            </div>
-            <div class="form-group">
                 <label>商品所在地（仓储）：</label>
                 <input type="hidden" id="location" name='location'/>
                 <ul class='location-ul clearfix'>
-                    <!--                    <li>
-                                            <input type="checkbox" checked="checked" id="cn"/> <label for="cn">中国本地发货</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" id="uk"/> <label for="uk">英国仓储</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" id="us"/> <label for="us">美国仓储</label>
-                                        </li>-->
-
                     <?php foreach ($this->location as $key => $val): ?>
                         <li>
-                            <input type="checkbox" id="<?php echo $key ?>"/> <label for="<?php echo $key ?>"><?php echo $val; ?>仓储</label>
-                            <input type="text" id="<?php echo $key ?>-link" value="" placeholder="<?php echo $val; ?>购买链接"/>
+                            <label for="<?php echo $key ?>"><?php echo $val; ?>仓储</label>
+                            <input type="text" name="<?php echo $key ?>-link" id="<?php echo $key ?>-link" value="" placeholder="<?php echo $val; ?>购买链接"/>
                         </li>
                     <?php endforeach; ?>
                 </ul>

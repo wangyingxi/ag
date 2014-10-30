@@ -27,14 +27,11 @@ class Product extends AbstractDocument {
 
     /** @ODM\String */
     protected $description;
-
-    /** @ODM\String */
-    protected $buy_link;
     
     /** @ODM\ReferenceMany(targetDocument="\Documents\Photo") */
     protected $photo = array();
 
-    /** @ODM\Collection */
+    /** @ODM\Hash */
     protected $location = array('cn');
 
     /** @ODM\Float */

@@ -137,20 +137,14 @@ if ($model->css) {
                     </div>
                 <?php endif; ?>
 
-                <div id="product-buy" class="clearfix">
-                    <!--                    <div id="set-qty">
-                                            <button id="sub-btn"></button>
-                                            <input type="text" id="qty" maxlength="2" value="1"/>
-                                            <button id="add-btn"></button>
-                                        </div>-->
-
-                    <a href="<?php echo $model->buy_link; ?>" id="add-to-cart">
-                        <i class="ico"></i>Buy at eBay
+                <div id="product-buy">
+                    <a href="javascript:void(0)" class="l-ft" id="add-to-cart">
+                        <i class="ico"></i>Buy Online
                     </a>
-
-                    <button id="view-cart" class="green-btn" onclick="location.href = '/cart'">
-                        <i class="ico"></i>Added &amp; View Cart
-                    </button>
+                    <?php foreach ($model->location as $k => $v): ?>
+                        <button type="button" class="location-buy-link <?php echo $k ?>" country="<?php echo $k ?>" link="<?php echo $v ?>"><i class="flg"></i></button>
+                    <?php endforeach; ?>
+                    <div class="clear"></div>
                 </div>
                 <?php if (count($model->photo)): ?>
                     <div id="product-sg">
@@ -183,59 +177,59 @@ if ($model->css) {
             </div>
 
             <?php if ($model->brand): ?>
-                    <!--<p class="tt margintop20px bdsprl">
-                        ABOUT <?php echo strtoupper($model->brand->name) ?>
-                    </p>
-                    <div class="ct">
-                        <style>
-                            .bdsprl {
-                                border-top:1px solid #E0E0E0;
-                                margin-right:10px;
-                                padding-top:20px;
-                            }
-                            #product-brand-logo-big {
-                                border-radius:200px;
-                                display:block;
-                                float:left;
-                                height:80px;
-                                width:80px;
-                            }
-                            #brand-statement {
-                                float:left;
-                                width:430px
-                            }
-                            #brand-statement dt {
-                                font-weight:bold;
-                            }
-                            #brand-statement dt, #brand-statement dd {
-                                padding-left:20px;
-                            }
-                            #brand-statement dd {
-                                font-size:13px;
-                            }
-                            #brand-statement .slim-btn {
-                                margin-top:15px;
-                                padding: 0 22px;
-                            }
-                        </style>
+                                        <!--<p class="tt margintop20px bdsprl">
+                                            ABOUT <?php echo strtoupper($model->brand->name) ?>
+                                        </p>
+                                        <div class="ct">
+                                            <style>
+                                                .bdsprl {
+                                                    border-top:1px solid #E0E0E0;
+                                                    margin-right:10px;
+                                                    padding-top:20px;
+                                                }
+                                                #product-brand-logo-big {
+                                                    border-radius:200px;
+                                                    display:block;
+                                                    float:left;
+                                                    height:80px;
+                                                    width:80px;
+                                                }
+                                                #brand-statement {
+                                                    float:left;
+                                                    width:430px
+                                                }
+                                                #brand-statement dt {
+                                                    font-weight:bold;
+                                                }
+                                                #brand-statement dt, #brand-statement dd {
+                                                    padding-left:20px;
+                                                }
+                                                #brand-statement dd {
+                                                    font-size:13px;
+                                                }
+                                                #brand-statement .slim-btn {
+                                                    margin-top:15px;
+                                                    padding: 0 22px;
+                                                }
+                                            </style>
                 <?php if ($model->brand->logo): ?>
-                                <a target="_blank" href="#">
-                                    <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
-                                </a>
+                                                                        <a target="_blank" href="#">
+                                                                            <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
+                                                                        </a>
                 <?php endif; ?>
-                        <dl id="brand-statement">
-                            <dt>
-                            <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
-                            </dt>
-                            <dd>
+                                            <dl id="brand-statement">
+                                                <dt>
+                                                <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
+                                                </dt>
+                                                <dd>
                 <?php echo $model->brand->description; ?>
-                            </dd>
-                            <dd>
-                                <a href="#" class="slim-btn btn-sm">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
-                            </dd>
-                        </dl>
-                        <div class="clear"></div>
-                    </div>-->
+                                                </dd>
+                                                <dd>
+                                                    <a href="#" class="slim-btn btn-sm">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
+                                                </dd>
+                                            </dl>
+                                            <div class="clear"></div>
+                                        </div>-->
             <?php endif; ?>
 
 
@@ -259,82 +253,75 @@ if ($model->css) {
     </div>
 </div>
 <script type="text/javascript">
-                        (function($) {
-                            $('.big-photo').xCenter();
-//        var qty = $('#qty');
-//        qty.integerInput();
-//        var minus = $('#sub-btn');
-//        minus.bind('click', function() {
-//            var val = parseInt(qty.val());
-//            if (typeof val === 'number' && !isNaN(val)) {
-//                val = val - 1;
-//                if (val == 0) {
-//                    val = 1;
-//                }
-//                qty.val(val);
-//            } else {
-//                qty.val(1);
-//            }
-//        });
-//        var plus = $('#add-btn');
-//        plus.bind('click', function() {
-//            var val = parseInt(qty.val());
-//            if (typeof val === 'number' && !isNaN(val)) {
-//                val = val + 1;
-//                qty.val(val);
-//            } else {
-//                qty.val(1);
-//            }
-//        });
+    (function($) {
+        $('.big-photo').xCenter();
 
-                            // set gallary selected
-                            var __cls1 = 'selected';
-                            var __cls2 = '.s-img-wp';
-                            var s_img = $(__cls2);
-                            if (s_img.length > 0) {
-                                $(s_img[0]).addClass(__cls1);
-                            }
+        // set gallary selected
+        var __cls1 = 'selected';
+        var __cls2 = '.s-img-wp';
+        var s_img = $(__cls2);
+        if (s_img.length > 0) {
+            $(s_img[0]).addClass(__cls1);
+        }
 
-                            s_img.click(function() {
-                                var $this = $(this).closest(__cls2);
-                                if ($this.hasClass(__cls1)) {
-                                    return;
-                                }
-                                $this.siblings(__cls2).removeClass(__cls1);
-                                $this.addClass(__cls1);
+        s_img.click(function() {
+            var $this = $(this).closest(__cls2);
+            if ($this.hasClass(__cls1)) {
+                return;
+            }
+            $this.siblings(__cls2).removeClass(__cls1);
+            $this.addClass(__cls1);
 
-                                var large = $this.attr('large');
-                                $('#big-photo-link .big-photo').attr('src', large);
-                            });
+            var large = $this.attr('large');
+            $('#big-photo-link .big-photo').attr('src', large);
+        });
 
-                            $('.rt-arr-btn').click(function() {
-                                var s = $(__cls2 + "." + __cls1);
-                                var next = s.next(__cls2);
-                                if (next.length) {
-                                    next.click();
-                                } else {
-                                    $(s.siblings(__cls2).get(0)).click();
-                                }
-                            });
+        $('.rt-arr-btn').click(function() {
+            var s = $(__cls2 + "." + __cls1);
+            var next = s.next(__cls2);
+            if (next.length) {
+                next.click();
+            } else {
+                $(s.siblings(__cls2).get(0)).click();
+            }
+        });
 
-                            $('.lt-arr-btn').click(function() {
-                                var s = $(__cls2 + "." + __cls1);
-                                var prev = s.prev(__cls2);
-                                if (prev.length) {
-                                    prev.click();
-                                } else {
-                                    $(s.siblings(__cls2).get(s.siblings(__cls2).length - 1)).click();
-                                }
-                            });
-                            $('#add-to-cart').click(function() {
-//            var __DURATION = 100;
-//            $.cart.add($('#product-id').val(), parseInt($('#qty').val()));
-//            $('#cart-total').html($.cart.total());
-//            $(this).fadeOut(__DURATION, function() {
-//                $('#view-cart').fadeIn(__DURATION);
-//            });
+        $('.lt-arr-btn').click(function() {
+            var s = $(__cls2 + "." + __cls1);
+            var prev = s.prev(__cls2);
+            if (prev.length) {
+                prev.click();
+            } else {
+                $(s.siblings(__cls2).get(s.siblings(__cls2).length - 1)).click();
+            }
+        });
+        $('.location-buy-link').click(function() {
+            $(this).addClass('selected').siblings('.location-buy-link').removeClass('selected');
+            localStorage.setItem('buy-country', $(this).attr('country'));
+            setBuyLink();
+        });
+        setBuyLink();
+    })(jQuery);
 
-                            });
-
-                        })(jQuery);
+    function setBuyLink() {
+        var cls = 'selected';
+        if ($('.location-buy-link').length) {
+            var target = $('.location-buy-link.' + cls);
+            if (target.length === 0) {
+                var bc = localStorage.getItem('buy-country');
+                if (bc) {
+                    // set localstorage selected item
+                    target = $('.location-buy-link[country="' + bc + '"]');
+                } else {
+                    // set default selected item
+                    target = $($('.location-buy-link').get(0));
+                }
+                target.click();
+            }
+            $('#add-to-cart').attr('href', target.attr('link'));
+        } else {
+            // hide buy link block
+            $('#product-buy').hide();
+        }
+    }
 </script>

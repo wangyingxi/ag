@@ -118,9 +118,9 @@
 
 }
 #product-buy {
-    padding: 20px 0 0 0;
+    padding: 20px 0;
 }
-#product-buy #add-to-cart, #product-buy #view-cart, .add-to-cart-list {
+#product-buy #add-to-cart, .add-to-cart-list {
     color: #FFF;
     display: block;
     height: 42px;
@@ -146,6 +146,44 @@
     font-size:12px;
     visibility: hidden;
 }
+.location-buy-link {
+    background:url(../img/flags.png) center -5px;
+    border:0;
+    border-radius:1000px;
+    box-shadow:none;
+    float:left;
+    height:26px;
+    margin: 7px 0 0 10px;
+    padding:0;
+    position:relative;
+    width:26px;
+}
+.location-buy-link .flg {
+    background:#19d94f;
+    border:2px solid #FFF;
+    bottom:-5px;
+    border-radius:100px;
+    display:none;
+    height:10px;
+    position:absolute;
+    right:-5px;
+    width:10px;
+}
+.location-buy-link:hover {
+    background:url(../img/flags.png) center -5px;
+    box-shadow:none;
+}
+.location-buy-link.selected .flg {
+    display:block !important;
+    opacity:1 !important;
+}
+.location-buy-link:hover .flg {
+    display:block;
+    opacity:.9;
+}
+.location-buy-link.uk {
+    background-position: center -41px;
+}
 .pdt-grid:hover .add-to-cart-list {
     visibility: visible;
 }
@@ -153,20 +191,21 @@
     background: #00509d;
     color:#FFF;
 }
-#product-buy #view-cart {
-    display:none;
-}
-#product-buy #add-to-cart, #product-buy #set-qty, #product-buy #view-cart, .add-to-cart-list {
+
+#product-buy #add-to-cart, #product-buy #set-qty, .add-to-cart-list {
     border-radius: 3px;
 }
-#product-buy #add-to-cart *, #product-buy #view-cart *, .add-to-cart-list * {
+#product-buy #add-to-cart *, .add-to-cart-list * {
     float: left;
 }
-#product-buy #add-to-cart .ico, #product-buy #view-cart .ico, .add-to-cart-list .ico {
+#product-buy #add-to-cart .ico, .add-to-cart-list .ico {
     background-position: -62px 1px;
     display: inline-block;
     height: 30px;
     width: 30px;
+}
+#product-buy #add-to-cart {
+    margin-right:5px;
 }
 #product-buy #set-qty {
     background: #E0E0E0;
@@ -282,9 +321,10 @@
     height: 40px;
     left: 0;
     margin: 0;
+    margin-top:-20px;
     padding: 0;
     position: absolute;
-    top: 210px;
+    top: 50%;
     width: 40px;
     z-index: 2;
 }
@@ -413,7 +453,7 @@
     background:#333 !important;
 }
 .pdt-grid {
-    
+
     float:left;
     margin-right:26px;
     width:218px;

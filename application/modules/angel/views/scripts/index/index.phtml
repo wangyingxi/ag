@@ -29,7 +29,6 @@
                         $title = $product['title'];
                         $sub_title = $product['sub_title'];
                         $location = $product['location'];
-                        $buy_link = $product['buy_link'];
                         $link = $this->url(array('id' => $id), 'product-view');
                         ?>
                         <a class='pdt-img-a' href="<?php echo $link; ?>">
@@ -39,7 +38,7 @@
                             <p class='pdt-tt'>
                                 <a href='<?php echo $link ?>'><?php echo $title ?></a>
                             </p>
-    <?php if ($buy_link): ?>
+    <?php if (false): ?>
                                 <p class='pdt-bt'>
                                     <a class="add-to-cart-list" href="<?php echo $link; ?>"></i> Buy at eBay</a>
                                 </p>

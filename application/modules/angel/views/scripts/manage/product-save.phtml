@@ -90,7 +90,7 @@ $model = $this->model;
                         $skuValue = "";
                     }
                     ?>
-                    
+
                     <input type="text" class="form-control" id="sku" name="sku" data-toggle="popover" data-placement="bottom" value="<?php echo $model->sku ?>">
                     <span class='input-group-btn'>
                         <input class='btn btn-default' id="is-sku-exist" origin-sku="<?php echo $skuValue ?>" type='button' value='检查可用性'/>
@@ -107,8 +107,8 @@ $model = $this->model;
             </div>
             <div class="form-group">
                 <label>商品图片：</label>
-                <?php if($this->imageBroken): ?>
-                <label class="label label-danger">部分图片已被删除，无法显示，请重新设置</label>
+                <?php if ($this->imageBroken): ?>
+                    <label class="label label-danger">部分图片已被删除，无法显示，请重新设置</label>
                 <?php endif; ?>
                 <div class='panel panel-info'>
                     <div id="gy-photo" class='panel-body gy-photo'>
@@ -121,24 +121,17 @@ $model = $this->model;
                 <textarea row="10" class="form-control" id="description" name="description"><?php echo $model->description ?></textarea>
             </div>
             <div class="form-group">
-                <label>购买链接：</label>
-                <input type="text" class="form-control" id="buy_link" name="buy_link" data-toggle="popover" value="<?php echo $model->buy_link ?>">
-            </div>
-            <div class="form-group">
                 <label>商品所在地（仓储）：</label>
                 <input type="hidden" id="location" name='location'/>
                 <ul class='location-ul clearfix'>
                     <?php foreach ($this->location as $key => $val): ?>
                         <?php
-                        $checked = '';
-                        if (in_array($key, $model->location)) {
-                            $checked = 'checked="checked"';
-                        } else {
-//                            echo $key;exit;
-                        }
+                        $location_link = '';
+                        $location_link = $model->location[$key];
                         ?>
                         <li>
-                            <input type="checkbox" <?php echo $checked; ?> id="<?php echo $key ?>"/> <label for="<?php echo $key ?>"><?php echo $val; ?>仓储</label>
+                            <label for="<?php echo $key ?>"><?php echo $val; ?>仓储</label>
+                            <input type="text" name="<?php echo $key ?>-link" id="<?php echo $key ?>-link" value="<?php echo $location_link ?>" placeholder="<?php echo $val; ?>购买链接"/>
                         </li>
                     <?php endforeach; ?>
                 </ul>

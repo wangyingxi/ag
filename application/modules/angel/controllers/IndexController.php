@@ -29,7 +29,6 @@ class Angel_IndexController extends Angel_Controller_Action {
                 'id' => $r->id,
                 'sub_title' => $r->sub_title,
                 'location' => $r->location,
-                'buy_link' => $r->buy_link,
                 'path' => $path);
         }
         $this->view->products = $resource;
