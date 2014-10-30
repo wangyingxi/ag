@@ -309,7 +309,7 @@ if ($model->css) {
             var target = $('.location-buy-link.' + cls);
             if (target.length === 0) {
                 var bc = localStorage.getItem('buy-country');
-                if (bc) {
+                if (bc && bc.length > 1) {
                     // set localstorage selected item
                     target = $('.location-buy-link[country="' + bc + '"]');
                 } else {
