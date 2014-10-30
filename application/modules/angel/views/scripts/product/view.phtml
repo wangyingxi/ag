@@ -177,59 +177,59 @@ if ($model->css) {
             </div>
 
             <?php if ($model->brand): ?>
-                                        <!--<p class="tt margintop20px bdsprl">
-                                            ABOUT <?php echo strtoupper($model->brand->name) ?>
-                                        </p>
-                                        <div class="ct">
-                                            <style>
-                                                .bdsprl {
-                                                    border-top:1px solid #E0E0E0;
-                                                    margin-right:10px;
-                                                    padding-top:20px;
-                                                }
-                                                #product-brand-logo-big {
-                                                    border-radius:200px;
-                                                    display:block;
-                                                    float:left;
-                                                    height:80px;
-                                                    width:80px;
-                                                }
-                                                #brand-statement {
-                                                    float:left;
-                                                    width:430px
-                                                }
-                                                #brand-statement dt {
-                                                    font-weight:bold;
-                                                }
-                                                #brand-statement dt, #brand-statement dd {
-                                                    padding-left:20px;
-                                                }
-                                                #brand-statement dd {
-                                                    font-size:13px;
-                                                }
-                                                #brand-statement .slim-btn {
-                                                    margin-top:15px;
-                                                    padding: 0 22px;
-                                                }
-                                            </style>
+                                            <!--<p class="tt margintop20px bdsprl">
+                                                ABOUT <?php echo strtoupper($model->brand->name) ?>
+                                            </p>
+                                            <div class="ct">
+                                                <style>
+                                                    .bdsprl {
+                                                        border-top:1px solid #E0E0E0;
+                                                        margin-right:10px;
+                                                        padding-top:20px;
+                                                    }
+                                                    #product-brand-logo-big {
+                                                        border-radius:200px;
+                                                        display:block;
+                                                        float:left;
+                                                        height:80px;
+                                                        width:80px;
+                                                    }
+                                                    #brand-statement {
+                                                        float:left;
+                                                        width:430px
+                                                    }
+                                                    #brand-statement dt {
+                                                        font-weight:bold;
+                                                    }
+                                                    #brand-statement dt, #brand-statement dd {
+                                                        padding-left:20px;
+                                                    }
+                                                    #brand-statement dd {
+                                                        font-size:13px;
+                                                    }
+                                                    #brand-statement .slim-btn {
+                                                        margin-top:15px;
+                                                        padding: 0 22px;
+                                                    }
+                                                </style>
                 <?php if ($model->brand->logo): ?>
-                                                                        <a target="_blank" href="#">
-                                                                            <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
-                                                                        </a>
+                                                                                <a target="_blank" href="#">
+                                                                                    <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
+                                                                                </a>
                 <?php endif; ?>
-                                            <dl id="brand-statement">
-                                                <dt>
-                                                <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
-                                                </dt>
-                                                <dd>
+                                                <dl id="brand-statement">
+                                                    <dt>
+                                                    <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
+                                                    </dt>
+                                                    <dd>
                 <?php echo $model->brand->description; ?>
-                                                </dd>
-                                                <dd>
-                                                    <a href="#" class="slim-btn btn-sm">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
-                                                </dd>
-                                            </dl>
-                                            <div class="clear"></div>
-                                        </div>-->
+                                                    </dd>
+                                                    <dd>
+                                                        <a href="#" class="slim-btn btn-sm">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
+                                                    </dd>
+                                                </dl>
+                                                <div class="clear"></div>
+                                            </div>-->
             <?php endif; ?>
 
 
@@ -312,7 +312,8 @@ if ($model->css) {
                 if (bc && bc.length > 1) {
                     // set localstorage selected item
                     target = $('.location-buy-link[country="' + bc + '"]');
-                } else {
+                }
+                if (target.length === 0) {
                     // set default selected item
                     target = $($('.location-buy-link').get(0));
                 }
