@@ -38,6 +38,10 @@ class Angel_IndexController extends Angel_Controller_Action {
 //        $this->_helper->json(1);
 //        var_dump('hahaha');exit;
     }
+    
+    public function aboutAction() {
+
+    }
 
     /**
      * 登录
