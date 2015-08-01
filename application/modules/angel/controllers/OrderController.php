@@ -92,7 +92,7 @@ class Angel_OrderController extends Angel_Controller_Action {
                         $apiContext = new ApiContext($cred, 'Request' . time());
                         $apiContext->setConfig($sdkConfig);
                         $payer = new Payer();
-                        $payer->setPayment_method("paypal");
+                        $payer->setPaymentMethod("paypal");
 
                         $amount = new Amount();
                         $amount->setCurrency(strtoupper($order->currency));
@@ -105,12 +105,12 @@ class Angel_OrderController extends Angel_Controller_Action {
                         $redirectUrls = new RedirectUrls();
 //        $redirectUrls->setReturn_url("https://devtools-paypal.com/guide/pay_paypal/php?success=true");
 //        $redirectUrls->setCancel_url("https://devtools-paypal.com/guide/pay_paypal/php?cancel=true");
-                        $redirectUrls->setReturn_url("http://" . $_SERVER["SERVER_NAME"] . $this->view->url(array(), 'paypal-approval'));
-                        $redirectUrls->setCancel_url("http://" . $_SERVER["SERVER_NAME"] . $this->view->url(array('reason' => 'cancel'), 'paypal-return'));
+                        $redirectUrls->setReturnUrl("http://" . $_SERVER["SERVER_NAME"] . $this->view->url(array(), 'paypal-approval'));
+                        $redirectUrls->setCancelUrl("http://" . $_SERVER["SERVER_NAME"] . $this->view->url(array('reason' => 'cancel'), 'paypal-return'));
                         $payment = new Payment();
                         $payment->setIntent("sale");
                         $payment->setPayer($payer);
-                        $payment->setRedirect_urls($redirectUrls);
+                        $payment->setRedirectUrls($redirectUrls);
                         $payment->setTransactions(array($transaction));
 
                         $response = $payment->create($apiContext);
@@ -156,7 +156,7 @@ class Angel_OrderController extends Angel_Controller_Action {
             $payment = new Payment();
             $payment->setId($payment_id);
             $execution = new PaymentExecution();
-            $execution->setPayer_id($payer_id);
+            $execution->setPayerId($payer_id);
             $response = $payment->execute($execution, $apiContext);
 //            var_dump($response);
 //            exit;
