@@ -62,14 +62,16 @@ $address = $this->address;
         <div class="ftb">
             <p class="ftbp">
                 <i class="halflings globe"></i>
-                <select title="COUNTRY" id="country" value="<?php echo $address->country ?>">
+                <label class='nothing-txt' style="background:transparent;">United States</label>
+                
+<!--                <select title="COUNTRY" id="country" value="<?php echo $address->country ?>">
                     <option value="">CHOOSE COUNTRY</option>
                     <option value="uk">United Kingdom</option>
                     <option value="us">United States</option>
                     <option value="jp">Japan</option>
                     <option value="hk">Hong Kong</option>
                     <option value="de">Germany</option>
-                </select>
+                </select>-->
             </p>
         </div>
         <?php if ($this->updateBtn): ?>

@@ -35,7 +35,7 @@ class Angel_OrderController extends Angel_Controller_Action {
                 $address->city = $this->request->getParam('city');
                 $address->state = $this->request->getParam('state');
                 $address->zip = $this->request->getParam('zip');
-                $address->country = $this->request->getParam('country');
+                $address->country = 'us';
             }
 
             $resource = $this->parseCart($query);
