@@ -97,9 +97,7 @@
                     <a href="#" class="logo l-ft"><img src="/img/logo.png" alt="welcome to sitename"/></a>
                 </div>
                 <div class="grid_10">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search keywords or model #" />
-                    </div>
+                    <img src="/img/P92033858697.38329-4">
                 </div>
                 <div class="grid_9">
                     <div class="info-bar">
@@ -117,9 +115,8 @@
                             Cart
                             <a id="cart-total" href="<?php echo $this->url(array(), 'cart') ?>"> 0 </a>
                         </div>
-                        <span class="vsplr l-ft"></span>
 
-                        <div class="currency-bar l-ft">
+                        <div class="currency-bar l-ft hidden">
                             <?php foreach ($this->currency as $key => $val): ?>
                                 <a class="price-option" currency="<?php echo $key ?>" currency-symbol="<?php echo $this->currency_symbol[$key] ?>" href="javascript:void(0)"> <?php echo $this->currency_symbol[$key] . ' ' . $key ?> </a>
                             <?php endforeach; ?>

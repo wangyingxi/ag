@@ -78,35 +78,9 @@ if ($model->css) {
 
         <div class="grid_10">
             <div class="lpad-30">
-                <ul id="breadcrumb" class="clearfix">
-                    <li>
-                        <a href="/">HOME</a>
-                    </li>
-                    <?php if ($model->category) : ?>
-                        <?php if ($model->category->parent): ?>
-                            <li>
-                                <i class="ico"></i>
-                                <a href="#"><?php echo strtoupper($model->category->parent->name); ?></a>
-                            </li>
-                        <?php endif; ?>
-                        <li>
-                            <i class="ico"></i>
-                            <a href="#"><?php echo strtoupper($model->category->name); ?></a>
-                        </li>
-                    <?php endif; ?>
-
-                </ul>
-
+                
                 <h1 id="product-title"><?php echo $model->title ?></h1>
-                <?php if ($model->brand): ?>
-                    <h2 id="product-brand" class="clearfix">
-                        <span>by</span>
-                        <a href="#" class="bold"><?php echo strtoupper($model->brand->name) ?></a>
-                        <?php if ($model->brand->logo): ?>
-                            <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo"/>
-                        <?php endif; ?>
-                    </h2>
-                <?php endif; ?>
+                
                 <?php if ($model->sub_title): ?>
                     <p id="product-sub-title">
                         <?php echo $model->sub_title; ?>
@@ -176,63 +150,6 @@ if ($model->css) {
                 <?php echo $model->description ?>
             </div>
 
-            <?php if ($model->brand): ?>
-                <p class="tt margintop20px bdsprl">
-                    ABOUT <?php echo strtoupper($model->brand->name) ?>
-                </p>
-                <div class="ct">
-                    <style>
-                        .bdsprl {
-                            border-top:1px solid #E0E0E0;
-                            margin-right:10px;
-                            padding-top:20px;
-                        }
-                        #product-brand-logo-big {
-                            border-radius:200px;
-                            display:block;
-                            float:left;
-                            height:80px;
-                            width:80px;
-                        }
-                        #brand-statement {
-                            float:left;
-                            width:430px
-                        }
-                        #brand-statement dt {
-                            font-weight:bold;
-                        }
-                        #brand-statement dt, #brand-statement dd {
-                            padding-left:20px;
-                        }
-                        #brand-statement dd {
-                            font-size:13px;
-                        }
-                        #brand-statement .slim-btn {
-                            margin-top:15px;
-                            padding: 0 22px;
-                        }
-                    </style>
-                    <?php if ($model->brand->logo): ?>
-                        <a target="_blank" href="#">
-                            <img src="<?php echo $this->photoImage($model->brand->logo->name . $model->brand->logo->type, ''); ?>" id="product-brand-logo-big"/>
-                        </a>
-                    <?php endif; ?>
-                    <dl id="brand-statement">
-                        <dt>
-                        <a target="_blank" href="#"><?php echo $model->brand->name; ?></a>
-                        </dt>
-                        <dd>
-                            <?php echo $model->brand->description; ?>
-                        </dd>
-                        <dd>
-                            <a href="#" class="slim-btn btn-sm">VIEW <?php echo $model->brand->name ?> PRODUCT</a>
-                        </dd>
-                    </dl>
-                    <div class="clear"></div>
-                </div>
-            <?php endif; ?>
-
-
             <div class="sprl"></div>
         </div>
         <div class="grid_10">
@@ -242,14 +159,7 @@ if ($model->css) {
 
         </div>
         <div class="clear-30"></div>
-        <div class="grid_24">
-            <p class="tt">
-                CUSTOMER REVIEWS
-            </p>
-            <div id="review-btn-empty">
-                <a href="javascript:void(0)" class="txt">NO REVIEWS YET, WRITE NOW</a> 
-            </div>
-        </div>
+        
     </div>
 </div>
 <script type="text/javascript">

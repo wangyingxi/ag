@@ -1,0 +1,62 @@
+<?php
+//$a = 200;
+//for (; $a < 800; $a++) {
+//    $b = 10;
+//    for (; $b < 200; $b++) {
+//        if ($a * 4 + $b * 3 == 950)
+//            echo $a . ':' . $b . '|';
+//    }
+//}
+?>
+<div class="content wbg-wrapper">
+    <div class="container_24">
+        <div class='grid_24'>
+            <?php $i = 0 ?>
+            <?php foreach ($this->products as $product): ?>
+
+                <?php $i++; ?>
+                <?php
+                $cls = '';
+                if ($i % 4 == 0) {
+                    $cls = ' ed';
+                }
+                ?>
+                <div class="pdt-grid <?php echo $cls; ?>">
+                    <div class='pdt-wp'>
+                        <?php
+                        $photo = $product['path'];
+                        $id = $product['id'];
+                        $title = $product['title'];
+                        $sub_title = $product['sub_title'];
+                        $location = $product['location'];
+                        $link = $this->url(array('id' => $id), 'product-view');
+                        ?>
+                        <a class='pdt-img-a' href="<?php echo $link; ?>">
+                            <img class='pdt-img' src="<?php echo $photo ?>"/>
+                        </a>
+                        <div class='pdt-ct'>
+                            <p class='pdt-tt'>
+                                <a href='<?php echo $link ?>'><?php echo $title ?></a>
+                            </p>
+    <?php if (false): ?>
+                                <p class='pdt-bt'>
+                                    <a class="add-to-cart-list" href="<?php echo $link; ?>"></i> Buy at eBay</a>
+                                </p>
+    <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php if ($i % 4 == 0): ?>
+                    <div class='clear'></div>
+    <?php endif; ?>
+<?php endforeach; ?>
+            <div class='clear'></div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    (function($) {
+
+    })(jQuery);
+</script>
