@@ -113,7 +113,15 @@ class Angel_OrderController extends Angel_Controller_Action {
                         $payment->setRedirectUrls($redirectUrls);
                         $payment->setTransactions(array($transaction));
 
-                        $response = $payment->create($apiContext);
+                        try {
+                            $response = $payment->create($apiContext);
+                        } catch (PayPal\Exception\PayPalConnectionException $pce) {
+                            // Don't spit out errors or use "exit" like this in production code
+                            echo '<pre>';print_r(json_decode($pce->getData()));
+                            exit;
+                        }
+                        
+                        
                         $paymentId = $response->getId();
                         $_SESSION['payment_id'] = $paymentId;
                         $linksArr = $response->getLinks();
