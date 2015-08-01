@@ -283,7 +283,9 @@
         $('input[data-toggle="popover"]').popover({animation: false});
 
         productSaveBtn('<?php echo $this->separator ?>');
-        calculatePrice();
+        if(!calculatePrice()) {
+            alert('打算免费卖给鬼佬吗？亲～');
+        }
         isSkuExist('<?php echo $this->url(array(), 'manage-check-sku') ?>');
 
 //        $('.gy-photo').photoSelector(false, "set save here");

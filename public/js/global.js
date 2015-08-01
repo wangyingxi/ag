@@ -119,15 +119,20 @@ function isSkuExist(url) {
  * 根据基本价格以及汇率计算出所有货币对应价格
  */
 function calculatePrice() {
+    var valid = false;
     $('#calculate').click(function() {
         var baseprice = $('#base-rmb').val();
         $.each($('.curreny-rate'), function() {
             var rate = $(this).val();
+            if(rate * 1) {
+                valid = true;
+            }
             var result = baseprice / rate;
             if (result) {
                 $('#' + $(this).attr('for')).val(result.toFixed(2) * 1);
             }
         });
+        return valid;
     });
 }
 
