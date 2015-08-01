@@ -295,9 +295,7 @@ $model = $this->model;
         $('input[data-toggle="popover"]').popover({animation: false});
 
         productSaveBtn('<?php echo $this->separator ?>');
-        if(!calculatePrice()) {
-            alert('打算免费卖给鬼佬吗？亲～');
-        }
+        calculatePrice();
         isSkuExist('<?php echo $this->url(array(), 'manage-check-sku') ?>');
 
 
@@ -305,5 +303,9 @@ $model = $this->model;
         $('#status').setSelectValue();
         $('#brand').setSelectValue();
         $('#category').setSelectValue();
+        
+        $('#save-btn').click(function() {
+            return checkPriceFixed();
+        });
     })(jQuery);
 </script>

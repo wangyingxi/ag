@@ -119,21 +119,30 @@ function isSkuExist(url) {
  * 根据基本价格以及汇率计算出所有货币对应价格
  */
 function calculatePrice() {
-    var valid = false;
     $('#calculate').click(function() {
         var baseprice = $('#base-rmb').val();
         $.each($('.curreny-rate'), function() {
             var rate = $(this).val();
-            if(rate * 1) {
-                valid = true;
-            }
             var result = baseprice / rate;
             if (result) {
                 $('#' + $(this).attr('for')).val(result.toFixed(2) * 1);
             }
         });
-        return valid;
     });
+}
+function checkPriceFixed() {
+    var valid = true;
+    $('.price').each(function() {
+        if ($(this).val() <= 0) {
+            valid = false;
+        }
+    });
+    if (!valid) {
+        alert('您打算免费卖给鬼佬吗？亲～');
+        return false;
+    } else {
+        return true;
+    }
 }
 
 /* 
