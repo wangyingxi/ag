@@ -20,7 +20,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 /** Paypal SDK **/
-//require_once 'Paypal/autoload.php';
+require_once 'Paypal/autoload.php';
 
 
 /** Zend_Application */
