@@ -116,7 +116,7 @@
                             <a id="cart-total" href="<?php echo $this->url(array(), 'cart') ?>"> 0 </a>
                         </div>
 
-                        <div class="currency-bar l-ft hidden">
+                        <div class="currency-bar l-ft">
                             <?php foreach ($this->currency as $key => $val): ?>
                                 <a class="price-option" currency="<?php echo $key ?>" currency-symbol="<?php echo $this->currency_symbol[$key] ?>" href="javascript:void(0)"> <?php echo $this->currency_symbol[$key] . ' ' . $key ?> </a>
                             <?php endforeach; ?>
