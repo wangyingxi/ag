@@ -2,7 +2,7 @@
 
 class Angel_IndexController extends Angel_Controller_Action {
 
-    protected $login_not_required = array('about', 'index', 'login', 'register', 'email-validation', 'is-email-exist', 'forgot-password');
+    protected $login_not_required = array('about', 'index', 'login', 'register', 'email-validation', 'is-email-exist', 'forgot-password','test');
 
     public function init() {
         parent::init();
@@ -34,8 +34,12 @@ class Angel_IndexController extends Angel_Controller_Action {
         $this->view->products = $resource;
     }
     public function testAction() {
-//        $this->_helper->json(1);
-//        var_dump('hahaha');exit;
+        if ($this->request->isPost()) {
+
+            $fs = $this->request->getParam('fs');
+            var_dump($_FILES);
+            exit();
+        }
     }
     public function aboutAction() {
 

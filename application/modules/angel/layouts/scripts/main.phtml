@@ -8,7 +8,10 @@
         <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("reset.css"); ?>" />
         <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("text.css"); ?>" />
         <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("960gs.css"); ?>" />
-        <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("open-sans.css"); ?>" />
+        <?php if ($_SERVER["REMOTE_ADDR"] != '127.0.0.1'): ?>
+            <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("open-sans.css"); ?>" />
+        <?php endif; ?>
+
         <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("global.css"); ?>" />
         <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("global.mall.css"); ?>" />
         <link rel="stylesheet" type="text/css" href="<?php echo $this->cssPath("sub.css"); ?>" />
@@ -88,10 +91,10 @@
         </div>
         <!-- Top Start -->
         <div class="wp top clearfix">
-            
-            
-            
-            
+
+
+
+
             <div class="container_24">
                 <div class="grid_5">
                     <a href="#" class="logo l-ft"><img src="/img/logo.png" alt="welcome to sitename"/></a>
@@ -129,7 +132,7 @@
                     <span class="vsplr"></span>
                     <a href="/about"> About DRIFTBOT </a>
 
-                    
+
                 </div>
             </div>
         </div>
